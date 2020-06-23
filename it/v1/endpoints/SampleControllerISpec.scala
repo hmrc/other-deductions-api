@@ -56,7 +56,7 @@ class SampleControllerISpec extends IntegrationBaseSpec {
                                               |  "responseData" : "someResponse",
                                               |  "links": [
                                               |   {
-                                              |     "href": "/mtd/template/$nino/sample-endpoint",
+                                              |     "href": "/other/deductions/$nino/sample-endpoint",
                                               |     "method": "GET",
                                               |     "rel": "sample-rel"
                                               |   }
