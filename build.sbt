@@ -21,7 +21,7 @@ import uk.gov.hmrc.versioning.SbtGitVersioning
 import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 import uk.gov.hmrc.{SbtArtifactory, SbtAutoBuildPlugin}
 
-val appName = "mtd-api"
+val appName = "other-deductions-api"
 
 lazy val ItTest = config("it") extend Test
 

@@ -3,12 +3,12 @@
   "aFieldDefinedInline": "bar",
   "links": [
     {
-      "href": "/insert/context/AA11112A",
+      "href": "/other/deductions/AA11112A",
       "rel": "self",
       "method": "GET"
     },
     {
-      "href": "/insert/context/AA111112A/foo/bar",
+      "href": "/other/deductions/AA111112A/foo/bar",
       "rel": "sample-rel",
       "method": "GET"
     }
