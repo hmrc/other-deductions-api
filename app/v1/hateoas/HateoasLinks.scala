@@ -19,7 +19,7 @@ package v1.hateoas
 import config.AppConfig
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method._
-import v1.models.hateoas.RelType.{DELETE_RELIEFS_OTHER, _}
+import v1.models.hateoas.RelType._
 
 trait HateoasLinks {
 

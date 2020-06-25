@@ -20,70 +20,56 @@ import play.api.libs.json.Json
 import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
-class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
-  val amendOtherDeductionsBody = AmendOtherDeductionsBody(
-    Seafarers(
-      Some("myRef"),
-      2000.99,
-      "Blue Bell",
-      "2018-04-06",
-      "2019-04-06"
-    )
-  )
+class SeafarersSpec extends UnitSpec with JsonErrorValidators {
+  val seafarers = Seafarers(Some("myRef"), 2000.99, "Blue Bell",  "2018-04-06", "2019-04-06")
 
-  val noRefAmendOtherDeductionsBody = AmendOtherDeductionsBody(
-    Seafarers(
-      None,
-      2000.99,
-      "Blue Bell",
-      "2018-04-06",
-      "2019-04-06"
-    )
-  )
+  val noRefSeafares = Seafarers(None, 2000.99, "Blue Bell", "2018-04-06", "2019-04-06")
 
   val json = Json.parse(
-    """{
-      | "seafarers": {
+    """
+      |{
       |   "customerReference": "myRef",
       |   "amountDeducted": 2000.99,
       |   "nameOfShip": "Blue Bell",
       |   "fromDate": "2018-04-06",
       |   "toDate": "2019-04-06"
-      |   }
       |}""".stripMargin)
 
-  val jsonNoRef = Json.parse(
-    """{
-      | "seafarers": {
+  val noRefJson = Json.parse(
+    """
+      |{
       |   "amountDeducted": 2000.99,
       |   "nameOfShip": "Blue Bell",
       |   "fromDate": "2018-04-06",
       |   "toDate": "2019-04-06"
-      |   }
       |}""".stripMargin)
 
   "reads" when {
-    "passed a valid JSON" should {
+    "passed valid JSON" should {
       "return a valid model" in {
-        amendOtherDeductionsBody shouldBe json.as[AmendOtherDeductionsBody]
+        seafarers shouldBe json.as[Seafarers]
       }
     }
   }
-  "reads from JSON with no customer reference" should {
-    "return a model with no customer reference" in {
-      noRefAmendOtherDeductionsBody shouldBe jsonNoRef.as[AmendOtherDeductionsBody]
+  "reads from a JSON with no reference" when {
+    "passed a JSON with no customer reference" should {
+      "return a model with no customer reference " in {
+        noRefSeafares shouldBe noRefJson.as[Seafarers]
+      }
     }
   }
   "writes" when {
     "passed valid model" should {
       "return valid JSON" in {
-        Json.toJson(amendOtherDeductionsBody) shouldBe json
+        Json.toJson(seafarers) shouldBe json
       }
     }
   }
-  "write from a body with no customer reference" should {
-    "return a JSON with no customer reference" in {
-      Json.toJson(noRefAmendOtherDeductionsBody) shouldBe jsonNoRef
+  "writes from a model with no reference" when {
+    "passed a model with no customer reference" should {
+      "return a JSON with no customer reference" in {
+        Json.toJson(noRefSeafares) shouldBe noRefJson
+      }
     }
   }
 }
