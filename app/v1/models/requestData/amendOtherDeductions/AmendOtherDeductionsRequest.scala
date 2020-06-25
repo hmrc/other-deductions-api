@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.hateoas
+package v1.models.requestData.amendOtherDeductions
 
-object RelType {
-  val SAMPLE_ENDPOINT_REL = "sample-rel"
-  val SELF = "self"
-  val AMEND_OTHER_DEDUCTIONS = "amend-other-deductions"
-  val DELETE_OTHER_DEDUCTIONS = "amend-other-deductions"
-}
+import uk.gov.hmrc.auth.core.Nino
+
+case class AmendOtherDeductionsRequest(nino: Nino, taxYear: String, body: AmendOtherDeductionsBody)

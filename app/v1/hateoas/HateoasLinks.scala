@@ -19,7 +19,7 @@ package v1.hateoas
 import config.AppConfig
 import v1.models.hateoas.Link
 import v1.models.hateoas.Method._
-import v1.models.hateoas.RelType._
+import v1.models.hateoas.RelType.{DELETE_RELIEFS_OTHER, _}
 
 trait HateoasLinks {
 
@@ -30,4 +30,16 @@ trait HateoasLinks {
   //API resource links
   def sampleLink(appConfig: AppConfig, nino: String): Link =
     Link(href = sampleUri(appConfig, nino), method = GET, rel = SAMPLE_ENDPOINT_REL)
+
+  private def otherDeductionsUri(appConfig: AppConfig, nino: String, taxYear: String): String =
+    s"/${appConfig.apiGatewayContext}/other/$nino/$taxYear"
+
+  def amendOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_OTHER_DEDUCTIONS)
+
+  def deleteOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_DEDUCTIONS)
+
+  def retrieveOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 }
