@@ -16,12 +16,13 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{JsonFormatValidation, NinoValidation, TaxYearValidation}
+import v1.controllers.requestParsers.validators.validations._
 import v1.models.errors.{MtdError, RuleIncorrectOrEmptyBodyError}
+import v1.models.requestData.amendOtherDeductions.{AmendOtherDeductionsBody, AmendOtherDeductionsRawData, Seafarers}
 
 class AmendOtherDeductionsValidator extends Validator[AmendOtherDeductionsRawData] {
 
-  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldValidation)
+  private val validationSet = List(parameterFormatValidation, bodyFormatValidation, bodyFieldFormatValidation, dateRangeValidation)
 
   private def parameterFormatValidation: AmendOtherDeductionsRawData => List[List[MtdError]] = (data: AmendOtherDeductionsRawData) => {
     List(
@@ -36,38 +37,67 @@ class AmendOtherDeductionsValidator extends Validator[AmendOtherDeductionsRawDat
     )
   }
 
-  private def bodyFieldValidation: AmendOtherDeductionsRawData => List[List[MtdError]] = { data =>
+  private def bodyFieldFormatValidation: AmendOtherDeductionsRawData => List[List[MtdError]] = { data =>
     val body = data.body.as[AmendOtherDeductionsBody]
 
     List(flattenErrors(
       List(
-        body.socialEnterpriseInvestment.map(_.zipWithIndex.flatMap {
-          case (item, i) => validatesocialEnterpriseInvestment(item, i)
+        body.seafarers.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateSeafarers(item, i)
         })
       ).map(_.getOrElse(NoValidationErrors).toList)
     ))
   }
 
-  private def validatesocialEnterpriseInvestment(socialEnterpriseInvestmentItem: SocialEnterpriseInvestmentItem, arrayIndex: Int): List[MtdError] = {
+  private def validateSeafarers(seafarers: Seafarers, arrayIndex: Int): List[MtdError] = {
     List(
-      DateValidation.validateOptional(
-        date = socialEnterpriseInvestmentItem.dateOfInvestment,
-        path = s"/socialEnterpriseInvestment/$arrayIndex/dateOfInvestment",
-        error = DateOfInvestmentFormatError
+      CustomerReferenceValidation.validateOptional(
+        field = seafarers.customerReference,
+        path = s"/seafarers/$arrayIndex/customerReference"
       ),
-      NumberValidation.validateOptional(
-        field = socialEnterpriseInvestmentItem.amountInvested,
-        path = s"/socialEnterpriseInvestment/$arrayIndex/amountInvested"
+      AmountValidation.validate(
+        field = seafarers.amountDeducted,
+        path = s"/seafarers/$arrayIndex/amountDeducted"
       ),
-      NumberValidation.validateOptional(
-        field = socialEnterpriseInvestmentItem.reliefClaimed,
-        path = s"/socialEnterpriseInvestment/$arrayIndex/reliefClaimed"
+      NameOfShipValidation.validate(
+        field = seafarers.nameOfShip,
+        path = s"/seafarers/$arrayIndex/nameOfShip"
       ),
+      DateValidation.validate(
+        field = seafarers.fromDate,
+        path = s"/seafarers/$arrayIndex/fromDate"
+      ),
+      DateValidation.validate(
+        field = seafarers.toDate,
+        path = s"/seafarers/$arrayIndex/toDate"
+      )
     ).flatten
   }
 
+  private def dateRangeValidation: AmendOtherDeductionsRawData => List[List[MtdError]] = { data =>
+    val body = data.body.as[AmendOtherDeductionsBody]
 
-  override def validate(data: AmendReliefInvestmentsRawData): List[MtdError] = {
+    List(flattenErrors(
+      List(
+        body.seafarers.map(_.zipWithIndex.flatMap {
+          case (item, i) => validateToDateBeforeFromDate(item, i)
+        })
+      ).map(_.getOrElse(NoValidationErrors).toList)
+    ))
+  }
+
+  private def validateToDateBeforeFromDate(seafarers: Seafarers, arrayIndex: Int): List[MtdError] = {
+    List(
+      ToDateBeforeFromDateValidation.validate(
+        from = seafarers.fromDate,
+        to = seafarers.toDate,
+        fromPath = s"/seafarers/$arrayIndex/fromDate",
+        toPath = s"/seafarers/$arrayIndex/toDate"
+      )
+    ).flatten
+  }
+
+  override def validate(data: AmendOtherDeductionsRawData): List[MtdError] = {
     run(validationSet, data).distinct
   }
 }
