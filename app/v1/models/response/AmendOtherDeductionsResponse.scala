@@ -26,13 +26,13 @@ object AmendOtherDeductionsResponse extends HateoasLinks {
     override def links(appConfig: AppConfig, data: AmendOtherReliefsHateoasData): Seq[Link] = {
       import data._
       Seq(
-        amendOtherDeductions(appConfig, nino, date),
-        retrieveOtherDeductions(appConfig, nino, date),
-        deleteOtherDeductions(appConfig, nino, date)
+        amendOtherDeductions(appConfig, nino, taxYear),
+        retrieveOtherDeductions(appConfig, nino, taxYear),
+        deleteOtherDeductions(appConfig, nino, taxYear)
       )
     }
   }
 }
 
 
-case class AmendOtherReliefsHateoasData(nino: String, date: String) extends HateoasData
+case class AmendOtherReliefsHateoasData(nino: String, taxYear: String) extends HateoasData

@@ -21,45 +21,45 @@ import support.UnitSpec
 import v1.models.utils.JsonErrorValidators
 
 class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
-  val amendOtherDeductionsBody = AmendOtherDeductionsBody(
+  val amendOtherDeductionsBody = AmendOtherDeductionsBody(Seq(
     Seafarers(
       Some("myRef"),
       2000.99,
       "Blue Bell",
       "2018-04-06",
       "2019-04-06"
-    )
+    ))
   )
 
-  val noRefAmendOtherDeductionsBody = AmendOtherDeductionsBody(
+  val noRefAmendOtherDeductionsBody = AmendOtherDeductionsBody(Seq(
     Seafarers(
       None,
       2000.99,
       "Blue Bell",
       "2018-04-06",
       "2019-04-06"
-    )
+    ))
   )
 
   val json = Json.parse(
     """{
-      | "seafarers": {
+      | "seafarers": [{
       |   "customerReference": "myRef",
       |   "amountDeducted": 2000.99,
       |   "nameOfShip": "Blue Bell",
       |   "fromDate": "2018-04-06",
       |   "toDate": "2019-04-06"
-      |   }
+      |   }]
       |}""".stripMargin)
 
   val jsonNoRef = Json.parse(
     """{
-      | "seafarers": {
+      | "seafarers": [{
       |   "amountDeducted": 2000.99,
       |   "nameOfShip": "Blue Bell",
       |   "fromDate": "2018-04-06",
       |   "toDate": "2019-04-06"
-      |   }
+      |   }]
       |}""".stripMargin)
 
   "reads" when {

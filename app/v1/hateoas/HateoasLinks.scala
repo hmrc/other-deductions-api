@@ -35,10 +35,10 @@ trait HateoasLinks {
     s"/${appConfig.apiGatewayContext}/other/$nino/$taxYear"
 
   def amendOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_OTHER_DEDUCTIONS)
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = PUT, rel = AMEND_DEDUCTIONS_OTHER)
 
   def deleteOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_OTHER_DEDUCTIONS)
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_DEDUCTIONS_OTHER)
 
   def retrieveOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
     Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
