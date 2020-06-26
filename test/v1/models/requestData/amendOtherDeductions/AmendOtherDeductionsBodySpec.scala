@@ -30,6 +30,22 @@ class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
       "2019-04-06"
     ))
   )
+  val multipleSeafarersAmendOtherDeductionsBody = AmendOtherDeductionsBody(Seq(
+    Seafarers(
+      Some("myRef"),
+      2000.99,
+      "Blue Bell",
+      "2018-04-06",
+      "2019-04-06"
+    ),
+    Seafarers(
+      Some("myRef"),
+      2000.99,
+      "Blue Bell",
+      "2018-04-06",
+      "2019-04-06"
+    ))
+  )
 
   val noRefAmendOtherDeductionsBody = AmendOtherDeductionsBody(Seq(
     Seafarers(
@@ -52,6 +68,25 @@ class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
       |   }]
       |}""".stripMargin)
 
+  val jsonMultipleSeafarers = Json.parse(
+    """{
+      | "seafarers": [{
+      |   "customerReference": "myRef",
+      |   "amountDeducted": 2000.99,
+      |   "nameOfShip": "Blue Bell",
+      |   "fromDate": "2018-04-06",
+      |   "toDate": "2019-04-06"
+      |   },
+      |   {
+      |   "customerReference": "myRef",
+      |   "amountDeducted": 2000.99,
+      |   "nameOfShip": "Blue Bell",
+      |   "fromDate": "2018-04-06",
+      |   "toDate": "2019-04-06"
+      |   }
+      |   ]
+      |}""".stripMargin)
+
   val jsonNoRef = Json.parse(
     """{
       | "seafarers": [{
@@ -69,6 +104,13 @@ class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
       }
     }
   }
+  "reads from JSON with multiple seafarers" when {
+    "passed a JSON with multiple seafarers" should {
+      "return a valid model with multiple seafarers" in {
+        multipleSeafarersAmendOtherDeductionsBody shouldBe jsonMultipleSeafarers.as[AmendOtherDeductionsBody]
+      }
+    }
+  }
   "reads from JSON with no customer reference" should {
     "return a model with no customer reference" in {
       noRefAmendOtherDeductionsBody shouldBe jsonNoRef.as[AmendOtherDeductionsBody]
@@ -78,6 +120,13 @@ class AmendOtherDeductionsBodySpec extends UnitSpec with JsonErrorValidators {
     "passed valid model" should {
       "return valid JSON" in {
         Json.toJson(amendOtherDeductionsBody) shouldBe json
+      }
+    }
+  }
+  "writes from body with multiple seafarers" when {
+    "passed a model with multiple seafarers" should {
+      "return a JSON with multiple seafarers" in {
+        Json.toJson(multipleSeafarersAmendOtherDeductionsBody) shouldBe jsonMultipleSeafarers
       }
     }
   }
