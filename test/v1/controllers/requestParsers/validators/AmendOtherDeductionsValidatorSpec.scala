@@ -18,7 +18,7 @@ package v1.controllers.requestParsers.validators
 
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.{CustomerReferenceFormatError, DateFormatError, NameOfShipFormatError, NinoFormatError, RangeToDateBeforeFromDateError, RuleTaxYearRangeInvalidError, TaxYearFormatError, ValueFormatError}
+import v1.models.errors._
 import v1.models.requestData.amendOtherDeductions.AmendOtherDeductionsRawData
 
 class AmendOtherDeductionsValidatorSpec extends UnitSpec {
