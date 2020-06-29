@@ -35,13 +35,13 @@ class AmendOtherDeductionsServiceSpec extends UnitSpec {
   private val correlationId = "X-123"
 
   val body = AmendOtherDeductionsBody(
-    Seq(Seafarers(
+    Some(Seq(Seafarers(
       Some("myRef"),
       2000.99,
       "Blue Bell",
       "2018-04-06",
       "2019-04-06"
-    ))
+    )))
   )
 
   private val requestData = AmendOtherDeductionsRequest(nino, taxYear, body)

@@ -29,13 +29,13 @@ class AmendOtherDeductionsConnectorSpec extends ConnectorSpec {
   val taxYear = "2018-04-06"
   val nino = Nino("AA123456A")
   val body = AmendOtherDeductionsBody(
-    Seq(Seafarers(
+    Some(Seq(Seafarers(
       Some("myRef"),
       2000.99,
       "Blue Bell",
       "2018-04-06",
       "2019-04-06"
-    ))
+    )))
   )
 
   class Test extends MockHttpClient with MockAppConfig {
@@ -47,14 +47,14 @@ class AmendOtherDeductionsConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "doConnector" must {
+  "connector" must {
     val request = AmendOtherDeductionsRequest(nino, taxYear, body)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
       MockedHttpClient
         .put(
-          url = s"$baseUrl/individuals/deductions/other/$nino/$taxYear",
+          url = s"$baseUrl/deductions/other/$nino/$taxYear",
           body = body,
           requiredHeaders = "Environment" -> "des-environment", "Authorization" -> s"Bearer des-token"
         )
