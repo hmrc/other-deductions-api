@@ -30,5 +30,4 @@ object DateValidation {
     case Success(_) => NoValidationErrors
     case Failure(_) => List(DateFormatError.copy(paths = Some(Seq(path))))
   }
-
 }
