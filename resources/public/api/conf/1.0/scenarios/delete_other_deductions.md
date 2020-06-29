@@ -13,7 +13,7 @@
         </tr>
         <tr>
             <td><p>NOT_FOUND</p></td>
-            <td><p>Simulates the scenario where the given expenses could not be found.</p></td>
+            <td><p>Simulates the scenario where the given relief investment could not be found.</p></td>
          </tr>
     </tbody>
 </table>
