@@ -48,6 +48,13 @@ class DeleteOtherDeductionsValidatorSpec extends UnitSpec {
       }
     }
 
+    "return RuleTaxYearRangeInvalidError error" when {
+      "an invalid tax year range is supplied" in {
+        validator.validate(DeleteOtherDeductionsRawData(validNino, "2017-19")) shouldBe
+          List(RuleTaxYearRangeInvalidError)
+      }
+    }
+
     "return multiple errors" when {
       "request supplied has multiple errors" in {
         validator.validate(DeleteOtherDeductionsRawData("A12344A", "20178")) shouldBe
