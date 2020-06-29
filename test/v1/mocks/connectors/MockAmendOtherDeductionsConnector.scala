@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.connectors
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.models.domain.EmptyJsonBody
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.{AmendOtherDeductionsConnector, DesOutcome}
 import v1.models.requestData.amendOtherDeductions.AmendOtherDeductionsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class AmendOtherDeductionsConnector @Inject() (val http: HttpClient,
-                                               val appConfig: AppConfig) extends BaseDesConnector {
+trait MockAmendOtherDeductionsConnector extends MockFactory {
 
-  def amend(request: AmendOtherDeductionsRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+  val mockAmendOtherDeductionsConnector: AmendOtherDeductionsConnector = mock[AmendOtherDeductionsConnector]
 
-    put(
-      body = request.body,
-      uri = DesUri[Unit](s"individuals/deductions/other/${request.nino}/${request.taxYear}")
-    )
+  object MockAmendOtherDeductionsConnector {
+
+    def amend(requestData: AmendOtherDeductionsRequest): CallHandler[Future[DesOutcome[Unit]]] = {
+      (mockAmendOtherDeductionsConnector
+        .amend(_: AmendOtherDeductionsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(requestData, *, *)
+    }
   }
 }
