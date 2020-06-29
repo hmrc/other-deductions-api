@@ -24,7 +24,7 @@ import utils.Logging
 import v1.connectors.AmendOtherDeductionsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
-import v1.models.requestData.amendOtherDeductions.AmendOtherDeductionsRequest
+import v1.models.request.amendOtherDeductions.AmendOtherDeductionsRequest
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
