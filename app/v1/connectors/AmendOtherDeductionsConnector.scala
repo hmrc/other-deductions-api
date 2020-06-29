@@ -17,11 +17,12 @@
 package v1.connectors
 
 import config.AppConfig
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.models.des.DesSampleResponse
 import v1.models.domain.EmptyJsonBody
+import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.models.requestData.amendOtherDeductions.AmendOtherDeductionsRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,13 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendOtherDeductionsConnector @Inject() (val http: HttpClient,
                                                val appConfig: AppConfig) extends BaseDesConnector {
 
-  def doConnectorThing(request: AmendOtherDeductionsRequest)(
+  def amend(request: AmendOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[DesSampleResponse]] = {
+    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
 
-    post(
+    put(
       body = EmptyJsonBody,
-      DesUri[DesSampleResponse](s"deductions/nino/${request.nino}/taxYear/${request.desTaxYear}/someService")
+      uri = DesUri[Unit](s"individuals/deductions/other/${request.nino}/${request.taxYear}")
     )
   }
 }
