@@ -29,10 +29,10 @@ import v1.controllers.requestParsers.SampleRequestParser
 import v1.hateoas.HateoasFactory
 import v1.models.audit.{AuditEvent, SampleAuditDetail, SampleAuditResponse}
 import v1.models.auth.UserDetails
-import v1.models.domain.SampleHateoasData
 import v1.models.errors._
-import v1.models.request.SampleRawData
-import v1.services.{SampleService, _}
+import v1.models.request.sample.SampleRawData
+import v1.models.response.sample.SampleHateoasData
+import v1.services._
 
 import scala.concurrent.{ExecutionContext, Future}
 
