@@ -25,7 +25,7 @@ import scala.util.{Failure, Success, Try}
 object DateValidation {
 
   def validate(field: String, path: String): List[MtdError] = Try {
-    if(field.nonEmpty) LocalDate.parse(field, dateFormat)
+    LocalDate.parse(field, dateFormat)
   } match {
     case Success(_) => NoValidationErrors
     case Failure(_) => List(DateFormatError.copy(paths = Some(Seq(path))))
