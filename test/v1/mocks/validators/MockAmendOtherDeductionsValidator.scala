@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import v1.controllers.requestParsers.validators.AmendOtherDeductionsValidator
 import v1.models.errors.MtdError
-import v1.models.requestData.amendOtherDeductions.AmendOtherDeductionsRawData
+import v1.models.request.amendOtherDeductions.AmendOtherDeductionsRawData
 
 class MockAmendOtherDeductionsValidator extends MockFactory {
 

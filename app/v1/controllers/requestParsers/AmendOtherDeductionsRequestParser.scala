@@ -19,7 +19,7 @@ package v1.controllers.requestParsers
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.AmendOtherDeductionsValidator
-import v1.models.requestData.amendOtherDeductions.{AmendOtherDeductionsBody, AmendOtherDeductionsRawData, AmendOtherDeductionsRequest}
+import v1.models.request.amendOtherDeductions.{AmendOtherDeductionsBody, AmendOtherDeductionsRawData, AmendOtherDeductionsRequest}
 
 class AmendOtherDeductionsRequestParser @Inject()(val validator: AmendOtherDeductionsValidator)
   extends RequestParser[AmendOtherDeductionsRawData, AmendOtherDeductionsRequest] {
