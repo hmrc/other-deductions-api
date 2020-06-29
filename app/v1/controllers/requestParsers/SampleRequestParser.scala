@@ -22,7 +22,7 @@ import v1.controllers.requestParsers.validators.SampleValidator
 import v1.models.domain.SampleRequestBody
 import v1.models.request.{DesTaxYear, SampleRawData, SampleRequestData}
 
-class SampleRequestDataParser @Inject()(val validator: SampleValidator)
+class SampleRequestParser @Inject()(val validator: SampleValidator)
   extends RequestParser[SampleRawData, SampleRequestData] {
 
   override protected def requestFor(data: SampleRawData): SampleRequestData =
