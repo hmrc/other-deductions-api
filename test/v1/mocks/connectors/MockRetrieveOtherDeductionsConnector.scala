@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package v1.connectors
+package v1.mocks.connectors
 
-import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
-import v1.connectors.httpparsers.StandardDesHttpParser._
+import v1.connectors.{DesOutcome, RetrieveOtherDeductionsConnector}
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
 import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class RetrieveOtherDeductionsConnector @Inject()(val http: HttpClient,
-                                                 val appConfig: AppConfig) extends BaseDesConnector {
+trait MockRetrieveOtherDeductionsConnector extends MockFactory {
 
-  def retrieve(request: RetrieveOtherDeductionsRequest)
-            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveOtherDeductionsResponse]] = {
+  val mockRetrieveOtherDeductionsConnector: RetrieveOtherDeductionsConnector = mock[RetrieveOtherDeductionsConnector]
 
-    get(
-      DesUri[RetrieveOtherDeductionsResponse](s"deductions/other/${request.nino}/${request.taxYear}")
-    )
+  object MockRetrieveOtherDeductionsConnector {
+
+    def retrieve(requestData: RetrieveOtherDeductionsRequest): CallHandler[Future[DesOutcome[RetrieveOtherDeductionsResponse]]] = {
+      (mockRetrieveOtherDeductionsConnector
+        .retrieve(_: RetrieveOtherDeductionsRequest)(_: HeaderCarrier, _: ExecutionContext))
+        .expects(requestData, *, *)
+    }
   }
 }
