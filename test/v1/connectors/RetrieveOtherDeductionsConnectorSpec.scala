@@ -37,7 +37,7 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desEnvironment returns "des-environment"
   }
 
-  "delete" must {
+  "retrieve" should {
     val request = RetrieveOtherDeductionsRequest(nino, taxYear)
 
     "return the result" when {
