@@ -26,12 +26,12 @@
             "example": "Blue Bell"
           },
           "fromDate": {
-            "description": "The date work started in the format YYYY-MM-DD.",
+            "description": "The date work started in the format YYYY-MM-DD",
             "type": "string",
             "example": "2029-04-06"
           },
           "toDate": {
-            "description": "The date work ended in the format: YYYY-MM-DD.",
+            "description": "The date work ended in the format: YYYY-MM-DD",
             "type": "string",
             "example": "2020-04-06"
           }
