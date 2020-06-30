@@ -16,14 +16,15 @@
 
 package v1.controllers.requestParsers
 
-import cats.Inject
+import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import v1.controllers.requestParsers.validators.RetrieveOtherDeductionsValidator
+import v1.models.request.retrieveOtherDeductions.{RetrieveOtherDeductionsRawData, RetrieveOtherDeductionsRequest}
 
 class RetrieveOtherDeductionsRequestParser @Inject()(val validator: RetrieveOtherDeductionsValidator)
   extends RequestParser[RetrieveOtherDeductionsRawData, RetrieveOtherDeductionsRequest] {
 
   override protected def requestFor(data: RetrieveOtherDeductionsRawData): RetrieveOtherDeductionsRequest =
-    RetrieveOtherDeductionsRequest(Nino(data.nino), data.taxYear, data.body.as[RetrieveOtherDeductionsBody])
+    RetrieveOtherDeductionsRequest(Nino(data.nino), data.taxYear)
 
 }

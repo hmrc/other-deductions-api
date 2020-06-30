@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package v1.controllers.requestParsers.validators
+package v1.mocks.validators
 
-import v1.controllers.requestParsers.validators.validations._
+import org.scalamock.handlers.CallHandler1
+import org.scalamock.scalatest.MockFactory
+import v1.controllers.requestParsers.validators.RetrieveOtherDeductionsValidator
 import v1.models.errors.MtdError
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRawData
 
-class RetrieveOtherDeductionsValidator extends Validator[RetrieveOtherDeductionsRawData] {
+class MockRetrieveOtherDeductionsValidator extends MockFactory {
 
-  private val validationSet = List(parameterFormatValidation)
+  val mockValidator: RetrieveOtherDeductionsValidator = mock[RetrieveOtherDeductionsValidator]
 
-  private def parameterFormatValidation: RetrieveOtherDeductionsRawData => List[List[MtdError]] = (data: RetrieveOtherDeductionsRawData) => {
-    List(
-      NinoValidation.validate(data.nino),
-      TaxYearValidation.validate(data.taxYear)
-    )
+  object MockRetrieveOtherDeductionsValidator {
+
+    def validate(data: RetrieveOtherDeductionsRawData): CallHandler1[RetrieveOtherDeductionsRawData, List[MtdError]] = {
+      (mockValidator
+        .validate(_: RetrieveOtherDeductionsRawData))
+        .expects(data)
+    }
   }
-
-  override def validate(data: RetrieveOtherDeductionsRawData): List[MtdError] = {
-    run(validationSet, data).distinct
-  }
-
 }
