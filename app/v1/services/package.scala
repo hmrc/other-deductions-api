@@ -26,4 +26,7 @@ package object services {
   type AmendOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
 
   type DeleteOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
+
+  type RetrieveOtherDeductionsServiceOutcome = ServiceOutcome[RetrieveOtherDeductionsBody]
+
 }
