@@ -27,7 +27,8 @@ import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRawData
 class DeleteOtherDeductionsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2019-20"
+
+  private val validTaxYear = "2021-22"
 
   class Test extends MockCurrentTaxYear with MockAppConfig {
 

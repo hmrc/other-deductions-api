@@ -29,7 +29,7 @@ import v1.models.request.amendOtherDeductions.AmendOtherDeductionsRawData
 class AmendOtherDeductionsValidatorSpec @Inject()(implicit appConfig: AppConfig, currentTaxYear: CurrentTaxYear) extends UnitSpec {
 
   private val validNino = "AA123456A"
-  private val validTaxYear = "2019-20"
+  private val validTaxYear = "201-22"
   private val requestBodyJson = Json.parse(
     """
       |{
