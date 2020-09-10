@@ -34,7 +34,7 @@ class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
     implicit val currentTaxYear: CurrentTaxYear = mockCurrentTaxYear
 
     MockedAppConfig.minimumPermittedTaxYear
-      .returns(2020)
+      .returns(2022)
 
   }
 
@@ -42,26 +42,26 @@ class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
     "return no errors" when {
       "a valid tax year is supplied" in new Test {
 
-        val validTaxYear = "2019-20"
+        val validTaxYear = "2022-23"
         val validationResult = MtdTaxYearValidation.validate(validTaxYear)
         validationResult.isEmpty shouldBe true
-
-        "the minimum allowed tax year is supplied" in {
-          val validTaxYear = "2021-22"
-          val validationResult = MtdTaxYearValidation.validate(validTaxYear)
-          validationResult.isEmpty shouldBe true
-        }
       }
 
-      "return the given error" when {
-        "a tax year below the minimum is supplied" in new Test {
+      "the minimum allowed tax year is supplied" in new Test {
+        val validTaxYear = "2021-22"
+        val validationResult = MtdTaxYearValidation.validate(validTaxYear)
+        validationResult.isEmpty shouldBe true
+      }
+    }
 
-          val invalidTaxYear = "2020-21"
-          val validationResult = MtdTaxYearValidation.validate(invalidTaxYear)
-          validationResult.isEmpty shouldBe false
-          validationResult.length shouldBe 1
-          validationResult.head shouldBe RuleTaxYearNotSupportedError
-        }
+    "return the given error" when {
+      "a tax year below the minimum is supplied" in new Test {
+
+        val invalidTaxYear = "2020-21"
+        val validationResult = MtdTaxYearValidation.validate(invalidTaxYear)
+        validationResult.isEmpty shouldBe false
+        validationResult.length shouldBe 1
+        validationResult.head shouldBe RuleTaxYearNotSupportedError
       }
     }
   }

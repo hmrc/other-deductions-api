@@ -36,7 +36,7 @@ class DeleteOtherDeductionsValidatorSpec extends UnitSpec {
     implicit val currentTaxYear: CurrentTaxYear = mockCurrentTaxYear
 
     MockedAppConfig.minimumPermittedTaxYear
-      .returns(2019)
+      .returns(2022)
 
     val validator = new DeleteOtherDeductionsValidator()
 
