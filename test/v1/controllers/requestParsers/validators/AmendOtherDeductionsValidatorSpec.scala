@@ -17,7 +17,6 @@
 package v1.controllers.requestParsers.validators
 
 import config.AppConfig
-import javax.inject.Inject
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -26,7 +25,7 @@ import v1.mocks.MockCurrentTaxYear
 import v1.models.errors._
 import v1.models.request.amendOtherDeductions.AmendOtherDeductionsRawData
 
-class AmendOtherDeductionsValidatorSpec @Inject()(implicit appConfig: AppConfig, currentTaxYear: CurrentTaxYear) extends UnitSpec {
+class AmendOtherDeductionsValidatorSpec extends UnitSpec {
 
   private val validNino = "AA123456A"
   private val validTaxYear = "2021-22"

@@ -20,7 +20,6 @@ import config.AppConfig
 import mocks.MockAppConfig
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import support.UnitSpec
-import utils.CurrentTaxYear
 import v1.mocks.MockCurrentTaxYear
 import v1.models.errors.RuleTaxYearNotSupportedError
 import v1.models.utils.JsonErrorValidators
@@ -31,7 +30,6 @@ class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
     val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd")
 
     implicit val appConfig: AppConfig = mockAppConfig
-    implicit val currentTaxYear: CurrentTaxYear = mockCurrentTaxYear
 
     MockedAppConfig.minimumPermittedTaxYear
       .returns(2022)
