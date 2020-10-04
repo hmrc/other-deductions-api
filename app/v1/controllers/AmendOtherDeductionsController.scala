@@ -19,6 +19,7 @@ package v1.controllers
 import cats.data.EitherT
 import cats.implicits._
 import javax.inject.{Inject, Singleton}
+import org.joda.time.DateTime
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -108,11 +109,16 @@ class AmendOtherDeductionsController @Inject()(val authService: EnrolmentsAuthSe
            MtdErrorWithCustomMessage(CustomerReferenceFormatError.code) |
            MtdErrorWithCustomMessage(DateFormatError.code) |
            MtdErrorWithCustomMessage(RangeToDateBeforeFromDateError.code) => BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case DownstreamError => {
+        DateTime.now().getHourOfDay < 9 || DateTime.now().getHourOfDay >= 17 match {
+          case false => logger.error(s"Error thrown during work hours (9am-5pm)")
+          case true =>  logger.error(s"Error thrown outside of work time (5pm-9am)")
+        }
+        InternalServerError(Json.toJson(errorWrapper))
+      }
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
     }
   }
-
   private def auditSubmission(details: DeductionsAuditDetail)
                              (implicit hc: HeaderCarrier,
                               ec: ExecutionContext): Future[AuditResult] = {
