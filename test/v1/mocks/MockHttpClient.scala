@@ -20,7 +20,7 @@ import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -32,17 +32,9 @@ trait MockHttpClient extends MockFactory {
 
     def get[T](url: String, requiredHeaders: (String, String)*): CallHandler[Future[T]] = {
       (mockHttpClient
-        .GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])(_: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
-        .expects(where { (actualUrl, _, _, _, hc, _) =>
-          url == actualUrl && requiredHeaders.forall((hc.extraHeaders ++ hc.headers(requiredHeaders.map(_._1))).contains)
-        })
-    }
-
-    def parameterGet[T](url: String, parameters: Seq[(String, String)], requiredHeaders: (String, String)*): CallHandler[Future[T]] = {
-      (mockHttpClient
-        .GET(_: String, _: Seq[(String, String)], _: Seq[(String, String)])(_: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
-        .expects(where { (actualUrl, params, _,  _, hc, _) =>
-          url == actualUrl && requiredHeaders.forall((hc.extraHeaders ++ hc.headers(requiredHeaders.map(_._1))).contains) && params == parameters
+        .GET(_: String)(_: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
+        .expects(where { (actualUrl, _, hc, _) =>
+          url == actualUrl && requiredHeaders.forall(h => hc.headers.contains(h))
         })
     }
 
@@ -50,15 +42,16 @@ trait MockHttpClient extends MockFactory {
       (mockHttpClient
         .POST[I, T](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
         .expects(where { (actualUrl, actualBody, _, _, _, hc, _) =>
-          url == actualUrl && body == actualBody && requiredHeaders.forall((hc.extraHeaders ++ hc.headers(requiredHeaders.map(_._1))).contains)
+          url == actualUrl && body == actualBody && requiredHeaders.forall(h => hc.headers.contains(h))
         })
     }
+
 
     def put[I, T](url: String, body: I, requiredHeaders: (String, String)*): CallHandler[Future[T]] = {
       (mockHttpClient
         .PUT[I, T](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
         .expects(where { (actualUrl, actualBody, _, _, _, hc, _) =>
-          url == actualUrl && body == actualBody && requiredHeaders.forall((hc.extraHeaders ++ hc.headers(requiredHeaders.map(_._1))).contains)
+          url == actualUrl && body == actualBody && requiredHeaders.forall(h => hc.headers.contains(h))
         })
     }
 
@@ -66,7 +59,7 @@ trait MockHttpClient extends MockFactory {
       (mockHttpClient
         .DELETE(_: String, _: Seq[(String, String)])(_: HttpReads[T], _: HeaderCarrier, _: ExecutionContext))
         .expects(where { (actualUrl, _,  _, hc, _) =>
-          url == actualUrl && requiredHeaders.forall((hc.extraHeaders ++ hc.headers(requiredHeaders.map(_._1))).contains)
+          url == actualUrl && requiredHeaders.forall(h => hc.headers.contains(h))
         })
     }
   }
