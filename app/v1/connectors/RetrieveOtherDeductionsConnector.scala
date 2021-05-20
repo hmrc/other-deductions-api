@@ -28,13 +28,13 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RetrieveOtherDeductionsConnector @Inject()(val http: HttpClient,
-                                                 val appConfig: AppConfig) extends BaseDesConnector {
+                                                 val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def retrieve(request: RetrieveOtherDeductionsRequest)
-            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DesOutcome[RetrieveOtherDeductionsResponse]] = {
+            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DownstreamOutcome[RetrieveOtherDeductionsResponse]] = {
 
     get(
-      DesUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${request.nino}/${request.taxYear}")
+      IfsUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${request.nino}/${request.taxYear}")
     )
   }
 }

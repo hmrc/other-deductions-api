@@ -26,13 +26,14 @@ trait MockAppConfig extends MockFactory {
   val mockAppConfig: AppConfig = mock[AppConfig]
 
   object MockedAppConfig {
-    def desBaseUrl: CallHandler[String] = (mockAppConfig.desBaseUrl _: () => String).expects()
-
-    def desToken: CallHandler[String] = (mockAppConfig.desToken _).expects()
-
-    def desEnvironment: CallHandler[String] = (mockAppConfig.desEnv _).expects()
 
     def mtdIdBaseUrl: CallHandler[String] = (mockAppConfig.mtdIdBaseUrl _: () => String).expects()
+
+    def ifsBaseUrl: CallHandler[String] = (mockAppConfig.ifsBaseUrl _: () => String).expects()
+
+    def ifsToken: CallHandler[String] = (mockAppConfig.ifsToken _).expects()
+
+    def ifsEnvironment: CallHandler[String] = (mockAppConfig.ifsEnv _).expects()
 
     def featureSwitch: CallHandler[Option[Configuration]] = (mockAppConfig.featureSwitch _: () => Option[Configuration]).expects()
 

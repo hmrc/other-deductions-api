@@ -27,15 +27,15 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AmendOtherDeductionsConnector @Inject() (val http: HttpClient,
-                                               val appConfig: AppConfig) extends BaseDesConnector {
+                                               val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amend(request: AmendOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[Unit]] = {
+    ec: ExecutionContext): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,
-      uri = DesUri[Unit](s"income-tax/deductions/${request.nino}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/deductions/${request.nino}/${request.taxYear}")
     )
   }
 }
