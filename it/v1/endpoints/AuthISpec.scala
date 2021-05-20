@@ -31,7 +31,6 @@ class AuthISpec extends IntegrationBaseSpec {
     val nino          = "AA123456A"
     val taxYear       = "2021-22"
     val data        = "someData"
-    val correlationId = "X-123"
 
     val desResponseBody: JsValue = Json.parse(
       """
