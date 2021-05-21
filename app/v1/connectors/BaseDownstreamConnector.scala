@@ -30,7 +30,7 @@ trait BaseDownstreamConnector {
 
   val logger: Logger = Logger(this.getClass)
 
-  private[connectors] def downstreamHeaderCarrier(implicit hc: HeaderCarrier): HeaderCarrier =
+  private[connectors] def ifsHeaderCarrier(implicit hc: HeaderCarrier): HeaderCarrier =
     hc.copy(authorization = Some(Authorization(s"Bearer ${appConfig.ifsToken}")))
       .withExtraHeaders("Environment" -> appConfig.ifsEnv)
 
@@ -42,7 +42,7 @@ trait BaseDownstreamConnector {
       http.POST(s"${appConfig.ifsBaseUrl}/${uri.value}", body)
     }
 
-    doPost(downstreamHeaderCarrier(hc))
+    doPost(ifsHeaderCarrier(hc))
   }
 
   def put[Body: Writes, Resp](body: Body, uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -53,7 +53,7 @@ trait BaseDownstreamConnector {
       http.PUT(s"${appConfig.ifsBaseUrl}/${uri.value}", body)
     }
 
-    doPut(downstreamHeaderCarrier(hc))
+    doPut(ifsHeaderCarrier(hc))
   }
 
   def get[Resp](uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -63,7 +63,7 @@ trait BaseDownstreamConnector {
     def doGet(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.GET(s"${appConfig.ifsBaseUrl}/${uri.value}")
 
-    doGet(downstreamHeaderCarrier(hc))
+    doGet(ifsHeaderCarrier(hc))
   }
 
   def delete[Resp](uri: IfsUri[Resp])(implicit ec: ExecutionContext,
@@ -73,7 +73,7 @@ trait BaseDownstreamConnector {
     def doDelete(implicit hc: HeaderCarrier): Future[DownstreamOutcome[Resp]] =
       http.DELETE(s"${appConfig.ifsBaseUrl}/${uri.value}")
 
-    doDelete(downstreamHeaderCarrier(hc))
+    doDelete(ifsHeaderCarrier(hc))
   }
 
 }
