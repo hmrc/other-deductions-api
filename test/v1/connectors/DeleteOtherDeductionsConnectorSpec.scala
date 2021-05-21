@@ -17,7 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequest
@@ -25,15 +25,15 @@ import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequest
 import scala.concurrent.Future
 
 class DeleteOtherDeductionsConnectorSpec extends ConnectorSpec {
-
   val taxYear = "2017-18"
   val nino = Nino("AA123456A")
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: DeleteOtherDeductionsConnector = new DeleteOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    MockedAppConfig.ifsBaseUrl returns baseUrl
-    MockedAppConfig.ifsToken returns "ifs-token"
-    MockedAppConfig.ifsEnvironment returns "ifs-environment"
+    )
+    MockAppConfig.ifsBaseUrl returns baseUrl
+    MockAppConfig.ifsToken returns "ifs-token"
+    MockAppConfig.ifsEnvironment returns "ifs-environment"
   }
 
   "delete" must {

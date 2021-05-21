@@ -17,8 +17,8 @@
 package config
 
 import com.typesafe.config.Config
-import javax.inject.{Inject, Singleton}
-import play.api.{ConfigLoader, Configuration}
+import javax.inject.{ Inject, Singleton }
+import play.api.{ ConfigLoader, Configuration }
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {

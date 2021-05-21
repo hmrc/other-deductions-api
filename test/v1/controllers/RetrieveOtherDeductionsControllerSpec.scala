@@ -17,7 +17,7 @@
 package v1.controllers
 
 import play.api.libs.json.Json
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.hateoas.MockHateoasFactory
