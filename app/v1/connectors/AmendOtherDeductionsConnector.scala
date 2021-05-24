@@ -31,11 +31,12 @@ class AmendOtherDeductionsConnector @Inject() (val http: HttpClient,
 
   def amend(request: AmendOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DownstreamOutcome[Unit]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,
-      uri = IfsUri[Unit](s"income-tax/deductions/${request.nino}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/deductions/${request.nino.nino}/${request.taxYear}")
     )
   }
 }

@@ -35,7 +35,8 @@ class AmendOtherDeductionsService @Inject()(connector: AmendOtherDeductionsConne
   def amend(request: AmendOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[AmendOtherDeductionsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[AmendOtherDeductionsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.amend(request)).leftMap(mapDesErrors(desErrorMap))

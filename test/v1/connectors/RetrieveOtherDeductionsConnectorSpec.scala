@@ -27,17 +27,18 @@ import scala.concurrent.Future
 class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
 
   val taxYear = "2017-18"
-  val nino = Nino("AA123456A")
+  val nino = "AA123456A"
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: RetrieveOtherDeductionsConnector = new RetrieveOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "retrieve" should {
-    val request = RetrieveOtherDeductionsRequest(nino, taxYear)
+    val request = RetrieveOtherDeductionsRequest(Nino(nino), taxYear)
 
     "return the result" when {
       "downstream call is successful" in new Test {
@@ -45,8 +46,10 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
 
         MockedHttpClient
           .get(
-            url = s"$baseUrl/income-tax/deductions/${request.nino}/${request.taxYear}",
-            requiredHeaders = "Environment" -> "ifs-environment", "Authorization" -> s"Bearer ifs-token"
+            url = s"$baseUrl/income-tax/deductions/$nino/$taxYear",
+            config = dummyIfsHeaderCarrierConfig,
+            requiredHeaders = requiredIfsHeaders,
+            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
           )
           .returns(Future.successful(outcome))
 

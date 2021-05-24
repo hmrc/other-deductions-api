@@ -25,5 +25,5 @@ class AmendOtherDeductionsRequestParser @Inject()(val validator: AmendOtherDeduc
   extends RequestParser[AmendOtherDeductionsRawData, AmendOtherDeductionsRequest] {
 
   override protected def requestFor(data: AmendOtherDeductionsRawData): AmendOtherDeductionsRequest =
-    AmendOtherDeductionsRequest(Nino(data.nino), data.taxYear, data.body.json.as[AmendOtherDeductionsBody])
+    AmendOtherDeductionsRequest(Nino(data.nino), data.taxYear, data.body.as[AmendOtherDeductionsBody])
 }

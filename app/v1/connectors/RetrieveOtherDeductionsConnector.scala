@@ -30,11 +30,13 @@ import scala.concurrent.{ExecutionContext, Future}
 class RetrieveOtherDeductionsConnector @Inject()(val http: HttpClient,
                                                  val appConfig: AppConfig) extends BaseDownstreamConnector {
 
-  def retrieve(request: RetrieveOtherDeductionsRequest)
-            (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[DownstreamOutcome[RetrieveOtherDeductionsResponse]] = {
+  def retrieve(request: RetrieveOtherDeductionsRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext,
+    correlationId: String): Future[DownstreamOutcome[RetrieveOtherDeductionsResponse]] = {
 
     get(
-      IfsUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${request.nino}/${request.taxYear}")
+      IfsUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${request.nino.nino}/${request.taxYear}")
     )
   }
 }

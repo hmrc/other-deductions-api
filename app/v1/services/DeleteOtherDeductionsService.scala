@@ -35,7 +35,8 @@ class DeleteOtherDeductionsService @Inject()(DeleteOtherDeductionsConnector: Del
   def delete(request: DeleteOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[DeleteOtherDeductionsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[DeleteOtherDeductionsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(DeleteOtherDeductionsConnector.delete(request)).leftMap(mapDesErrors(desErrorMap))

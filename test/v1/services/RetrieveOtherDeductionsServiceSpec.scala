@@ -16,7 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
 import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
@@ -26,14 +25,12 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
 import v1.models.response.retrieveOtherDeductions.{RetrieveOtherDeductionsResponse, Seafarers}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RetrieveOtherDeductionsServiceSpec extends UnitSpec {
+class RetrieveOtherDeductionsServiceSpec extends ServiceSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2017-18"
-  private val correlationId = "X-123"
 
   private val responseModel = RetrieveOtherDeductionsResponse(
     "2019-04-04T01:01:01Z",
@@ -66,7 +63,7 @@ class RetrieveOtherDeductionsServiceSpec extends UnitSpec {
           MockRetrieveOtherDeductionsConnector.retrieve(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.retrieve(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

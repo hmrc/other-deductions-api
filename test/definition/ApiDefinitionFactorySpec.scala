@@ -31,8 +31,6 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     MockAppConfig.apiGatewayContext returns "other/deductions"
   }
 
-  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
-
   "definition" when {
     "called" should {
       "return a valid Definition case class when confidence level 200 checking is enforced" in {

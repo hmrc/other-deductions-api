@@ -34,7 +34,7 @@ trait MockAppConfig extends MockFactory {
     def ifsBaseUrl: CallHandler[String] = (mockAppConfig.ifsBaseUrl _: () => String).expects()
     def ifsToken: CallHandler[String] = (mockAppConfig.ifsToken _).expects()
     def ifsEnvironment: CallHandler[String] = (mockAppConfig.ifsEnv _).expects()
-    def desEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (mockAppConfig.ifsEnvironmentHeaders _).expects()
+    def ifsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (mockAppConfig.ifsEnvironmentHeaders _).expects()
 
     // Business Rule Config
     def minimumPermittedTaxYear: CallHandler[Int] = (mockAppConfig.minimumPermittedTaxYear _).expects()

@@ -32,8 +32,8 @@ trait MockDeleteOtherDeductionsConnector extends MockFactory {
 
     def delete(requestData: DeleteOtherDeductionsRequest): CallHandler[Future[DownstreamOutcome[Unit]]] = {
       (mockDeleteOtherDeductionsConnector
-        .delete(_: DeleteOtherDeductionsRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .delete(_: DeleteOtherDeductionsRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 

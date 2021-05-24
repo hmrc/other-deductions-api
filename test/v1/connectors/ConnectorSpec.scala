@@ -38,14 +38,14 @@ trait ConnectorSpec extends UnitSpec
   implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders)
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  val dummyDesHeaderCarrierConfig: HeaderCarrier.Config =
+  val dummyIfsHeaderCarrierConfig: HeaderCarrier.Config =
     HeaderCarrier.Config(
       Seq("^not-test-BaseUrl?$".r),
       Seq.empty[String],
       Some("other-deductions-api")
     )
 
-  val requiredDesHeaders: Seq[(String, String)] = Seq(
+  val requiredIfsHeaders: Seq[(String, String)] = Seq(
     "Authorization" -> "Bearer ifs-token",
     "Environment" -> "ifs-environment",
     "User-Agent" -> "other-deductions-api",
@@ -53,7 +53,7 @@ trait ConnectorSpec extends UnitSpec
     "Gov-Test-Scenario" -> "DEFAULT"
   )
 
-  val allowedDesHeaders: Seq[String] = Seq(
+  val allowedIfsHeaders: Seq[String] = Seq(
     "Accept",
     "Gov-Test-Scenario",
     "Content-Type",

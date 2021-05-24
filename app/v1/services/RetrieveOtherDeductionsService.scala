@@ -35,7 +35,8 @@ class RetrieveOtherDeductionsService @Inject()(connector: RetrieveOtherDeduction
   def retrieve(request: RetrieveOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    logContext: EndpointLogContext): Future[RetrieveOtherDeductionsServiceOutcome] = {
+    logContext: EndpointLogContext,
+    correlationId: String): Future[RetrieveOtherDeductionsServiceOutcome] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))

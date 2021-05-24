@@ -16,7 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
 import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
@@ -25,15 +24,12 @@ import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequest
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class DeleteOtherDeductionsServiceSpec extends UnitSpec {
+class DeleteOtherDeductionsServiceSpec extends ServiceSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2017-18"
-  private val correlationId = "X-123"
-
 
   private val request = DeleteOtherDeductionsRequest(Nino(nino), taxYear)
 
@@ -65,7 +61,7 @@ class DeleteOtherDeductionsServiceSpec extends UnitSpec {
             MockDeleteOtherDeductionsConnector.delete(request)
               .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-            await(service.delete(request)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+            await(service.delete(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }
 
         val input = Seq(

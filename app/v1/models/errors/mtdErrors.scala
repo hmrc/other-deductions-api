@@ -48,10 +48,6 @@ object TaxYearFormatError extends MtdError(
   message = "The provided tax year is invalid"
 )
 
-object SRNFormatError extends MtdError(
-  code = "FORMAT_SRN_INVALID",
-  message = "The provided scheme reference number is invalid"
-)
 // Rule Errors
 object RuleTaxYearNotSupportedError
     extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "Tax year not supported, because it precedes the earliest allowable tax year")

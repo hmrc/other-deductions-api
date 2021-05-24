@@ -28,7 +28,7 @@ import scala.concurrent.Future
 class AmendOtherDeductionsConnectorSpec extends ConnectorSpec {
 
   val taxYear = "2018-04-06"
-  val nino = Nino("AA123456A")
+  val nino = "AA123456A"
   val body = AmendOtherDeductionsBody(
     Some(Seq(Seafarers(
       Some("myRef"),
@@ -41,29 +41,27 @@ class AmendOtherDeductionsConnectorSpec extends ConnectorSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: AmendOtherDeductionsConnector = new AmendOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    )
-
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedDesHeaders)
+    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
   }
 
   "connector" must {
-    val request = AmendOtherDeductionsRequest(nino, taxYear, body)
+    val request = AmendOtherDeductionsRequest(Nino(nino), taxYear, body)
 
     "put a body and return 204 no body" in new Test {
       val outcome = Right(ResponseWrapper(correlationId, ()))
 
       implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
-      val requiredDesHeadersPut: Seq[(String, String)] = requiredDesHeaders ++ Seq("Content-Type" -> "application/json")
+      val requiredIfsHeadersPut: Seq[(String, String)] = requiredIfsHeaders ++ Seq("Content-Type" -> "application/json")
 
       MockedHttpClient
         .put(
-          url = s"$baseUrl/income-tax/deductions/${request.nino}/${request.taxYear}",
-          config = dummyDesHeaderCarrierConfig,
+          url = s"$baseUrl/income-tax/deductions/$nino/$taxYear",
+          config = dummyIfsHeaderCarrierConfig,
           body = body,
-          requiredHeaders = requiredDesHeadersPut,
+          requiredHeaders = requiredIfsHeadersPut,
           excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
         ).returns(Future.successful(outcome))
 
