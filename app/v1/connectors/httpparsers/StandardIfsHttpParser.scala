@@ -23,7 +23,7 @@ import v1.connectors.DownstreamOutcome
 import v1.models.errors.{DownstreamError, OutboundError}
 import v1.models.outcomes.ResponseWrapper
 
-object StandardDesHttpParser extends HttpParser {
+object StandardIfsHttpParser extends HttpParser {
 
   case class SuccessCode(status: Int) extends AnyVal
 
@@ -48,16 +48,16 @@ object StandardDesHttpParser extends HttpParser {
 
     if (response.status != successCode.status) {
       logger.warn(
-        "[StandardDesHttpParser][read] - " +
-          s"Error response received from DES with status: ${response.status} and body\n" +
+        "[StandardIfsHttpParser][read] - " +
+          s"Error response received from IFS with status: ${response.status} and body\n" +
           s"${response.body} and correlationId: $correlationId when calling $url")
     }
 
     response.status match {
       case successCode.status =>
         logger.info(
-          "[StandardDesHttpParser][read] - " +
-            s"Success response received from DES with correlationId: $correlationId when calling $url")
+          "[StandardIfsHttpParser][read] - " +
+            s"Success response received from IFS with correlationId: $correlationId when calling $url")
         successOutcomeFactory(correlationId)
       case BAD_REQUEST | NOT_FOUND | FORBIDDEN | CONFLICT => Left(ResponseWrapper(correlationId, parseErrors(response)))
       case _                                              => Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
