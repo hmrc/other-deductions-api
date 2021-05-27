@@ -71,7 +71,7 @@ class AmendOtherDeductionsServiceSpec extends ServiceSpec {
         s"a $desErrorCode error is returned from the service" in new Test {
 
           MockAmendOtherDeductionsConnector.amend(requestData)
-            .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+            .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(desErrorCode))))))
 
           await(service.amend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }

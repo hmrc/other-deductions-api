@@ -25,12 +25,12 @@ import v1.connectors.RetrieveOtherDeductionsConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors.{DownstreamError, NinoFormatError, NotFoundError, TaxYearFormatError}
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
-import v1.support.DesResponseMappingSupport
+import v1.support.IfsResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveOtherDeductionsService @Inject()(connector: RetrieveOtherDeductionsConnector) extends DesResponseMappingSupport with Logging {
+class RetrieveOtherDeductionsService @Inject()(connector: RetrieveOtherDeductionsConnector) extends IfsResponseMappingSupport with Logging {
 
   def retrieve(request: RetrieveOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
@@ -39,13 +39,13 @@ class RetrieveOtherDeductionsService @Inject()(connector: RetrieveOtherDeduction
     correlationId: String): Future[RetrieveOtherDeductionsServiceOutcome] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapDesErrors(desErrorMap))
-    } yield desResponseWrapper
+      ifsResponseWrapper <- EitherT(connector.retrieve(request)).leftMap(mapIfsErrors(ifsErrorMap))
+    } yield ifsResponseWrapper
 
     result.value
   }
 
-  private def desErrorMap =
+  private def ifsErrorMap =
     Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR" -> TaxYearFormatError,

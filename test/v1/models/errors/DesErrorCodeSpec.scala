@@ -32,7 +32,7 @@ class DesErrorCodeSpec extends UnitSpec {
     )
 
     "generate the correct error code" in {
-      json.as[DesErrorCode] shouldBe DesErrorCode("CODE")
+      json.as[IfsErrorCode] shouldBe IfsErrorCode("CODE")
     }
   }
 }

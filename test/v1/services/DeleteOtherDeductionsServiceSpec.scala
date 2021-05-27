@@ -55,11 +55,11 @@ class DeleteOtherDeductionsServiceSpec extends ServiceSpec {
     "unsuccessful" must {
       "map errors according to spec" when {
 
-        def serviceError(desErrorCode: String, error: MtdError): Unit =
-          s"a $desErrorCode error is returned from the service" in new Test {
+        def serviceError(ifsErrorCode: String, error: MtdError): Unit =
+          s"a $ifsErrorCode error is returned from the service" in new Test {
 
             MockDeleteOtherDeductionsConnector.delete(request)
-              .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
+              .returns(Future.successful(Left(ResponseWrapper(correlationId, IfsErrors.single(IfsErrorCode(ifsErrorCode))))))
 
             await(service.delete(request)) shouldBe Left(ErrorWrapper(correlationId, error))
           }

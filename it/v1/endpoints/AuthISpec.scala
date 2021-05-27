@@ -22,7 +22,7 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
-import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
+import v1.stubs.{AuditStub, AuthStub, IfsStub, MtdIdLookupStub}
 
 class AuthISpec extends IntegrationBaseSpec {
 
@@ -32,7 +32,7 @@ class AuthISpec extends IntegrationBaseSpec {
     val taxYear       = "2021-22"
     val data        = "someData"
 
-    val desResponseBody: JsValue = Json.parse(
+    val ifsResponseBody: JsValue = Json.parse(
       """
         |{
         |   "submittedOn": "2019-04-04T01:01:01Z",
@@ -48,7 +48,7 @@ class AuthISpec extends IntegrationBaseSpec {
     )
 
     def uri: String = s"/$nino/$taxYear"
-    def desUri: String = s"/income-tax/deductions/$nino/$taxYear"
+    def ifsUri: String = s"/income-tax/deductions/$nino/$taxYear"
 
     def setupStubs(): StubMapping
 
@@ -85,7 +85,7 @@ class AuthISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUri, Status.OK, desResponseBody)
+          IfsStub.onSuccess(IfsStub.GET, ifsUri, Status.OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
