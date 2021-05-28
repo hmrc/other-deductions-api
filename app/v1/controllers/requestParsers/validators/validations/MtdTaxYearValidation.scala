@@ -26,10 +26,10 @@ object MtdTaxYearValidation {
   def validate(taxYear: String)
               (implicit appConfig: AppConfig): List[MtdError] = {
 
-    val desTaxYear = Integer.parseInt(IfsTaxYear.fromMtd(taxYear).value)
+    val ifsTaxYear = Integer.parseInt(IfsTaxYear.fromMtd(taxYear).value)
 
-    desTaxYear match {
-      case _ if desTaxYear < appConfig.minimumPermittedTaxYear => List(RuleTaxYearNotSupportedError)
+    ifsTaxYear match {
+      case _ if ifsTaxYear < appConfig.minimumPermittedTaxYear => List(RuleTaxYearNotSupportedError)
       case _ => NoValidationErrors
     }
   }

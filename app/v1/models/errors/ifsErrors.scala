@@ -26,12 +26,12 @@ object IfsErrorCode {
   implicit val reads: Reads[IfsErrorCode] = Json.reads[IfsErrorCode]
 }
 
-sealed trait DesError
+sealed trait IfsError
 
-case class IfsErrors(errors: List[IfsErrorCode]) extends DesError
+case class IfsErrors(errors: List[IfsErrorCode]) extends IfsError
 
 object IfsErrors {
   def single(error: IfsErrorCode): IfsErrors = IfsErrors(List(error))
 }
 
-case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends DesError
+case class OutboundError(error: MtdError, errors: Option[Seq[MtdError]] = None) extends IfsError

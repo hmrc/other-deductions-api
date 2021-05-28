@@ -54,7 +54,7 @@ trait HttpParser extends Logging {
     (__ \ "bvrfailureResponseElement" \ "validationRuleFailures").read[Seq[IfsErrorCode]]
   }
 
-  def parseErrors(response: HttpResponse): DesError = {
+  def parseErrors(response: HttpResponse): IfsError = {
     val singleError         = response.validateJson[IfsErrorCode].map(err => IfsErrors(List(err)))
     lazy val multipleErrors = response.validateJson(multipleErrorReads).map(errs => IfsErrors(errs))
     lazy val bvrErrors      = response.validateJson(bvrErrorReads).map(errs => OutboundError(BVRError, Some(errs.map(_.toMtd))))

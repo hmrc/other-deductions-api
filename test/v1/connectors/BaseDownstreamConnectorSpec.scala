@@ -100,7 +100,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
         await(connector.delete(IfsUri[Result](url))) shouldBe outcome
       }
 
-      "POST" in new Test(ifsEnvironmentHeaders) {
+      "PUT" in new Test(ifsEnvironmentHeaders) {
         implicit val hc: HeaderCarrier = HeaderCarrier(otherHeaders = otherHeaders ++ Seq("Content-Type" -> "application/json"))
         val requiredHeadersPut: Seq[(String, String)] = requiredHeaders ++ Seq("Content-Type" -> "application/json")
 
