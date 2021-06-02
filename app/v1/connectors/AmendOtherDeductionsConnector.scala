@@ -32,7 +32,7 @@ class AmendOtherDeductionsConnector @Inject() (val http: HttpClient,
   def amend(request: AmendOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+    correlationId: String): Future[IfsOutcome[Unit]] = {
 
     put(
       body = request.body,

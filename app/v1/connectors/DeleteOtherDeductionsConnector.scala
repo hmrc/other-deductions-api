@@ -32,7 +32,7 @@ class DeleteOtherDeductionsConnector @Inject()(val http: HttpClient,
   def delete(request: DeleteOtherDeductionsRequest)(
     implicit hc: HeaderCarrier,
     ec: ExecutionContext,
-    correlationId: String): Future[DownstreamOutcome[Unit]] = {
+    correlationId: String): Future[IfsOutcome[Unit]] = {
 
     delete(
       IfsUri[Unit](s"income-tax/deductions/${request.nino.nino}/${request.taxYear}")

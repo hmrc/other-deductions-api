@@ -23,5 +23,5 @@ package object connectors {
 
   type MtdIdLookupOutcome = Either[MtdError, String]
 
-  type DownstreamOutcome[A] = Either[ResponseWrapper[IfsError],ResponseWrapper[A]]
+  type IfsOutcome[A] = Either[ResponseWrapper[IfsError],ResponseWrapper[A]]
 }
