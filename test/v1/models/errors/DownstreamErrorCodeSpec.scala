@@ -14,28 +14,27 @@
  * limitations under the License.
  */
 
-package config
+package v1.models.errors
 
-import play.api.Configuration
+import api.models.errors.DownstreamErrorCode
+import play.api.libs.json.Json
+import support.UnitSpec
 
-case class FeatureSwitch(value: Option[Configuration]) {
+class DownstreamErrorCodeSpec extends UnitSpec {
 
-  private val versionRegex = """(\d)\.\d""".r
+  "reads" should {
+    val json = Json.parse(
+      """
+        |{
+        |   "code": "CODE",
+        |   "reason": "ignored"
+        |}
+      """.stripMargin
+    )
 
-  def isVersionEnabled(version: String): Boolean = {
-    val versionNoIfPresent: Option[String] =
-      version match {
-        case versionRegex(v) => Some(v)
-        case _               => None
-      }
-
-    val enabled = for {
-      versionNo <- versionNoIfPresent
-      config    <- value
-      enabled   <- config.getOptional[Boolean](s"version-$versionNo.enabled")
-    } yield enabled
-
-    enabled.getOrElse(false)
+    "generate the correct error code" in {
+      json.as[DownstreamErrorCode] shouldBe DownstreamErrorCode("CODE")
+    }
   }
 
 }

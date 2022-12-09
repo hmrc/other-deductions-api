@@ -16,11 +16,12 @@
 
 package v1.connectors.httpparsers
 
+import api.models.errors.OutboundError
 import play.api.http.Status._
 import play.api.libs.json.Reads
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import v1.connectors.IfsOutcome
-import v1.models.errors.{DownstreamError, OutboundError}
+import v1.connectors.DownstreamOutcome
+import v1.models.errors.DownstreamError
 import v1.models.outcomes.ResponseWrapper
 
 object StandardIfsHttpParser extends HttpParser {
@@ -28,13 +29,13 @@ object StandardIfsHttpParser extends HttpParser {
   case class SuccessCode(status: Int) extends AnyVal
 
   // Return Right[IfsResponse[Unit]] as success response has no body - no need to assign it a value
-  implicit def readsEmpty(implicit successCode: SuccessCode = SuccessCode(NO_CONTENT)): HttpReads[IfsOutcome[Unit]] =
+  implicit def readsEmpty(implicit successCode: SuccessCode = SuccessCode(NO_CONTENT)): HttpReads[DownstreamOutcome[Unit]] =
     (_: String, url: String, response: HttpResponse) =>
       doRead(url, response) { correlationId =>
         Right(ResponseWrapper(correlationId, ()))
       }
 
-  implicit def reads[A: Reads](implicit successCode: SuccessCode = SuccessCode(OK)): HttpReads[IfsOutcome[A]] =
+  implicit def reads[A: Reads](implicit successCode: SuccessCode = SuccessCode(OK)): HttpReads[DownstreamOutcome[A]] =
     (_: String, url: String, response: HttpResponse) =>
       doRead(url, response) { correlationId =>
         response.validateJson[A] match {
@@ -43,8 +44,8 @@ object StandardIfsHttpParser extends HttpParser {
         }
       }
 
-  private def doRead[A](url: String, response: HttpResponse)(successOutcomeFactory: String => IfsOutcome[A])(implicit
-      successCode: SuccessCode): IfsOutcome[A] = {
+  private def doRead[A](url: String, response: HttpResponse)(successOutcomeFactory: String => DownstreamOutcome[A])(implicit
+      successCode: SuccessCode): DownstreamOutcome[A] = {
 
     val correlationId = retrieveCorrelationId(response)
 

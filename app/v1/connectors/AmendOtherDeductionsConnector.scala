@@ -16,7 +16,9 @@
 
 package v1.connectors
 
+import api.connectors.DownstreamUri.IfsUri
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
@@ -29,7 +31,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AmendOtherDeductionsConnector @Inject() (val http: HttpClient, val appConfig: AppConfig) extends BaseDownstreamConnector {
 
   def amend(
-      request: AmendOtherDeductionsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[IfsOutcome[Unit]] = {
+      request: AmendOtherDeductionsRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext, correlationId: String): Future[DownstreamOutcome[Unit]] = {
 
     put(
       body = request.body,

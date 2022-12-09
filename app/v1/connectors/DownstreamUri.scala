@@ -14,26 +14,14 @@
  * limitations under the License.
  */
 
-package v1.models.errors
+package api.connectors
 
-import play.api.libs.json.Json
-import support.UnitSpec
+sealed trait DownstreamUri[Resp] {
+  val value: String
+}
 
-class IfsErrorCodeSpec extends UnitSpec {
-
-  "reads" should {
-    val json = Json.parse(
-      """
-        |{
-        |   "code": "CODE",
-        |   "reason": "ignored"
-        |}
-      """.stripMargin
-    )
-
-    "generate the correct error code" in {
-      json.as[IfsErrorCode] shouldBe IfsErrorCode("CODE")
-    }
-  }
+object DownstreamUri {
+  case class IfsUri[Resp](value: String)                extends DownstreamUri[Resp]
+  case class TaxYearSpecificIfsUri[Resp](value: String) extends DownstreamUri[Resp]
 
 }

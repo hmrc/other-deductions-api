@@ -16,7 +16,9 @@
 
 package v1.connectors
 
+import api.connectors.DownstreamUri.IfsUri
 import config.AppConfig
+
 import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpClient
@@ -32,7 +34,7 @@ class RetrieveOtherDeductionsConnector @Inject() (val http: HttpClient, val appC
   def retrieve(request: RetrieveOtherDeductionsRequest)(implicit
       hc: HeaderCarrier,
       ec: ExecutionContext,
-      correlationId: String): Future[IfsOutcome[RetrieveOtherDeductionsResponse]] = {
+      correlationId: String): Future[DownstreamOutcome[RetrieveOtherDeductionsResponse]] = {
 
     get(
       IfsUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${request.nino.nino}/${request.taxYear}")
