@@ -22,10 +22,10 @@ import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 
-trait IfsResponseMappingSupport {
+trait DownstreamResponseMappingSupport {
   self: Logging =>
 
-  final def mapIfsErrors[D](errorCodeMap: PartialFunction[String, MtdError])(ifsResponseWrapper: ResponseWrapper[DownstreamError])(implicit
+  final def mapDownstreamErrors[D](errorCodeMap: PartialFunction[String, MtdError])(downstreamResponseWrapper: ResponseWrapper[DownstreamError])(implicit
       logContext: EndpointLogContext): ErrorWrapper = {
 
     lazy val defaultErrorCodeMapping: String => MtdError = { code =>
@@ -33,7 +33,7 @@ trait IfsResponseMappingSupport {
       DownstreamError
     }
 
-    ifsResponseWrapper match {
+    downstreamResponseWrapper match {
       case ResponseWrapper(correlationId, DownstreamErrors(error :: Nil)) =>
         ErrorWrapper(correlationId, errorCodeMap.applyOrElse(error.code, defaultErrorCodeMapping), None)
 

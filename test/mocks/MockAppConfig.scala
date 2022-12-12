@@ -36,6 +36,12 @@ trait MockAppConfig extends MockFactory {
     def ifsEnvironment: CallHandler[String]                     = (mockAppConfig.ifsEnv _).expects()
     def ifsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (mockAppConfig.ifsEnvironmentHeaders _).expects()
 
+    // Tax Year Specific IFS Config
+    def tysIfsBaseUrl: CallHandler[String]                         = (mockAppConfig.tysIfsBaseUrl _: () => String).expects()
+    def tysIfsToken: CallHandler[String]                           = (mockAppConfig.tysIfsToken _).expects()
+    def tysIfsEnvironment: CallHandler[String]                     = (mockAppConfig.tysIfsEnv _).expects()
+    def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (mockAppConfig.tysIfsEnvironmentHeaders _).expects()
+
     // Business Rule Config
     def minimumPermittedTaxYear: CallHandler[Int] = (mockAppConfig.minimumPermittedTaxYear _).expects()
 

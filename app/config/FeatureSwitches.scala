@@ -37,8 +37,6 @@ case class FeatureSwitches(featureSwitchConfig: Configuration) {
     enabled.getOrElse(false)
   }
 
-  val isV1R7cRoutingEnabled: Boolean        = isEnabled("v1r7c-endpoints.enabled")
-  val isTaxYearNotEndedRuleEnabled: Boolean = isEnabled("taxYearNotEndedRule.enabled")
   val isTaxYearSpecificApiEnabled: Boolean  = isEnabled("tys-api.enabled")
 
   private def isEnabled(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)

@@ -38,7 +38,8 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
 
   implicit val httpReads: HttpReads[DownstreamOutcome[Result]] = mock[HttpReads[DownstreamOutcome[Result]]]
 
-  class Test(ifsEnvironmentHeaders: Option[Seq[String]]) extends MockHttpClient with MockAppConfig {
+
+  class Test(environmentHeaders: Option[Seq[String]]) extends MockHttpClient with MockAppConfig {
 
     val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
       val http: HttpClient     = mockHttpClient
@@ -48,10 +49,12 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     MockAppConfig.ifsBaseUrl returns baseUrl
     MockAppConfig.ifsToken returns "ifs-token"
     MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns ifsEnvironmentHeaders
+    MockAppConfig.ifsEnvironmentHeaders returns environmentHeaders
+
   }
 
-  "BaseDownstreamConnector" when {
+
+  "BaseDownstreamConnector for IFS" when {
     val requiredHeaders: Seq[(String, String)] = Seq(
       "Environment"       -> "ifs-environment",
       "Authorization"     -> s"Bearer ifs-token",

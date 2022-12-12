@@ -24,11 +24,11 @@ import v1.connectors.DownstreamOutcome
 import v1.models.errors.DownstreamError
 import v1.models.outcomes.ResponseWrapper
 
-object StandardIfsHttpParser extends HttpParser {
+object StandardDownstreamHttpParser extends HttpParser {
 
   case class SuccessCode(status: Int) extends AnyVal
 
-  // Return Right[IfsResponse[Unit]] as success response has no body - no need to assign it a value
+  // Return Right[DownstreamResponse[Unit]] as success response has no body - no need to assign it a value
   implicit def readsEmpty(implicit successCode: SuccessCode = SuccessCode(NO_CONTENT)): HttpReads[DownstreamOutcome[Unit]] =
     (_: String, url: String, response: HttpResponse) =>
       doRead(url, response) { correlationId =>
@@ -51,16 +51,16 @@ object StandardIfsHttpParser extends HttpParser {
 
     if (response.status != successCode.status) {
       logger.warn(
-        "[StandardIfsHttpParser][read] - " +
-          s"Error response received from IFS with status: ${response.status} and body\n" +
+        "[StandardDownstreamHttpParser][read] - " +
+          s"Error response received from Downstream with status: ${response.status} and body\n" +
           s"${response.body} and correlationId: $correlationId when calling $url")
     }
 
     response.status match {
       case successCode.status =>
         logger.info(
-          "[StandardIfsHttpParser][read] - " +
-            s"Success response received from IFS with correlationId: $correlationId when calling $url")
+          "[StandardDownstreamHttpParser][read] - " +
+            s"Success response received from Downstream with correlationId: $correlationId when calling $url")
         successOutcomeFactory(correlationId)
       case BAD_REQUEST | NOT_FOUND | FORBIDDEN | CONFLICT => Left(ResponseWrapper(correlationId, parseErrors(response)))
       case _                                              => Left(ResponseWrapper(correlationId, OutboundError(DownstreamError)))
