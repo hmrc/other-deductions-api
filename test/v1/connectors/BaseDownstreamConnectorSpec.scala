@@ -68,7 +68,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
     )
 
     "making a HTTP request to a downstream service (i.e IFS)" must {
-      testHttpMethods(dummyIfsHeaderCarrierConfig, requiredHeaders, excludedHeaders, Some(allowedIfsHeaders))
+      testHttpMethods(dummyHeaderCarrierConfig, requiredHeaders, excludedHeaders, Some(allowedIfsHeaders))
 
       "exclude all `otherHeaders` when no external service header allow-list is found" should {
         val requiredHeaders: Seq[(String, String)] = Seq(
@@ -78,7 +78,7 @@ class BaseDownstreamConnectorSpec extends ConnectorSpec {
           "CorrelationId" -> correlationId
         )
 
-        testHttpMethods(dummyIfsHeaderCarrierConfig, requiredHeaders, otherHeaders, None)
+        testHttpMethods(dummyHeaderCarrierConfig, requiredHeaders, otherHeaders, None)
       }
     }
   }

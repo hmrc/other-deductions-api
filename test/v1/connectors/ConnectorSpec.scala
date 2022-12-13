@@ -39,18 +39,11 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
   implicit val hc: HeaderCarrier    = HeaderCarrier(otherHeaders = otherHeaders)
   implicit val ec: ExecutionContext = scala.concurrent.ExecutionContext.global
 
-  val dummyIfsHeaderCarrierConfig: HeaderCarrier.Config =
-    HeaderCarrier.Config(
-      Seq("^not-test-BaseUrl?$".r),
-      Seq.empty[String],
-      Some("other-deductions-api")
-    )
-
   val dummyHeaderCarrierConfig: HeaderCarrier.Config =
     HeaderCarrier.Config(
       Seq("^not-test-BaseUrl?$".r),
       Seq.empty[String],
-      Some("individuals-income-received-api")
+      Some("other-deductions-api")
     )
 
   val requiredIfsHeaders: Seq[(String, String)] = Seq(
