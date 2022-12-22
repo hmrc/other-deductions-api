@@ -37,7 +37,7 @@ class CreateAndAmendOtherDeductionsConnector @Inject() (val http: HttpClient, va
 
     put(
       body = request.body,
-      uri = IfsUri[Unit](s"income-tax/deductions/${request.nino.nino}/${request.taxYear}")
+      uri = IfsUri[Unit](s"income-tax/deductions/${request.nino}/${request.taxYear}")
     )
   }
 
