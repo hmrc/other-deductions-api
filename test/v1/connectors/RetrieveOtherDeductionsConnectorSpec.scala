@@ -16,9 +16,7 @@
 
 package v1.connectors
 
-import mocks.MockAppConfig
 import v1.models.domain.Nino
-import v1.mocks.MockHttpClient
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
 
@@ -26,35 +24,37 @@ import scala.concurrent.Future
 
 class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
 
-  val taxYear = "2017-18"
-  val nino    = "AA123456A"
-
-  class Test extends MockHttpClient with MockAppConfig {
-    val connector: RetrieveOtherDeductionsConnector = new RetrieveOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
-    MockAppConfig.ifsBaseUrl returns baseUrl
-    MockAppConfig.ifsToken returns "ifs-token"
-    MockAppConfig.ifsEnvironment returns "ifs-environment"
-    MockAppConfig.ifsEnvironmentHeaders returns Some(allowedIfsHeaders)
-  }
-
-  "retrieve" should {
-    val request = RetrieveOtherDeductionsRequest(Nino(nino), taxYear)
-
-    "return the result" when {
-      "downstream call is successful" in new Test {
+  "RetrieveOtherDeductionsConnector" should {
+    "return the expected response for a non-TYS request" when {
+      "a valid request is made" in new IfsTest with Test {
+        val taxYear = "2017-18"
         val outcome = Right(ResponseWrapper(correlationId, ()))
 
-        MockedHttpClient
-          .get(
-            url = s"$baseUrl/income-tax/deductions/$nino/$taxYear",
-            config = dummyHeaderCarrierConfig,
-            requiredHeaders = requiredIfsHeaders,
-            excludedHeaders = Seq("AnotherHeader" -> "HeaderValue")
-          )
+        willGet(s"$baseUrl/income-tax/deductions/AA123456A/2017-18")
           .returns(Future.successful(outcome))
 
         await(connector.retrieve(request)) shouldBe outcome
       }
+    }
+
+    "return the expected response for a TYS request" when {
+      "a valid request is made" in new TysIfsTest with Test {
+        val taxYear = "2023-24"
+        val outcome = Right(ResponseWrapper(correlationId, ()))
+
+        willGet(s"$baseUrl/income-tax/deductions/23-24/AA123456A")
+          .returns(Future.successful(outcome))
+
+        await(connector.retrieve(request)) shouldBe outcome
+      }
+    }
+
+    trait Test { _: ConnectorTest =>
+      val taxYear: String
+
+      val connector: RetrieveOtherDeductionsConnector = new RetrieveOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
+
+      lazy val request = RetrieveOtherDeductionsRequest(Nino("AA123456A"), taxYear)
     }
   }
 
