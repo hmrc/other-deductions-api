@@ -16,6 +16,8 @@
 
 package v1.connectors
 
+import api.models.domain.TaxYear
+import v1.fixtures.RetrieveOtherDeductionsFixtures.responseBodyModel
 import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
@@ -28,7 +30,7 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
     "return the expected response for a non-TYS request" when {
       "a valid request is made" in new IfsTest with Test {
         val taxYear = "2017-18"
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        val outcome = Right(ResponseWrapper(correlationId, responseBodyModel))
 
         willGet(s"$baseUrl/income-tax/deductions/AA123456A/2017-18")
           .returns(Future.successful(outcome))
@@ -40,7 +42,7 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
     "return the expected response for a TYS request" when {
       "a valid request is made" in new TysIfsTest with Test {
         val taxYear = "2023-24"
-        val outcome = Right(ResponseWrapper(correlationId, ()))
+        val outcome = Right(ResponseWrapper(correlationId, responseBodyModel))
 
         willGet(s"$baseUrl/income-tax/deductions/23-24/AA123456A")
           .returns(Future.successful(outcome))
@@ -54,7 +56,7 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
 
       val connector: RetrieveOtherDeductionsConnector = new RetrieveOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
 
-      lazy val request = RetrieveOtherDeductionsRequest(Nino("AA123456A"), taxYear)
+      lazy val request = RetrieveOtherDeductionsRequest(Nino("AA123456A"), TaxYear.fromMtd(taxYear))
     }
   }
 
