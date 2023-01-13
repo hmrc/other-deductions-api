@@ -1,6 +1,6 @@
 summary: Delete Deductions
 description: |
-  This endpoint allows a developer to retrieve deductions that have been previously populated. A National Insurance number and tax year must be provided.
+  This endpoint allows the developer to delete deductions.
   
   ### Test data
   <p>Scenario simulations using <code>Gov-Test-Scenario</code> headers is only available in the sandbox environment.</p>
@@ -14,22 +14,21 @@ description: |
       <tbody>
           <tr>
               <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate a successful response with a self-employment business.</p></td>
+              <td><p>Simulate success response.</p></td>
           </tr>
           <tr>
               <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where the given resource could not be found.</p></td>
+              <td><p>Simulates the scenario where the given deduction could not be found.</p></td>
           </tr>
       </tbody>
   </table>
 
-tags:
-  - Other Deductions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
   - $ref: './common/pathParameters.yaml#/components/parameters/taxYear'
   - $ref: './common/headers.yaml#/components/parameters/acceptJson'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
   - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
   - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
 

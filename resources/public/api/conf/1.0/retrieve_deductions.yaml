@@ -14,17 +14,15 @@ description: |
       <tbody>
           <tr>
               <td><p>N/A - DEFAULT</p></td>
-              <td><p>Simulate a successful response with a self-employment business.</p></td>
+              <td><p>Simulate success response.</p></td>
           </tr>
           <tr>
               <td><p>NOT_FOUND</p></td>
-              <td><p>Simulates the scenario where the given resource could not be found.</p></td>
+              <td><p>Simulates the scenario where the given deduction could not be found.</p></td>
           </tr>
       </tbody>
   </table>
 
-tags:
-  - Other Deductions
 
 parameters:
   - $ref: './common/pathParameters.yaml#/components/parameters/nino'
