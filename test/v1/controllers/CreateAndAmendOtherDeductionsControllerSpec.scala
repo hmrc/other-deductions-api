@@ -16,20 +16,38 @@
 
 package v1.controllers
 
-import api.models.domain.TaxYear
+import api.controllers.ControllerBaseSpec
+import api.mocks.MockIdGenerator
+import api.mocks.hateoas.MockHateoasFactory
+import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
+import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.domain.{Nino, TaxYear}
+import api.models.{errors, hateoas}
+import api.models.errors.{
+  BadRequestError,
+  CustomerReferenceFormatError,
+  DateFormatError,
+  ErrorWrapper,
+  InternalError,
+  MtdError,
+  NameOfShipFormatError,
+  NinoFormatError,
+  RangeToDateBeforeFromDateError,
+  RuleIncorrectOrEmptyBodyError,
+  RuleTaxYearNotSupportedError,
+  RuleTaxYearRangeInvalidError,
+  TaxYearFormatError,
+  ValueFormatError
+}
+import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.models.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.mocks.MockIdGenerator
-import v1.mocks.hateoas.MockHateoasFactory
 import v1.mocks.requestParsers.MockCreateAndAmendOtherDeductionsRequestParser
 import v1.mocks.services._
-import v1.models.audit.{AuditError, AuditEvent, AuditResponse, DeductionsAuditDetail}
 import v1.models.errors._
-import v1.models.hateoas.{HateoasWrapper, Link}
 import v1.models.hateoas.Method.{DELETE, GET, PUT}
-import v1.models.outcomes.ResponseWrapper
 import v1.models.request.createAndAmendOtherDeductions._
 import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
 
@@ -70,9 +88,9 @@ class CreateAndAmendOtherDeductionsControllerSpec
   private val correlationId = "X-123"
 
   private val testHateoasLinks = Seq(
-    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = PUT, rel = "amend-deductions-other"),
-    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = GET, rel = "self"),
-    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = DELETE, rel = "delete-deductions-other")
+    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = PUT, rel = "amend-deductions-other"),
+    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = GET, rel = "self"),
+    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = DELETE, rel = "delete-deductions-other")
   )
 
   private val requestBodyJson = Json.parse(
@@ -125,11 +143,11 @@ class CreateAndAmendOtherDeductionsControllerSpec
        |}
        |""".stripMargin)
 
-  def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[DeductionsAuditDetail] =
+  def event(auditResponse: AuditResponse, requestBody: Option[JsValue]): AuditEvent[GenericAuditDetail] =
     AuditEvent(
       auditType = "CreateAmendOtherDeductions",
       transactionName = "create-amend-other-deductions",
-      detail = DeductionsAuditDetail(
+      detail = GenericAuditDetail(
         userType = "Individual",
         agentReferenceNumber = None,
         params = Map("nino" -> nino, "taxYear" -> taxYear),
@@ -173,7 +191,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
 
             MockCreateAndAmendOtherDeductionsRequestParser
               .parseRequest(rawData)
-              .returns(Left(ErrorWrapper(correlationId, error, None)))
+              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
@@ -218,7 +236,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
 
             MockCreateAndAmendOtherDeductionsService
               .createAndAmend(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
@@ -234,7 +252,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (InternalError, INTERNAL_SERVER_ERROR),
           (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 

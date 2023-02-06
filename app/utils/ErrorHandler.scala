@@ -16,7 +16,7 @@
 
 package utils
 
-import play.api._
+import api.models.errors._
 import play.api.Configuration
 import play.api.http.Status._
 import play.api.libs.json.Json
@@ -28,7 +28,6 @@ import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.bootstrap.backend.http.JsonErrorHandler
 import uk.gov.hmrc.play.bootstrap.config.HttpAuditEvent
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
-import v1.models.errors._
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent._
@@ -87,8 +86,8 @@ class ErrorHandler @Inject() (config: Configuration, auditConnector: AuditConnec
       case e: UpstreamErrorResponse if UpstreamErrorResponse.Upstream4xxResponse.unapply(e).isDefined =>
         (e.reportAs, BadRequestError, "ServerValidationError")
       case e: UpstreamErrorResponse if UpstreamErrorResponse.Upstream5xxResponse.unapply(e).isDefined =>
-        (e.reportAs, DownstreamError, "ServerInternalError")
-      case _ => (INTERNAL_SERVER_ERROR, DownstreamError, "ServerInternalError")
+        (e.reportAs, InternalError, "ServerInternalError")
+      case _ => (INTERNAL_SERVER_ERROR, InternalError, "ServerInternalError")
     }
 
     auditConnector.sendEvent(

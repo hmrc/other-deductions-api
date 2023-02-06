@@ -16,6 +16,10 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
 import play.api.libs.json.Json
@@ -24,10 +28,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteOtherDeductionsRequestParser
-import v1.models.audit.{AuditEvent, AuditResponse, DeductionsAuditDetail}
-import v1.models.errors._
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRawData
-import v1.services.{AuditService, DeleteOtherDeductionsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.DeleteOtherDeductionsService
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -65,7 +67,7 @@ class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuth
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           auditSubmission(
-            DeductionsAuditDetail(
+            GenericAuditDetail(
               userDetails = request.userDetails,
               params = Map("nino" -> nino, "taxYear" -> taxYear),
               requestBody = None,
@@ -85,7 +87,7 @@ class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuth
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
-          DeductionsAuditDetail(
+          GenericAuditDetail(
             userDetails = request.userDetails,
             params = Map("nino" -> nino, "taxYear" -> taxYear),
             requestBody = None,
@@ -109,13 +111,13 @@ class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuth
             RuleTaxYearRangeInvalidError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 
-  private def auditSubmission(details: DeductionsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
 
     val event = AuditEvent(
       auditType = "DeleteOtherDeductions",

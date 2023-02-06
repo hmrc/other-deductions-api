@@ -16,24 +16,25 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
+import api.models.errors._
+import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.{Action, ControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendOtherDeductionsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.audit.{AuditEvent, AuditResponse, DeductionsAuditDetail}
-import v1.models.errors._
 import v1.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRawData
-import v1.models.response.{CreateAndAmendOtherDeductionsHateoasData}
+import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
 import v1.models.response.CreateAndAmendOtherDeductionsResponse.CreateAndAmendOtherLinksFactory
-import v1.services.{AuditService, CreateAndAmendOtherDeductionsService, EnrolmentsAuthService, MtdIdLookupService}
+import v1.services.CreateAndAmendOtherDeductionsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -71,7 +72,7 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
               s"Success response received with CorrelationId: ${serviceResponse.correlationId}")
 
           auditSubmission(
-            DeductionsAuditDetail(
+            GenericAuditDetail(
               userDetails = request.userDetails,
               params = Map("nino" -> nino, "taxYear" -> taxYear),
               requestBody = Some(request.body),
@@ -92,7 +93,7 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
             s"Error response received with CorrelationId: $resCorrelationId")
 
         auditSubmission(
-          DeductionsAuditDetail(
+          GenericAuditDetail(
             userDetails = request.userDetails,
             params = Map("nino" -> nino, "taxYear" -> taxYear),
             requestBody = Some(request.body),
@@ -123,12 +124,12 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
             RuleTaxYearNotSupportedError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 
-  private def auditSubmission(details: DeductionsAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
+  private def auditSubmission(details: GenericAuditDetail)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuditResult] = {
 
     val event = AuditEvent(
       auditType = "CreateAmendOtherDeductions",

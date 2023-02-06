@@ -16,20 +16,21 @@
 
 package v1.controllers
 
+import api.controllers.{AuthorisedController, EndpointLogContext}
+import api.hateoas.HateoasFactory
+import api.models.errors._
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
-
-import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.RetrieveOtherDeductionsRequestParser
-import v1.hateoas.HateoasFactory
-import v1.models.errors._
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRawData
 import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsHateoasData
-import v1.services.{EnrolmentsAuthService, MtdIdLookupService, RetrieveOtherDeductionsService}
+import v1.services.RetrieveOtherDeductionsService
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
@@ -91,9 +92,9 @@ class RetrieveOtherDeductionsController @Inject() (val authService: EnrolmentsAu
             RuleTaxYearNotSupportedError,
             RuleTaxYearRangeInvalidError) =>
         BadRequest(Json.toJson(errorWrapper))
-      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
-      case _               => unhandledError(errorWrapper)
+      case InternalError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError => NotFound(Json.toJson(errorWrapper))
+      case _             => unhandledError(errorWrapper)
     }
   }
 
