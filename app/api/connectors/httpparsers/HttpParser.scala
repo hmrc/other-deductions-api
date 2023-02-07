@@ -16,10 +16,11 @@
 
 package api.connectors.httpparsers
 
-import api.models.errors.{BVRError, InternalError, DownstreamErrorCode, DownstreamErrors, OutboundError}
+import api.models.errors.{DownstreamError, DownstreamErrorCode, DownstreamErrors, OutboundError}
 import play.api.libs.json._
 import uk.gov.hmrc.http.HttpResponse
 import utils.Logging
+import v1.models.errors._
 
 import scala.util.{Success, Try}
 
@@ -55,13 +56,13 @@ trait HttpParser extends Logging {
     (__ \ "bvrfailureResponseElement" \ "validationRuleFailures").read[Seq[DownstreamErrorCode]]
   }
 
-  def parseErrors(response: HttpResponse): InternalError = {
+  def parseErrors(response: HttpResponse): DownstreamError = {
     val singleError         = response.validateJson[DownstreamErrorCode].map(err => DownstreamErrors(List(err)))
     lazy val multipleErrors = response.validateJson(multipleErrorReads).map(errs => DownstreamErrors(errs))
     lazy val bvrErrors      = response.validateJson(bvrErrorReads).map(errs => OutboundError(BVRError, Some(errs.map(_.toMtd))))
     lazy val unableToParseJsonError = {
       logger.warn(s"unable to parse errors from response: ${response.body}")
-      OutboundError(InternalError)
+      OutboundError(DownstreamError)
     }
 
     singleError orElse multipleErrors orElse bvrErrors getOrElse unableToParseJsonError

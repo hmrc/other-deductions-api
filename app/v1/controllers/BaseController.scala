@@ -17,11 +17,11 @@
 package v1.controllers
 
 import api.controllers.EndpointLogContext
-import api.models.errors.{InternalError, ErrorWrapper}
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
 import utils.Logging
+import v1.models.errors.{DownstreamError, ErrorWrapper}
 
 trait BaseController {
   self: Logging =>
@@ -30,7 +30,7 @@ trait BaseController {
     logger.error(
       s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
         s"Unhandled error: $errorWrapper")
-    InternalServerError(Json.toJson(InternalError))
+    InternalServerError(Json.toJson(DownstreamError))
   }
 
   implicit class Response(result: Result) {

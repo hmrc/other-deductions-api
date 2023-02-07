@@ -16,10 +16,10 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.MtdError
 import api.models.utils.JsonErrorValidators
 import play.api.libs.json.{Json, Reads}
 import support.UnitSpec
+import v1.models.errors.MtdError
 
 class JsonFormatValidationSpec extends UnitSpec with JsonErrorValidators {
 

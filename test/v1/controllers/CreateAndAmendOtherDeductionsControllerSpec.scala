@@ -22,32 +22,17 @@ import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.{errors, hateoas}
-import api.models.errors.{
-  BadRequestError,
-  CustomerReferenceFormatError,
-  DateFormatError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NameOfShipFormatError,
-  NinoFormatError,
-  RangeToDateBeforeFromDateError,
-  RuleIncorrectOrEmptyBodyError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockCreateAndAmendOtherDeductionsRequestParser
 import v1.mocks.services._
+import v1.models
 import v1.models.errors._
-import v1.models.hateoas.Method.{DELETE, GET, PUT}
 import v1.models.request.createAndAmendOtherDeductions._
 import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
 
@@ -191,7 +176,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
 
             MockCreateAndAmendOtherDeductionsRequestParser
               .parseRequest(rawData)
-              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
+              .returns(Left(models.errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
@@ -236,7 +221,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
 
             MockCreateAndAmendOtherDeductionsService
               .createAndAmend(requestData)
-              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(models.errors.ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
@@ -252,7 +237,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
         val input = Seq(
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
-          (InternalError, INTERNAL_SERVER_ERROR),
+          (DownstreamError, INTERNAL_SERVER_ERROR),
           (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 

@@ -19,7 +19,6 @@ package v1.controllers
 import api.controllers.{AuthorisedController, EndpointLogContext}
 import api.hateoas.HateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
@@ -29,6 +28,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendOtherDeductionsRequestParser
+import v1.models.errors._
 import v1.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRawData
 import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
 import v1.models.response.CreateAndAmendOtherDeductionsResponse.CreateAndAmendOtherLinksFactory
@@ -124,8 +124,8 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
             RuleTaxYearNotSupportedError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
   }
 

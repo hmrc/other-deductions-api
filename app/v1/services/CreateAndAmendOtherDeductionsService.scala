@@ -17,12 +17,12 @@
 package v1.services
 
 import api.controllers.EndpointLogContext
-import api.models.errors._
 import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.CreateAndAmendOtherDeductionsConnector
+import v1.models.errors._
 import v1.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRequest
 import v1.support.DownstreamResponseMappingSupport
 
@@ -50,15 +50,15 @@ class CreateAndAmendOtherDeductionsService @Inject() (connector: CreateAndAmendO
       "INVALID_TAXABLE_ENTITY_ID"        -> NinoFormatError,
       "INVALID_TAX_YEAR"                 -> TaxYearFormatError,
       "INCOME_SOURCE_NOT_FOUND"          -> NotFoundError,
-      "INVALID_PAYLOAD"                  -> InternalError,
-      "INVALID_CORRELATIONID"            -> InternalError,
-      "BUSINESS_VALIDATION_RULE_FAILURE" -> InternalError,
-      "SERVER_ERROR"                     -> InternalError,
-      "SERVICE_UNAVAILABLE"              -> InternalError
+      "INVALID_PAYLOAD"                  -> DownstreamError,
+      "INVALID_CORRELATIONID"            -> DownstreamError,
+      "BUSINESS_VALIDATION_RULE_FAILURE" -> DownstreamError,
+      "SERVER_ERROR"                     -> DownstreamError,
+      "SERVICE_UNAVAILABLE"              -> DownstreamError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_CORRELATION_ID" -> DownstreamError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

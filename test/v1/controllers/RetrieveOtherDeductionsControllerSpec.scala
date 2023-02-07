@@ -21,19 +21,9 @@ import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.domain.{Nino, TaxYear}
-import api.models.{errors, hateoas}
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError
-}
-import api.models.hateoas.{HateoasWrapper, Link}
+import api.models.hateoas
+import api.models.hateoas.HateoasWrapper
+import api.models.hateoas.Method.GET
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
@@ -41,8 +31,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.fixtures.RetrieveOtherDeductionsFixtures.responseBodyModel
 import v1.mocks.requestParsers.MockRetrieveOtherDeductionsRequestParser
 import v1.mocks.services.MockRetrieveOtherDeductionsService
+import v1.models
 import v1.models.errors._
-import v1.models.hateoas.Method.GET
 import v1.models.request.retrieveOtherDeductions.{RetrieveOtherDeductionsRawData, RetrieveOtherDeductionsRequest}
 import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsHateoasData
 
@@ -115,7 +105,7 @@ class RetrieveOtherDeductionsControllerSpec
 
             MockRetrieveOtherDeductionsRequestParser
               .parse(rawData)
-              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
+              .returns(Left(models.errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -144,7 +134,7 @@ class RetrieveOtherDeductionsControllerSpec
 
             MockRetrieveOtherDeductionsService
               .retrieve(requestData)
-              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -158,7 +148,7 @@ class RetrieveOtherDeductionsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR)
+          (DownstreamError, INTERNAL_SERVER_ERROR)
         )
 
         val extraTysErrors = List(

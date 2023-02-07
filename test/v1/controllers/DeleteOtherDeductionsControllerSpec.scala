@@ -22,24 +22,13 @@ import api.mocks.hateoas.MockHateoasFactory
 import api.mocks.services.{MockAuditService, MockEnrolmentsAuthService, MockMtdIdLookupService}
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors.{
-  BadRequestError,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError
-}
 import api.models.outcomes.ResponseWrapper
 import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockDeleteOtherDeductionsRequestParser
 import v1.mocks.services.MockDeleteOtherDeductionsService
+import v1.models
 import v1.models.errors._
 import v1.models.request.deleteOtherDeductions.{DeleteOtherDeductionsRawData, DeleteOtherDeductionsRequest}
 
@@ -123,7 +112,7 @@ class DeleteOtherDeductionsControllerSpec
 
             MockDeleteOtherDeductionsRequestParser
               .parse(rawData)
-              .returns(Left(errors.ErrorWrapper(correlationId, error, None)))
+              .returns(Left(models.errors.ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -157,7 +146,7 @@ class DeleteOtherDeductionsControllerSpec
 
             MockDeleteOtherDeductionsService
               .delete(requestData)
-              .returns(Future.successful(Left(errors.ErrorWrapper(correlationId, mtdError))))
+              .returns(Future.successful(Left(models.errors.ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.handleRequest(nino, taxYear)(fakeRequest)
 
@@ -174,7 +163,7 @@ class DeleteOtherDeductionsControllerSpec
           (NinoFormatError, BAD_REQUEST),
           (TaxYearFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (InternalError, INTERNAL_SERVER_ERROR),
+          (DownstreamError, INTERNAL_SERVER_ERROR),
           (RuleTaxYearNotSupportedError, BAD_REQUEST)
         )
 

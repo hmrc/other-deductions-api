@@ -17,8 +17,8 @@
 package api.controllers.requestParsers.validators.validations
 
 import api.models.domain.IfsTaxYear
-import api.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import config.AppConfig
+import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 
 object MtdTaxYearValidation {
 

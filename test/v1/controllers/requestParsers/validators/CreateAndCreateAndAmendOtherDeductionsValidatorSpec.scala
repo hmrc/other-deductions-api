@@ -17,16 +17,6 @@
 package v1.controllers.requestParsers.validators
 
 import api.mocks.MockCurrentTaxYear
-import api.models.errors.{
-  CustomerReferenceFormatError,
-  DateFormatError,
-  NameOfShipFormatError,
-  NinoFormatError,
-  RangeToDateBeforeFromDateError,
-  RuleTaxYearRangeInvalidError,
-  TaxYearFormatError,
-  ValueFormatError
-}
 import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.Json

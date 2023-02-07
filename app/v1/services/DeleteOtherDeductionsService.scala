@@ -17,12 +17,12 @@
 package v1.services
 
 import api.controllers.EndpointLogContext
-import api.models.errors._
 import cats.data.EitherT
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.DeleteOtherDeductionsConnector
+import v1.models.errors._
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequest
 import v1.support.DownstreamResponseMappingSupport
 
@@ -50,13 +50,13 @@ class DeleteOtherDeductionsService @Inject() (DeleteOtherDeductionsConnector: De
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "INVALID_CORRELATIONID"     -> InternalError,
-      "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "INVALID_CORRELATIONID"     -> DownstreamError,
+      "SERVER_ERROR"              -> DownstreamError,
+      "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_CORRELATION_ID" -> DownstreamError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

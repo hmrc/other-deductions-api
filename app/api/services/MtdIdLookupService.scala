@@ -19,8 +19,8 @@ package api.services
 import api.connectors.MtdIdLookupConnector
 import api.connectors.connectors.MtdIdLookupOutcome
 import api.models.domain.Nino
-import api.models.errors.NinoFormatError
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.models.errors.NinoFormatError
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

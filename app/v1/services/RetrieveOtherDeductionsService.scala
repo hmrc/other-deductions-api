@@ -17,11 +17,11 @@
 package v1.services
 
 import api.controllers.EndpointLogContext
-import api.models.errors._
 import cats.implicits._
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
 import v1.connectors.RetrieveOtherDeductionsConnector
+import v1.models.errors._
 import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequest
 import v1.support.DownstreamResponseMappingSupport
 
@@ -45,14 +45,14 @@ class RetrieveOtherDeductionsService @Inject() (connector: RetrieveOtherDeductio
     val errors = Map(
       "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
       "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-      "INVALID_CORRELATIONID"     -> InternalError,
+      "INVALID_CORRELATIONID"     -> DownstreamError,
       "NO_DATA_FOUND"             -> NotFoundError,
-      "SERVER_ERROR"              -> InternalError,
-      "SERVICE_UNAVAILABLE"       -> InternalError
+      "SERVER_ERROR"              -> DownstreamError,
+      "SERVICE_UNAVAILABLE"       -> DownstreamError
     )
 
     val extraTysErrors = Map(
-      "INVALID_CORRELATION_ID" -> InternalError,
+      "INVALID_CORRELATION_ID" -> DownstreamError,
       "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
     )
 

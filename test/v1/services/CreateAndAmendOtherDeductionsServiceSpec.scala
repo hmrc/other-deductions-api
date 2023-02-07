@@ -18,18 +18,7 @@ package v1.services
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear}
-import api.models.errors
-import api.models.errors.{
-  DownstreamErrorCode,
-  DownstreamErrors,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleTaxYearNotSupportedError,
-  TaxYearFormatError
-}
+import api.models.errors.{DownstreamErrorCode, DownstreamErrors}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import uk.gov.hmrc.http.HeaderCarrier
@@ -90,22 +79,22 @@ class CreateAndAmendOtherDeductionsServiceSpec extends ServiceSpec {
             .createAndAmend(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DownstreamErrors.single(DownstreamErrorCode(downstreamErrorCode))))))
 
-          await(service.createAndAmend(requestData)) shouldBe Left(errors.ErrorWrapper(correlationId, error))
+          await(service.createAndAmend(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val errors = List(
         ("INVALID_TAXABLE_ENTITY_ID", NinoFormatError),
         ("INVALID_TAX_YEAR", TaxYearFormatError),
         ("INCOME_SOURCE_NOT_FOUND", NotFoundError),
-        ("INVALID_PAYLOAD", InternalError),
-        ("INVALID_CORRELATIONID", InternalError),
-        ("BUSINESS_VALIDATION_RULE_FAILURE", InternalError),
-        ("SERVER_ERROR", InternalError),
-        ("SERVICE_UNAVAILABLE", InternalError)
+        ("INVALID_PAYLOAD", DownstreamError),
+        ("INVALID_CORRELATIONID", DownstreamError),
+        ("BUSINESS_VALIDATION_RULE_FAILURE", DownstreamError),
+        ("SERVER_ERROR", DownstreamError),
+        ("SERVICE_UNAVAILABLE", DownstreamError)
       )
 
       val extraTysErrors = List(
-        ("INVALID_CORRELATION_ID", InternalError),
+        ("INVALID_CORRELATION_ID", DownstreamError),
         ("TAX_YEAR_NOT_SUPPORTED", RuleTaxYearNotSupportedError)
       )
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package api.models.errors
+package v1.models.errors
 
 import play.api.libs.json.{Json, OWrites}
 

@@ -17,7 +17,7 @@
 package api.controllers.requestParsers.validators.validations
 
 import api.models.domain.Nino
-import api.models.errors.{MtdError, NinoFormatError}
+import v1.models.errors.{MtdError, NinoFormatError}
 
 object NinoValidation {
 

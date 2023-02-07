@@ -18,7 +18,6 @@ package v1.controllers
 
 import api.controllers.{AuthorisedController, EndpointLogContext}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
-import api.models.errors._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import cats.data.EitherT
 import cats.implicits._
@@ -28,6 +27,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.DeleteOtherDeductionsRequestParser
+import v1.models.errors._
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRawData
 import v1.services.DeleteOtherDeductionsService
 
@@ -111,9 +111,9 @@ class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuth
             RuleTaxYearRangeInvalidError
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case InternalError => InternalServerError(Json.toJson(errorWrapper))
-      case NotFoundError => NotFound(Json.toJson(errorWrapper))
-      case _             => unhandledError(errorWrapper)
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
   }
 

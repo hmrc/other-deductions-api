@@ -17,7 +17,7 @@
 package v1.models.response
 
 import api.models.hateoas
-import api.models.hateoas.{Link, Method}
+import api.models.hateoas.Method
 import mocks.MockAppConfig
 import support.UnitSpec
 

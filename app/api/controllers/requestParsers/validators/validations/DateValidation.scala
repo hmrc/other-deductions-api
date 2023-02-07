@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import api.models.errors.{DateFormatError, MtdError}
+import v1.models.errors.{DateFormatError, MtdError}
 
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
