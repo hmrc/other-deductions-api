@@ -16,8 +16,8 @@
 
 package api.controllers.requestParsers.validators.validations
 
+import api.models.errors.RangeToDateBeforeFromDateError
 import support.UnitSpec
-import v1.models.errors.RangeToDateBeforeFromDateError
 
 class ToDateBeforeFromDateValidationSpec extends UnitSpec {
 

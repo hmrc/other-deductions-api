@@ -17,12 +17,12 @@
 package api.controllers.requestParsers.validators.validations
 
 import api.mocks.MockCurrentTaxYear
+import api.models.errors.RuleTaxYearNotSupportedError
 import api.models.utils.JsonErrorValidators
 import config.AppConfig
 import mocks.MockAppConfig
 import org.joda.time.format.{DateTimeFormat, DateTimeFormatter}
 import support.UnitSpec
-import v1.models.errors.RuleTaxYearNotSupportedError
 
 class MtdTaxYearValidationSpec extends UnitSpec with JsonErrorValidators {
 

@@ -43,7 +43,8 @@ class GenericAuditDetailSpec extends UnitSpec {
     GenericAuditDetail(
       userType = userType,
       agentReferenceNumber = agentReferenceNumber,
-      params = pathParams,
+      pathParams = pathParams,
+      queryParams = None,
       requestBody = requestBody,
       `X-CorrelationId` = xCorrId,
       auditResponse = auditResponseModelWithBody

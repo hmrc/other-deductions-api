@@ -17,7 +17,7 @@
 package api.models.outcomes
 
 import api.models.auth.UserDetails
-import v1.models.errors.MtdError
+import api.models.errors.MtdError
 
 package object outcomes {
 

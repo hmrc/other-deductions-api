@@ -16,8 +16,8 @@
 
 package api.controllers.requestParsers.validators.validations
 
+import api.models.errors.NameOfShipFormatError
 import support.UnitSpec
-import v1.models.errors.NameOfShipFormatError
 
 class NameOfShipValidationSpec extends UnitSpec {
 

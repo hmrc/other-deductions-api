@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package v1
+package api.controllers
 
-import api.models.outcomes.ResponseWrapper
-import v1.models.errors.ErrorWrapper
-import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsResponse
+import api.models.errors.ErrorWrapper
+import play.api.libs.json.Json
+import play.api.mvc.Result
+import play.api.mvc.Results.Status
 
-package object services {
+case class ErrorHandling(errorHandler: PartialFunction[ErrorWrapper, Result])
 
-  private type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
+object ErrorHandling {
 
-  type CreateAndAmendOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
-
-  type DeleteOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
-
-  type RetrieveOtherDeductionsServiceOutcome = ServiceOutcome[RetrieveOtherDeductionsResponse]
+  val Default: ErrorHandling = ErrorHandling { case errorWrapper: ErrorWrapper =>
+    Status(errorWrapper.error.httpStatus)(Json.toJson(errorWrapper))
+  }
 
 }

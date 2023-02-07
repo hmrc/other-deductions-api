@@ -17,12 +17,12 @@
 package v1.controllers.requestParsers.validators
 
 import api.mocks.MockCurrentTaxYear
+import api.models.errors._
 import config.AppConfig
 import mocks.MockAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import utils.CurrentTaxYear
-import v1.models.errors._
 import v1.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRawData
 
 class CreateAndAmendOtherDeductionsValidatorSpec extends UnitSpec {

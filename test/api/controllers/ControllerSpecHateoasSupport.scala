@@ -14,21 +14,25 @@
  * limitations under the License.
  */
 
-package api.controllers.requestParsers.validators.validations
+package api.controllers
 
-import api.models.errors.{MtdError, RangeToDateBeforeFromDateError}
+import api.models.hateoas.Link
+import api.models.hateoas.Method.GET
+import play.api.libs.json.{JsObject, Json}
 
-import java.time.LocalDate
+trait ControllerSpecHateoasSupport {
 
-object ToDateBeforeFromDateValidation {
+  val hateoaslinks: Seq[Link] = Seq(Link(href = "/foo/bar", method = GET, rel = "test-relationship"))
 
-  def validate(from: String, to: String, fromPath: String, toPath: String): List[MtdError] = {
-
-    val fromDate = LocalDate.parse(from, dateFormat)
-    val toDate   = LocalDate.parse(to, dateFormat)
-
-    if (toDate.isBefore(fromDate)) List(RangeToDateBeforeFromDateError.copy(paths = Some(Seq(fromPath, toPath)))) else Nil
-
-  }
+  val hateoaslinksJson: JsObject = Json
+    .parse("""
+             |{
+             |  "links": [{
+             |    "href": "/foo/bar",
+             |    "method": "GET",
+             |    "rel": "test-relationship"
+             |  }]
+             |}""".stripMargin)
+    .as[JsObject]
 
 }

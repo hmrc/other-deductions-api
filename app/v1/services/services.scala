@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package api.controllers.requestParsers.validators.validations
+package v1
 
-import api.models.errors.{MtdError, RangeToDateBeforeFromDateError}
+import api.models.errors.ErrorWrapper
+import api.models.outcomes.ResponseWrapper
+import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsResponse
 
-import java.time.LocalDate
+package object services {
 
-object ToDateBeforeFromDateValidation {
+  type ServiceOutcome[A] = Either[ErrorWrapper, ResponseWrapper[A]]
 
-  def validate(from: String, to: String, fromPath: String, toPath: String): List[MtdError] = {
+  type CreateAndAmendOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
 
-    val fromDate = LocalDate.parse(from, dateFormat)
-    val toDate   = LocalDate.parse(to, dateFormat)
+  type DeleteOtherDeductionsServiceOutcome = ServiceOutcome[Unit]
 
-    if (toDate.isBefore(fromDate)) List(RangeToDateBeforeFromDateError.copy(paths = Some(Seq(fromPath, toPath)))) else Nil
-
-  }
+  type RetrieveOtherDeductionsServiceOutcome = ServiceOutcome[RetrieveOtherDeductionsResponse]
 
 }

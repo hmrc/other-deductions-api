@@ -17,11 +17,11 @@
 package v1.controllers.requestParsers
 
 import api.models.domain.{Nino, TaxYear}
+import api.models.errors
+import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.mocks.validators.MockCreateAndAmendOtherDeductionsValidator
-import v1.models
-import v1.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, TaxYearFormatError}
 import v1.models.request.createAndAmendOtherDeductions.{
   CreateAndAmendOtherDeductionsBody,
   CreateAndAmendOtherDeductionsRawData,
@@ -92,7 +92,7 @@ class CreateAndAmendOtherDeductionsRequestParserSpec extends UnitSpec {
           .returns(List(NinoFormatError))
 
         parser.parseRequest(inputData) shouldBe
-          Left(models.errors.ErrorWrapper(correlationId, NinoFormatError, None))
+          Left(errors.ErrorWrapper(correlationId, NinoFormatError, None))
       }
 
       "multiple validation errors occur" in new Test {

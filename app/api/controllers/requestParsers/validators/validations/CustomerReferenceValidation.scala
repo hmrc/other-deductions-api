@@ -16,7 +16,7 @@
 
 package api.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{CustomerReferenceFormatError, MtdError}
+import api.models.errors.{CustomerReferenceFormatError, MtdError}
 
 object CustomerReferenceValidation {
 

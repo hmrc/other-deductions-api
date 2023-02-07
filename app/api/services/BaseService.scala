@@ -16,24 +16,8 @@
 
 package api.services
 
-import api.connectors.MtdIdLookupConnector
-import api.connectors.connectors.MtdIdLookupOutcome
-import api.models.domain.Nino
-import api.models.errors.NinoFormatError
-import uk.gov.hmrc.http.HeaderCarrier
+import api.controllers.RequestContextImplicits
+import utils.Logging
+import v1.support.DownstreamResponseMappingSupport
 
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
-
-@Singleton
-class MtdIdLookupService @Inject() (val connector: MtdIdLookupConnector) {
-
-  def lookup(nino: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[MtdIdLookupOutcome] = {
-    if (Nino.isValid(nino)) {
-      connector.getMtdId(nino)
-    } else {
-      Future.successful(Left(NinoFormatError))
-    }
-  }
-
-}
+trait BaseService extends RequestContextImplicits with DownstreamResponseMappingSupport with Logging

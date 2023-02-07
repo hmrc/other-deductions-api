@@ -17,9 +17,9 @@
 package api.services
 
 import api.models.auth.UserDetails
+import api.models.errors.{ClientNotAuthorisedError, InternalError}
 import api.models.outcomes.outcomes.AuthOutcome
 import config.AppConfig
-import play.api.Logger
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.authorise.Predicate
@@ -27,15 +27,13 @@ import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.HeaderCarrier
-import v1.models.errors._
+import utils.Logging
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConfig: AppConfig) {
-
-  private val logger: Logger = Logger(this.getClass)
+class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConfig: AppConfig) extends Logging {
 
   private val authFunction: AuthorisedFunctions = new AuthorisedFunctions {
     override def authConnector: AuthConnector = connector
@@ -68,17 +66,17 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
             user
           case None =>
             logger.warn(s"[EnrolmentsAuthService][authorised] No AgentReferenceNumber defined on agent enrolment.")
-            Left(DownstreamError)
+            Left(InternalError)
         }
-      case _ ~ _ =>
-        logger.warn(s"[EnrolmentsAuthService][authorised] Invalid AffinityGroup.")
-        Future.successful(Left(UnauthorisedError))
+      case unexpected =>
+        logger.error(s"[EnrolmentsAuthService][authorised] Unexpected AuthorisedFunction: $unexpected")
+        Future.successful(Left(ClientNotAuthorisedError))
     } recoverWith {
-      case _: MissingBearerToken     => Future.successful(Left(UnauthorisedError))
-      case _: AuthorisationException => Future.successful(Left(UnauthorisedError))
+      case _: MissingBearerToken     => Future.successful(Left(ClientNotAuthorisedError))
+      case _: AuthorisationException => Future.successful(Left(ClientNotAuthorisedError))
       case error =>
         logger.warn(s"[EnrolmentsAuthService][authorised] An unexpected error occurred: $error")
-        Future.successful(Left(DownstreamError))
+        Future.successful(Left(InternalError))
     }
   }
 
@@ -86,9 +84,8 @@ class EnrolmentsAuthService @Inject() (val connector: AuthConnector, val appConf
     authFunction
       .authorised(AffinityGroup.Agent and Enrolment("HMRC-AS-AGENT"))
       .retrieve(Retrievals.agentCode and Retrievals.authorisedEnrolments) {
-        case _ ~ enrolments =>
-          Future.successful(getAgentReferenceFromEnrolments(enrolments))
-        case _ => Future.successful(None)
+        case _ ~ enrolments => Future.successful(getAgentReferenceFromEnrolments(enrolments))
+        case _              => Future.successful(None)
       }
 
 }

@@ -17,10 +17,9 @@
 package api.models.errors
 
 import api.models.audit.AuditError
+import api.models.errors
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models
-import v1.models.errors._
 
 class ErrorWrapperSpec extends UnitSpec {
 
@@ -44,7 +43,7 @@ class ErrorWrapperSpec extends UnitSpec {
   }
 
   "Rendering a error response with one error and an empty sequence of errors" should {
-    val error = models.errors.ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
+    val error = errors.ErrorWrapper(correlationId, NinoFormatError, Some(Seq.empty))
 
     val json = Json.parse(
       """
@@ -61,7 +60,7 @@ class ErrorWrapperSpec extends UnitSpec {
   }
 
   "Rendering a error response with two errors" should {
-    val error = models.errors.ErrorWrapper(
+    val error = errors.ErrorWrapper(
       correlationId,
       BadRequestError,
       Some(
@@ -97,18 +96,18 @@ class ErrorWrapperSpec extends UnitSpec {
 
   "auditErrors" should {
     "handle errors = None" in {
-      val errorWrapper = models.errors.ErrorWrapper(correlationId, BadRequestError, None)
+      val errorWrapper = errors.ErrorWrapper(correlationId, BadRequestError, None)
       errorWrapper.auditErrors shouldBe Seq(AuditError(BadRequestError.code))
     }
     "handle errors = Some(_)" in {
-      val errorWrapper = models.errors.ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError)))
+      val errorWrapper = errors.ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, TaxYearFormatError)))
       errorWrapper.auditErrors shouldBe Seq(AuditError(NinoFormatError.code), AuditError(TaxYearFormatError.code))
     }
   }
 
   "When ErrorWrapper has several errors, containsAnyOf" should {
     val errorWrapper =
-      models.errors.ErrorWrapper("correlationId", BadRequestError, Some(List(NinoFormatError, TaxYearFormatError, ServiceUnavailableError)))
+      errors.ErrorWrapper("correlationId", BadRequestError, Some(List(NinoFormatError, TaxYearFormatError, ServiceUnavailableError)))
 
     "return false" when {
       "given no matching errors" in {

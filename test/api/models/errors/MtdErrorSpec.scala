@@ -16,15 +16,15 @@
 
 package api.models.errors
 
+import play.api.http.Status.BAD_REQUEST
 import play.api.libs.json.Json
 import support.UnitSpec
-import v1.models.errors.MtdError
 
 class MtdErrorSpec extends UnitSpec {
 
   "writes" should {
     "generate the correct JSON" in {
-      Json.toJson(MtdError("CODE", "some message")) shouldBe Json.parse(
+      Json.toJson(MtdError("CODE", "some message", BAD_REQUEST)) shouldBe Json.parse(
         """
           |{
           |   "code": "CODE",
