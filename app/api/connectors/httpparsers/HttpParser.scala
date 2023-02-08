@@ -17,13 +17,14 @@
 package api.connectors.httpparsers
 
 import api.models.errors._
-import play.api.libs.Files.logger
+import play.api.Logger
 import play.api.libs.json._
 import uk.gov.hmrc.http.HttpResponse
 
 import scala.util.{Success, Try}
 
 trait HttpParser {
+  private val logger: Logger = Logger(this.getClass)
 
   implicit class KnownJsonResponse(response: HttpResponse) {
 
