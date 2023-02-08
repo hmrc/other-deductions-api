@@ -16,6 +16,7 @@
 
 package v1.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear}
 
 import javax.inject.Inject

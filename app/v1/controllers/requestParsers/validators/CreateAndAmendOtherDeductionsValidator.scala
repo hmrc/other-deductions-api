@@ -54,7 +54,7 @@ class CreateAndAmendOtherDeductionsValidator @Inject() (implicit appConfig: AppC
     val body = data.body.as[CreateAndAmendOtherDeductionsBody]
 
     List(
-      flattenErrors(
+      Validator.flattenErrors(
         List(
           body.seafarers.map(_.zipWithIndex.flatMap { case (item, i) =>
             validateSeafarers(item, i)
@@ -92,7 +92,7 @@ class CreateAndAmendOtherDeductionsValidator @Inject() (implicit appConfig: AppC
     val body = data.body.as[CreateAndAmendOtherDeductionsBody]
 
     List(
-      flattenErrors(
+      Validator.flattenErrors(
         List(
           body.seafarers.map(_.zipWithIndex.flatMap { case (item, i) =>
             validateToDateBeforeFromDate(item, i)

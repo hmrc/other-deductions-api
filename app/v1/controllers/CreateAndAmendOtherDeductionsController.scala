@@ -25,8 +25,8 @@ import play.api.mvc.{Action, ControllerComponents}
 import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.CreateAndAmendOtherDeductionsRequestParser
 import v1.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRawData
-import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
-import v1.models.response.CreateAndAmendOtherDeductionsResponse.CreateAndAmendOtherLinksFactory
+import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsHateoasData
+import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsResponse.CreateAndAmendOtherLinksFactory
 import v1.services.CreateAndAmendOtherDeductionsService
 
 import javax.inject.{Inject, Singleton}

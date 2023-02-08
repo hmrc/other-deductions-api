@@ -16,10 +16,9 @@
 
 package api.hateoas
 
-import api.models.hateoas
 import api.models.hateoas.Link
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.hateoas.RelType.{CREATE_AND_AMEND_DEDUCTIONS_OTHER, DELETE_DEDUCTIONS_OTHER, SELF}
+import api.models.hateoas.Method._
+import api.models.hateoas.RelType._
 import config.AppConfig
 
 trait HateoasLinks {
@@ -30,12 +29,12 @@ trait HateoasLinks {
 
   // API resource links
   def createAndAmendOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AND_AMEND_DEDUCTIONS_OTHER)
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = PUT, rel = CREATE_AND_AMEND_DEDUCTIONS_OTHER)
 
   def deleteOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_DEDUCTIONS_OTHER)
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = DELETE, rel = DELETE_DEDUCTIONS_OTHER)
 
   def retrieveOtherDeductions(appConfig: AppConfig, nino: String, taxYear: String): Link =
-    hateoas.Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
+    Link(href = otherDeductionsUri(appConfig, nino, taxYear), method = GET, rel = SELF)
 
 }

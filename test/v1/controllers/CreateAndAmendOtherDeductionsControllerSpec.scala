@@ -32,7 +32,7 @@ import play.api.mvc.Result
 import v1.mocks.requestParsers.MockCreateAndAmendOtherDeductionsRequestParser
 import v1.mocks.services._
 import v1.models.request.createAndAmendOtherDeductions._
-import v1.models.response.CreateAndAmendOtherDeductionsHateoasData
+import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future

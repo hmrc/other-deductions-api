@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v1.support
+package api.support
 
 import api.controllers.EndpointLogContext
 import api.models.errors

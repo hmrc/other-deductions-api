@@ -16,6 +16,7 @@
 
 package api.controllers
 
+import api.controllers.requestParsers.RequestParser
 import api.hateoas.HateoasLinksFactory
 import api.mocks.MockIdGenerator
 import api.mocks.hateoas.MockHateoasFactory
@@ -35,7 +36,6 @@ import play.api.test.{FakeRequest, ResultExtractors}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v1.controllers.requestParsers.RequestParser
 import v1.services.ServiceOutcome
 
 import scala.concurrent.ExecutionContext.Implicits.global

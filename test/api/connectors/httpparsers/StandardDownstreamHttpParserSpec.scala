@@ -16,7 +16,7 @@
 
 package api.connectors.httpparsers
 
-import api.connectors.connectors.DownstreamOutcome
+import api.connectors.DownstreamOutcome
 import api.models.errors.{BVRError, InternalError, MtdError, _}
 import api.models.outcomes.ResponseWrapper
 import play.api.http.Status._
@@ -45,8 +45,8 @@ class StandardDownstreamHttpParserSpec extends UnitSpec {
   val data                            = "someData"
   val downstreamExpectedJson: JsValue = Json.obj("data" -> data)
 
-  val downstreamModel    = SomeModel(data)
-  val downstreamResponse = ResponseWrapper(correlationId, downstreamModel)
+  val downstreamModel: SomeModel                     = SomeModel(data)
+  val downstreamResponse: ResponseWrapper[SomeModel] = ResponseWrapper(correlationId, downstreamModel)
 
   "The generic HTTP parser" when {
     "no status code is specified" must {

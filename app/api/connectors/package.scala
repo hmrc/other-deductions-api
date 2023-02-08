@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package api.controllers.requestParsers.validators
+package api
 
-import java.time.format.DateTimeFormatter
+import api.models.errors.{DownstreamError, MtdError}
+import api.models.outcomes.ResponseWrapper
 
-package object validations {
+package object connectors {
 
-  val dateFormat         = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-  val NoValidationErrors = List()
+  type MtdIdLookupOutcome = Either[MtdError, String]
+
+  type DownstreamOutcome[A] = Either[ResponseWrapper[DownstreamError], ResponseWrapper[A]]
 
 }

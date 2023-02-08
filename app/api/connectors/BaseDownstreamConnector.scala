@@ -16,8 +16,7 @@
 
 package api.connectors
 
-import api.connectors.DownstreamUri.{IfsUri, TaxYearSpecificIfsUri}
-import api.connectors.connectors.DownstreamOutcome
+import api.connectors.DownstreamUri._
 import config.{AppConfig, FeatureSwitches}
 import play.api.Logger
 import play.api.http.{HeaderNames, MimeTypes}

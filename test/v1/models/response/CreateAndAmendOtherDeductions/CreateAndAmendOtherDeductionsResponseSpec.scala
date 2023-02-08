@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package v1.models.response
+package v1.models.response.CreateAndAmendOtherDeductions
 
 import api.models.hateoas
 import api.models.hateoas.Method
 import mocks.MockAppConfig
 import support.UnitSpec
+import v1.models.response.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsHateoasData, CreateAndAmendOtherDeductionsResponse}
 
 class CreateAndAmendOtherDeductionsResponseSpec extends UnitSpec with MockAppConfig {
 

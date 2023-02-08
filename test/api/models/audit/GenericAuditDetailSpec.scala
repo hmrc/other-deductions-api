@@ -106,7 +106,7 @@ class GenericAuditDetailSpec extends UnitSpec {
      """.stripMargin
   )
 
-  "DeductionsAuditDetail" when {
+  "GenericAuditDetail" when {
     "written to JSON (success)" should {
       "produce the expected JsObject" in {
         Json.toJson(deductionsAuditDetailModelSuccess) shouldBe deductionsAuditDetailJsonSuccess

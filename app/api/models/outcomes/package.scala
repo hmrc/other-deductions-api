@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package api.models.domain
+package api.models
 
-/** Represents a tax year for IFS
-  *
-  * @param value
-  *   the tax year string (where 2018 represents 2017-18)
-  */
-case class IfsTaxYear(value: String) extends AnyVal {
-  override def toString: String = value
-}
+import api.models.auth.UserDetails
+import api.models.errors.MtdError
 
-object IfsTaxYear {
+package object outcomes {
 
-  /** @param taxYear
-    *   tax year in MTD format (e.g. 2017-18)
-    */
-  def fromMtd(taxYear: String): IfsTaxYear =
-    IfsTaxYear(taxYear.take(2) + taxYear.drop(5))
+  type AuthOutcome = Either[MtdError, UserDetails]
 
 }

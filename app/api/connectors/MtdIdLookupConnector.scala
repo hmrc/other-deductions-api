@@ -16,10 +16,9 @@
 
 package api.connectors
 
-import api.connectors.connectors.MtdIdLookupOutcome
-import api.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import api.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}

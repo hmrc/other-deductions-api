@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package v1.support
+package api.support
 
 import api.controllers.EndpointLogContext
 import api.models.errors
-import api.models.errors.{BadRequestError, ErrorWrapper, InternalError, MtdError, _}
+import api.models.errors.{BadRequestError, DownstreamError, DownstreamErrors, ErrorWrapper, InternalError, MtdError, OutboundError}
 import api.models.outcomes.ResponseWrapper
 import utils.Logging
 
