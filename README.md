@@ -6,15 +6,15 @@ populated.
 ## Requirements
 
 - Scala 2.13.x
-- Java 8
-- sbt 1.6.x
+- Java 11
+- sbt 1.7.x
 - [Service Manager](https://github.com/hmrc/service-manager)
 
 ## Development Setup
 
 Run from the console using: `sbt run` (starts on port 7797 by default)
 
-Start the service manager profile: `sm --start MTDFB_ALL`
+Start the service manager profile: `sm --start MTDFB_OTHER_DEDUCTIONS`
 
 ## Running tests
 
