@@ -41,7 +41,7 @@ You can create a GitHub issue [here](https://github.com/hmrc/income-tax-mtd-chan
 ## API Reference / Documentation
 
 Available on
-the [Other Deductions Documentation](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/other-deductions-api/1.0)
+the [Other Deductions Documentation](https://developer.service.hmrc.gov.uk/api-documentation/docs/api/service/other-deductions-api)
 
 ## License
 
