@@ -18,10 +18,10 @@ package v1.controllers
 
 import api.controllers._
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
+import config.AppConfig
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
-import v1.controllers.requestParsers.DeleteOtherDeductionsRequestParser
-import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRawData
+import v1.controllers.validators.DeleteOtherDeductionsValidatorFactory
 import v1.services.DeleteOtherDeductionsService
 
 import javax.inject.{Inject, Singleton}
@@ -30,12 +30,13 @@ import scala.concurrent.ExecutionContext
 @Singleton
 class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuthService,
                                                  val lookupService: MtdIdLookupService,
-                                                 parser: DeleteOtherDeductionsRequestParser,
+                                                 validatorFactory: DeleteOtherDeductionsValidatorFactory,
                                                  service: DeleteOtherDeductionsService,
                                                  auditService: AuditService,
                                                  cc: ControllerComponents,
-                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+                                                 idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
     extends AuthorisedController(cc)
+    with V1Controller
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
@@ -45,21 +46,21 @@ class DeleteOtherDeductionsController @Inject() (val authService: EnrolmentsAuth
     authorisedAction(nino).async { implicit request =>
       implicit val ctx: RequestContext = RequestContext.from(idGenerator, endpointLogContext)
 
-      val rawData = DeleteOtherDeductionsRawData(nino, taxYear)
+      val validator = validatorFactory.validator(nino, taxYear)
 
       val requestHandler = RequestHandler
-        .withParser(parser)
+        .withValidator(validator)
         .withService(service.delete)
         .withAuditing(AuditHandler(
           auditService = auditService,
           auditType = "DeleteOtherDeductions",
           transactionName = "delete-other-deductions",
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          apiVersion = apiVersion,
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = None
         ))
 
-      requestHandler.handleRequest(rawData)
+      requestHandler.handleRequest()
     }
 
 }

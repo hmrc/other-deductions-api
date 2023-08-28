@@ -21,15 +21,15 @@ import api.hateoas.MockHateoasFactory
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
+import api.models.hateoas
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
-import api.models.{errors, hateoas}
 import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
-import v1.mocks.requestParsers.MockCreateAndAmendOtherDeductionsRequestParser
+import v1.controllers.validators.MockCreateAndAmendOtherDeductionsValidatorFactory
 import v1.mocks.services._
 import v1.models.request.createAndAmendOtherDeductions._
 import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsHateoasData
@@ -41,7 +41,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockCreateAndAmendOtherDeductionsService
-    with MockCreateAndAmendOtherDeductionsRequestParser
+    with MockCreateAndAmendOtherDeductionsValidatorFactory
     with MockHateoasFactory
     with MockAuditService
     with MockAppConfig {
@@ -104,16 +104,12 @@ class CreateAndAmendOtherDeductionsControllerSpec
                                             |}
                                             |""".stripMargin)
 
-  private val rawData     = CreateAndAmendOtherDeductionsRawData(nino, taxYear, requestBodyJson)
-  private val requestData = CreateAndAmendOtherDeductionsRequest(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
+  private val requestData = CreateAndAmendOtherDeductionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear), requestBody)
 
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "the request received is valid" in new Test {
-
-        MockCreateAndAmendOtherDeductionsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendOtherDeductionsService
           .createAndAmend(requestData)
@@ -134,19 +130,13 @@ class CreateAndAmendOtherDeductionsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockCreateAndAmendOtherDeductionsRequestParser
-          .parseRequest(rawData)
-          .returns(Left(errors.ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
 
       "the service returns an error" in new Test {
-
-        MockCreateAndAmendOtherDeductionsRequestParser
-          .parseRequest(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockCreateAndAmendOtherDeductionsService
           .createAndAmend(requestData)
@@ -162,11 +152,10 @@ class CreateAndAmendOtherDeductionsControllerSpec
     val controller = new CreateAndAmendOtherDeductionsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockCreateAndAmendOtherDeductionsRequestParser,
+      validatorFactory = mockCreateAndAmendOtherDeductionsValidatorFactory,
       service = mockService,
       hateoasFactory = mockHateoasFactory,
       auditService = mockAuditService,
-      appConfig = mockAppConfig,
       cc = cc,
       idGenerator = mockIdGenerator
     )
@@ -180,8 +169,8 @@ class CreateAndAmendOtherDeductionsControllerSpec
         detail = GenericAuditDetail(
           userType = "Individual",
           agentReferenceNumber = None,
-          pathParams = Map("nino" -> nino, "taxYear" -> taxYear),
-          queryParams = None,
+          versionNumber = "1.0",
+          params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = requestBody,
           `X-CorrelationId` = correlationId,
           auditResponse = auditResponse

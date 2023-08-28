@@ -24,11 +24,12 @@ import api.models.hateoas
 import api.models.hateoas.HateoasWrapper
 import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
+import mocks.MockAppConfig
 import play.api.mvc.Result
+import v1.controllers.validators.MockRetrieveOtherDeductionsValidatorFactory
 import v1.fixtures.RetrieveOtherDeductionsFixtures._
-import v1.mocks.requestParsers.MockRetrieveOtherDeductionsRequestParser
 import v1.mocks.services.MockRetrieveOtherDeductionsService
-import v1.models.request.retrieveOtherDeductions.{RetrieveOtherDeductionsRawData, RetrieveOtherDeductionsRequest}
+import v1.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequestData
 import v1.models.response.retrieveOtherDeductions.RetrieveOtherDeductionsHateoasData
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,12 +39,12 @@ class RetrieveOtherDeductionsControllerSpec
     extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveOtherDeductionsService
-    with MockRetrieveOtherDeductionsRequestParser
-    with MockHateoasFactory {
+    with MockRetrieveOtherDeductionsValidatorFactory
+    with MockHateoasFactory
+    with MockAppConfig {
 
   private val taxYear     = "2019-20"
-  private val rawData     = RetrieveOtherDeductionsRawData(nino, taxYear)
-  private val requestData = RetrieveOtherDeductionsRequest(Nino(nino), TaxYear.fromMtd(taxYear))
+  private val requestData = RetrieveOtherDeductionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Seq(
     hateoas.Link(
@@ -68,10 +69,7 @@ class RetrieveOtherDeductionsControllerSpec
   "handleRequest" should {
     "return a successful response with status 200 (OK)" when {
       "given a valid request" in new Test {
-
-        MockRetrieveOtherDeductionsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherDeductionsService
           .retrieve(requestData)
@@ -90,20 +88,13 @@ class RetrieveOtherDeductionsControllerSpec
 
     "return the error as per spec" when {
       "the parser validation fails" in new Test {
-
-        MockRetrieveOtherDeductionsRequestParser
-          .parse(rawData)
-          .returns(Left(ErrorWrapper(correlationId, NinoFormatError)))
+        willUseValidator(returning(NinoFormatError))
 
         runErrorTest(NinoFormatError)
-
       }
 
       "the service returns an error" in new Test {
-
-        MockRetrieveOtherDeductionsRequestParser
-          .parse(rawData)
-          .returns(Right(requestData))
+        willUseValidator(returningSuccess(requestData))
 
         MockRetrieveOtherDeductionsService
           .retrieve(requestData)
@@ -119,7 +110,7 @@ class RetrieveOtherDeductionsControllerSpec
     val controller = new RetrieveOtherDeductionsController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
-      parser = mockRetrieveOtherDeductionsRequestParser,
+      validatorFactory = mockRetrieveOtherDeductionsValidatorFactory,
       service = mockRetrieveOtherDeductionsService,
       hateoasFactory = mockHateoasFactory,
       cc = cc,
