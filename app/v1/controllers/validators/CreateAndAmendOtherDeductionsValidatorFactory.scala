@@ -17,19 +17,21 @@
 package v1.controllers.validators
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveJsonObject, ResolveNino, ResolveParsedNumber, ResolveTaxYear}
+import api.controllers.validators.resolvers.{DateRange, DateRangeResolving, ResolveJsonObject, ResolveNino, ResolveParsedNumber, ResolveTaxYear}
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
+import config.AppConfig
 import play.api.libs.json.JsValue
 import v1.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
 
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import scala.util.{Failure, Success, Try}
+import javax.inject.{Inject, Singleton}
 
-class CreateAndAmendOtherDeductionsValidatorFactory {
+@Singleton
+class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppConfig) {
+
+  private val customerRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
 
   private val resolveJson = new ResolveJsonObject[CreateAndAmendOtherDeductionsBody]()
 
@@ -39,76 +41,60 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
       def validate: Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(taxYear),
+          ResolveTaxYear(appConfig.minimumPermittedTaxYear, taxYear, None, None),
           resolveJson(body)
-        ).mapN(CreateAndAmendOtherDeductionsRequestData) andThen validateBody
-
-      private def validateBody(
-          parsed: CreateAndAmendOtherDeductionsRequestData): Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] = {
-        import parsed.body._
-        List(
-          validateBodyFieldFormat(seafarers),
-          validateBodyDateRange(seafarers)
-        ).traverse(identity)
-          .map(_ => parsed)
-      }
+        ).mapN(CreateAndAmendOtherDeductionsRequestData) andThen validateBodyFieldFormat
 
     }
 
-  private def validateBodyFieldFormat(seafarers: Option[Seq[Seafarers]]): Validated[Seq[MtdError], Unit] = {
-    val validationResult = seafarers
-      .getOrElse(Seq.empty[Seafarers])
-      .zipWithIndex
-      .traverse_ { case (item, index) => validateSeafarers(item, index) }
+  private def validateBodyFieldFormat(
+      parsed: CreateAndAmendOtherDeductionsRequestData): Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] = {
 
-    validationResult
-  }
+    val validationResult = parsed.body.seafarers match {
+      case None => Valid(())
+      case Some(seafarers) =>
+        seafarers.zipWithIndex
+          .traverse_ { case (item, index) => validateSeafarers(item, index) }
+    }
 
-  private def validateBodyDateRange(seafarers: Option[Seq[Seafarers]]): Validated[Seq[MtdError], Unit] = {
-    val validationResult = seafarers
-      .getOrElse(Seq.empty[Seafarers])
-      .zipWithIndex
-      .traverse_ { case (item, index) => validateToDateBeforeFromDate(item, index) }
-
-    validationResult
+    validationResult.map(_ => parsed)
   }
 
   private def validateSeafarers(seafarers: Seafarers, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
+    import seafarers._
+
     (
-      ValidateCustomerReference.validateOptional(field = seafarers.customerReference, path = s"/seafarers/$arrayIndex/customerReference"),
-      validateAmountDeducted(value = seafarers.amountDeducted, path = s"/seafarers/$arrayIndex/amountDeducted"),
-      validateNameOfShip(
-        field = seafarers.nameOfShip,
-        path = s"/seafarers/$arrayIndex/nameOfShip"
-      ),
-      ValidateDate.validateDateFormat(
-        field = seafarers.fromDate,
-        path = s"/seafarers/$arrayIndex/fromDate"
-      ),
-      ValidateDate.validateDateFormat(
-        field = seafarers.toDate,
-        path = s"/seafarers/$arrayIndex/toDate"
-      )
+      validateCustomerReference(customerReference, s"/seafarers/$arrayIndex/customerReference"),
+      validateAmountDeducted(amountDeducted, s"/seafarers/$arrayIndex/amountDeducted"),
+      validateNameOfShip(nameOfShip, s"/seafarers/$arrayIndex/nameOfShip"),
+      validateDates(fromDate, toDate, arrayIndex)
     ).tupled
-      .andThen { case (_, _, _, _, _) => Validated.Valid(()) }
+      .andThen { case (_, _, _, _) => Validated.Valid(()) }
   }
 
-  object ValidateCustomerReference {
-    val customerRefRegex: String = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$"
+  private def validateDates(fromDate: String, toDate: String, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
+    val fromPath = s"/seafarers/$arrayIndex/fromDate"
+    val toPath   = s"/seafarers/$arrayIndex/toDate"
 
-    def validateOptional(field: Option[String], path: String): Validated[Seq[MtdError], Unit] = {
+    object ResolveToFromDateRange extends DateRangeResolving {
+      override protected val startDateFormatError: MtdError = DateFormatError.withPath(fromPath)
+      override protected val endDateFormatError: MtdError   = DateFormatError.withPath(toPath)
 
-      field match {
-        case None        => Valid(())
-        case Some(value) => validate(value, path)
+      def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
+        resolve(value, maybeError, path)
       }
+
     }
 
-    private def validate(customerRef: String, path: String): Validated[Seq[MtdError], Unit] = {
-      if (customerRef.matches(customerRefRegex)) Valid(()) else Invalid(List(CustomerReferenceFormatError.copy(paths = Some(Seq(path)))))
-    }
-
+    ResolveToFromDateRange((fromDate, toDate), Some(RangeToDateBeforeFromDateError.withPaths(List(fromPath, toPath))), None).map(_ => ())
   }
+
+  private def validateCustomerReference(customerReference: Option[String], path: String): Validated[Seq[MtdError], Unit] =
+    customerReference match {
+      case None => Valid(())
+      case Some(ref: String) =>
+        if (customerRefRegex.matches(ref)) Valid(()) else Invalid(Seq(CustomerReferenceFormatError.withPath(path)))
+    }
 
   private val resolveAmountDeducted = ResolveParsedNumber()
 
@@ -118,40 +104,6 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   private def validateNameOfShip(field: String, path: String): Validated[Seq[MtdError], Unit] = {
     if (field.length <= 105) Valid(()) else Invalid(List(NameOfShipFormatError.copy(paths = Some(Seq(path)))))
-  }
-
-  object ValidateDate {
-    val dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-    def validateDateFormat(field: String, path: String): Validated[Seq[MtdError], Unit] = Try {
-      LocalDate.parse(field, dateFormat)
-    } match {
-      case Success(_) => Valid(())
-      case Failure(_) => Invalid(List(DateFormatError.copy(paths = Some(Seq(path)))))
-    }
-
-    def validateDateRange(from: String, to: String, fromPath: String, toPath: String): Validated[Seq[MtdError], Unit] = {
-      val fromDate = LocalDate.parse(from, dateFormat)
-      val toDate   = LocalDate.parse(to, dateFormat)
-
-      if (toDate.isBefore(fromDate)) Invalid(List(RangeToDateBeforeFromDateError.copy(paths = Some(Seq(fromPath, toPath))))) else Valid(())
-    }
-
-  }
-
-  private def validateToDateBeforeFromDate(seafarers: Seafarers, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    val validation = ValidateDate
-      .validateDateRange(
-        from = seafarers.fromDate,
-        to = seafarers.toDate,
-        fromPath = s"/seafarers/$arrayIndex/fromDate",
-        toPath = s"/seafarers/$arrayIndex/toDate"
-      )
-
-    validation.fold(
-      errors => Validated.invalid(errors.toList),
-      _ => Validated.valid(())
-    )
   }
 
 }
