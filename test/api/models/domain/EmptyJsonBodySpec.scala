@@ -14,10 +14,20 @@
  * limitations under the License.
  */
 
-package api.models.hateoas
+package api.models.domain
 
-object RelType {
-  val SELF                              = "self"
-  val CREATE_AND_AMEND_DEDUCTIONS_OTHER = "create-and-amend-deductions-other"
-  val DELETE_DEDUCTIONS_OTHER           = "delete-deductions-other"
+import play.api.libs.json.Json
+import support.UnitSpec
+
+class EmptyJsonBodySpec extends UnitSpec {
+
+  "EmptyJsonBody.writes" should {
+    "return an empty JSON body" when {
+      "called" in {
+        val json = EmptyJsonBody
+        Json.toJson(json)(EmptyJsonBody.writes) shouldBe Json.obj()
+      }
+    }
+  }
+
 }

@@ -17,7 +17,6 @@
 package api.controllers
 
 import api.hateoas._
-import api.models.hateoas.{HateoasData, HateoasWrapper}
 import cats.Functor
 import play.api.http.{HttpEntity, Status}
 import play.api.libs.json.{JsValue, Json, Writes}

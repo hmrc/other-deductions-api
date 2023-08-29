@@ -22,7 +22,8 @@ import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
 import config.AppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.{Action, ControllerComponents}
-import utils.{IdGenerator, Logging}
+import routing.{Version, Version1}
+import utils.IdGenerator
 import v1.controllers.validators.CreateAndAmendOtherDeductionsValidatorFactory
 import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsHateoasData
 import v1.models.response.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsResponse.CreateAndAmendOtherLinksFactory
@@ -40,9 +41,7 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
                                                          hateoasFactory: HateoasFactory,
                                                          cc: ControllerComponents,
                                                          idGenerator: IdGenerator)(implicit ec: ExecutionContext, appConfig: AppConfig)
-    extends AuthorisedController(cc)
-    with V1Controller
-    with Logging {
+    extends AuthorisedController(cc) {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "CreateAndAmendOtherDeductionsController", endpointName = "createAndAmendOtherDeductions")
@@ -60,7 +59,7 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
           auditService = auditService,
           auditType = "CreateAmendOtherDeductions",
           transactionName = "create-amend-other-deductions",
-          apiVersion = apiVersion,
+          apiVersion = Version.from(request, orElse = Version1),
           params = Map("nino" -> nino, "taxYear" -> taxYear),
           requestBody = Some(request.body),
           includeResponse = true

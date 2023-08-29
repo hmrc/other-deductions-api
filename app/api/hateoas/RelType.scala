@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
-package api.controllers
+package api.hateoas
 
-import api.hateoas.Link
-import api.hateoas.Method.GET
-import play.api.libs.json.{JsObject, Json}
-
-trait ControllerSpecHateoasSupport {
-
-  val hateoaslinks: Seq[Link] = Seq(Link(href = "/foo/bar", method = GET, rel = "test-relationship"))
-
-  val hateoaslinksJson: JsObject = Json
-    .parse("""
-             |{
-             |  "links": [{
-             |    "href": "/foo/bar",
-             |    "method": "GET",
-             |    "rel": "test-relationship"
-             |  }]
-             |}""".stripMargin)
-    .as[JsObject]
-
+object RelType {
+  val SELF                              = "self"
+  val CREATE_AND_AMEND_DEDUCTIONS_OTHER = "create-and-amend-deductions-other"
+  val DELETE_DEDUCTIONS_OTHER           = "delete-deductions-other"
 }

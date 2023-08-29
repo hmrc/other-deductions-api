@@ -17,14 +17,12 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.MockHateoasFactory
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.models.outcomes.ResponseWrapper
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
-import api.models.outcomes.ResponseWrapper
+import api.hateoas.Method.{DELETE, GET, PUT}
 import api.services.MockAuditService
 import mocks.MockAppConfig
 import play.api.libs.json.{JsValue, Json}
@@ -49,9 +47,9 @@ class CreateAndAmendOtherDeductionsControllerSpec
   private val taxYear = "2021-22"
 
   private val testHateoasLinks = Seq(
-    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = PUT, rel = "amend-deductions-other"),
-    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = GET, rel = "self"),
-    hateoas.Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = DELETE, rel = "delete-deductions-other")
+    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = PUT, rel = "amend-deductions-other"),
+    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = GET, rel = "self"),
+    Link(href = s"/individuals/deductions/other/$nino/$taxYear", method = DELETE, rel = "delete-deductions-other")
   )
 
   private val requestBodyJson = Json.parse(

@@ -17,12 +17,10 @@
 package v1.controllers
 
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import api.hateoas.MockHateoasFactory
+import api.hateoas.{HateoasWrapper, Link, MockHateoasFactory}
+import api.hateoas.Method.{DELETE, GET, PUT}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import api.models.hateoas
-import api.models.hateoas.HateoasWrapper
-import api.models.hateoas.Method.{DELETE, GET, PUT}
 import api.models.outcomes.ResponseWrapper
 import mocks.MockAppConfig
 import play.api.mvc.Result
@@ -47,17 +45,17 @@ class RetrieveOtherDeductionsControllerSpec
   private val requestData = RetrieveOtherDeductionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
 
   private val testHateoasLink = Seq(
-    hateoas.Link(
+    Link(
       href = s"/individuals/deductions/other/AA123456A/$taxYear",
       method = PUT,
       rel = "create-and-amend-deductions-other"
     ),
-    hateoas.Link(
+    Link(
       href = s"/individuals/deductions/other/AA123456A/$taxYear",
       method = GET,
       rel = "self"
     ),
-    hateoas.Link(
+    Link(
       href = s"/individuals/deductions/other/AA123456A/$taxYear",
       method = DELETE,
       rel = "delete-deductions-other"

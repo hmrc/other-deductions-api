@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package api.models.hateoas
+package api.models.domain
 
-import play.api.libs.json.Format
-import utils.enums.Enums
+import support.UnitSpec
 
-sealed trait Method
+class BusinessIdSpec extends UnitSpec {
 
-object Method {
-  case object GET    extends Method
-  case object POST   extends Method
-  case object DELETE extends Method
-  case object PUT    extends Method
+  "toString" should {
+    "return the BusinessId value" in {
+      val businessId = BusinessId("some id")
+      businessId.toString shouldBe "some id"
+    }
+  }
 
-  implicit val formats: Format[Method] = Enums.format[Method]
 }

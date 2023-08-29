@@ -17,9 +17,8 @@
 package api.controllers
 
 import api.controllers.validators.Validator
-import api.hateoas.{HateoasFactory, HateoasLinksFactory}
+import api.hateoas.{HateoasData, HateoasFactory, HateoasLinksFactory, HateoasWrapper}
 import api.models.errors.{ErrorWrapper, InternalError}
-import api.models.hateoas.{HateoasData, HateoasWrapper}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceOutcome
 import cats.data.EitherT
@@ -29,7 +28,6 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Writes}
 import play.api.mvc.Result
 import play.api.mvc.Results.InternalServerError
-import routing.Version
 import utils.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -40,8 +38,8 @@ trait RequestHandler {
       ctx: RequestContext,
       request: UserRequest[_],
       ec: ExecutionContext,
-      appConfig: AppConfig,
-      apiVersion: Version): Future[Result]
+      appConfig: AppConfig
+  ): Future[Result]
 
 }
 
@@ -69,8 +67,8 @@ object RequestHandler {
         ctx: RequestContext,
         request: UserRequest[_],
         ec: ExecutionContext,
-        appConfig: AppConfig,
-        apiVersion: Version): Future[Result] =
+        appConfig: AppConfig
+    ): Future[Result] =
       Delegate.handleRequest()
 
     def withErrorHandling(errorHandling: ErrorHandling): RequestHandlerBuilder[Input, Output] =
@@ -142,8 +140,8 @@ object RequestHandler {
           ctx: RequestContext,
           request: UserRequest[_],
           ec: ExecutionContext,
-          appConfig: AppConfig,
-          apiVersion: Version): Future[Result] = {
+          appConfig: AppConfig
+      ): Future[Result] = {
 
         logger.info(
           message = s"[${ctx.endpointLogContext.controllerName}][${ctx.endpointLogContext.endpointName}] " +

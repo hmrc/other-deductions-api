@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package api.models.hateoas
+package api.models.domain
 
-import play.api.libs.json.{Json, Writes}
+import support.UnitSpec
 
-case class Link(
-    href: String,
-    method: Method,
-    rel: String
-)
+class CalculationIdSpec extends UnitSpec {
 
-object Link {
-  implicit val writes: Writes[Link] = Json.writes[Link]
+  "toString" should {
+    "return the CalculationId value" in {
+      val calculationId = CalculationId("some id")
+      calculationId.toString shouldBe "some id"
+    }
+  }
+
 }
