@@ -18,20 +18,22 @@ package v1.controllers.validators
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{DateRange, DateRangeResolving, ResolveJsonObject, ResolveNino, ResolveParsedNumber, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import config.AppConfig
 import play.api.libs.json.JsValue
 import v1.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppConfig) {
+class CreateAndAmendOtherDeductionsValidatorFactory {
 
   private val customerRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+
+  private val valid = Valid(())
 
   private val resolveJson = new ResolveJsonObject[CreateAndAmendOtherDeductionsBody]()
 
@@ -41,7 +43,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppCon
       def validate: Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(appConfig.minimumPermittedTaxYear, taxYear, None, None),
+          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
           resolveJson(body)
         ).mapN(CreateAndAmendOtherDeductionsRequestData) andThen validateBodyFieldFormat
 
@@ -50,14 +52,14 @@ class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppCon
   private def validateBodyFieldFormat(
       parsed: CreateAndAmendOtherDeductionsRequestData): Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] = {
 
-    val validationResult = parsed.body.seafarers match {
-      case None => Valid(())
+    parsed.body.seafarers match {
+      case None => Valid(parsed)
       case Some(seafarers) =>
         seafarers.zipWithIndex
           .traverse_ { case (item, index) => validateSeafarers(item, index) }
+          .map(_ => parsed)
     }
 
-    validationResult.map(_ => parsed)
   }
 
   private def validateSeafarers(seafarers: Seafarers, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
@@ -69,7 +71,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppCon
       validateNameOfShip(nameOfShip, s"/seafarers/$arrayIndex/nameOfShip"),
       validateDates(fromDate, toDate, arrayIndex)
     ).tupled
-      .andThen { case (_, _, _, _) => Validated.Valid(()) }
+      .andThen { case (_, _, _, _) => valid }
   }
 
   private def validateDates(fromDate: String, toDate: String, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
@@ -91,9 +93,9 @@ class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppCon
 
   private def validateCustomerReference(customerReference: Option[String], path: String): Validated[Seq[MtdError], Unit] =
     customerReference match {
-      case None => Valid(())
+      case None => valid
       case Some(ref: String) =>
-        if (customerRefRegex.matches(ref)) Valid(()) else Invalid(Seq(CustomerReferenceFormatError.withPath(path)))
+        if (customerRefRegex.matches(ref)) valid else Invalid(Seq(CustomerReferenceFormatError.withPath(path)))
     }
 
   private val resolveAmountDeducted = ResolveParsedNumber()
@@ -103,7 +105,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory @Inject() (appConfig: AppCon
   }
 
   private def validateNameOfShip(field: String, path: String): Validated[Seq[MtdError], Unit] = {
-    if (field.length <= 105) Valid(()) else Invalid(List(NameOfShipFormatError.copy(paths = Some(Seq(path)))))
+    if (field.length <= 105) valid else Invalid(List(NameOfShipFormatError.withPath(path)))
   }
 
 }

@@ -43,9 +43,6 @@ trait MockAppConfig extends MockFactory {
     def tysIfsEnvironment: CallHandler[String]                     = (() => mockAppConfig.tysIfsEnv).expects()
     def tysIfsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.tysIfsEnvironmentHeaders).expects()
 
-    // Business Rule Config
-    def minimumPermittedTaxYear: CallHandler[Int] = (() => mockAppConfig.minimumPermittedTaxYear).expects()
-
     // API Config
     def featureSwitches: CallHandler[Configuration]              = (() => mockAppConfig.featureSwitches).expects()
     def apiGatewayContext: CallHandler[String]                   = (() => mockAppConfig.apiGatewayContext).expects()

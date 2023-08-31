@@ -97,13 +97,13 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
   private val parsedValidRequestBodyNoRef    = validRequestBodyJsonNoRef.as[CreateAndAmendOtherDeductionsBody]
   private val parsedValidRequestBodyMultiple = validRequestBodyJsonMultiple.as[CreateAndAmendOtherDeductionsBody]
 
-  val validatorFactory = new CreateAndAmendOtherDeductionsValidatorFactory(mockAppConfig)
+  val validatorFactory = new CreateAndAmendOtherDeductionsValidatorFactory()
 
   private def validator(nino: String, taxYear: String, body: JsValue) = validatorFactory.validator(nino, taxYear, body)
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is supplied" in new Test {
+      "a valid request is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, validTaxYear, validRequestBodyJson).validateAndWrapResult()
 
@@ -111,7 +111,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
           CreateAndAmendOtherDeductionsRequestData(parsedNino, parsedTaxYear, parsedValidRequestBody)
         )
       }
-      "a valid request is supplied with no customerRef" in new Test {
+      "a valid request is supplied with no customerRef" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, validTaxYear, validRequestBodyJsonNoRef).validateAndWrapResult()
 
@@ -119,7 +119,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
           CreateAndAmendOtherDeductionsRequestData(parsedNino, parsedTaxYear, parsedValidRequestBodyNoRef)
         )
       }
-      "a valid request is supplied with multiple objects in the seafarers array" in new Test {
+      "a valid request is supplied with multiple objects in the seafarers array" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, validTaxYear, validRequestBodyJsonMultiple).validateAndWrapResult()
 
@@ -130,7 +130,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
     }
 
     "return path parameter error(s)" when {
-      "an invalid nino is supplied" in new Test {
+      "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator("AAUH881", validTaxYear, validRequestBodyJson).validateAndWrapResult()
 
@@ -139,7 +139,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "an invalid taxYear is supplied" in new Test {
+      "an invalid taxYear is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, "20319", validRequestBodyJson).validateAndWrapResult()
 
@@ -148,7 +148,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "an invalid taxYear range is supplied" in new Test {
+      "an invalid taxYear range is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, "2018-20", validRequestBodyJson).validateAndWrapResult()
 
@@ -157,7 +157,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "a taxYear preceeding the minimum is supplied" in new Test {
+      "a taxYear preceeding the minimum is supplied" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, "2017-18", validRequestBodyJson).validateAndWrapResult()
 
@@ -166,7 +166,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "all path parameters are invalid" in new Test {
+      "all path parameters are invalid" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator("AANNAA12", "20319", validRequestBodyJson).validateAndWrapResult()
 
@@ -177,7 +177,7 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
     }
 
     "return RuleIncorrectOrEmptyBodyError" when {
-      "an empty JSON body is submitted" in new Test {
+      "an empty JSON body is submitted" in {
         val result: Either[ErrorWrapper, CreateAndAmendOtherDeductionsRequestData] =
           validator(validNino, validTaxYear, emptyJson).validateAndWrapResult()
 
@@ -188,8 +188,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
     }
 
     "return request body field errors" when {
-      "the customer reference is invalid" in new Test {
-        private val badJson = Json.parse(
+      "the customer reference is invalid" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -213,8 +213,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "the amountDeduction is invalid" in new Test {
-        private val badJson = Json.parse(
+      "the amountDeduction is invalid" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -238,8 +238,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "the nameOfShip is invalid" in new Test {
-        private val badJson = Json.parse(
+      "the nameOfShip is invalid" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -263,8 +263,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "the fromDate is invalid" in new Test {
-        private val badJson = Json.parse(
+      "the fromDate is invalid" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -288,8 +288,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "the toDate is invalid" in new Test {
-        private val badJson = Json.parse(
+      "the toDate is invalid" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -313,8 +313,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
 
-      "the toDate is before fromDate" in new Test {
-        private val badJson = Json.parse(
+      "the toDate is before fromDate" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -340,8 +340,8 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
     }
 
     "return all types of field errors" when {
-      "the provided data violates all errors" in new Test {
-        private val badJson = Json.parse(
+      "the provided data violates all errors" in {
+        val badJson = Json.parse(
           """
               |{
               |    "seafarers":[
@@ -381,10 +381,6 @@ class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with Mo
         )
       }
     }
-  }
-
-  trait Test {
-    MockAppConfig.minimumPermittedTaxYear.returns(2019).anyNumberOfTimes()
   }
 
 }

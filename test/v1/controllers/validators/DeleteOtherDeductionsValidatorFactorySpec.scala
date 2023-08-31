@@ -32,14 +32,13 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
   private val parsedNino    = Nino(validNino)
   private val parsedTaxYear = TaxYear.fromMtd(validTaxYear)
 
-  val validatorFactory = new DeleteOtherDeductionsValidatorFactory(mockAppConfig)
+  private val validatorFactory = new DeleteOtherDeductionsValidatorFactory()
 
-  private def validator(nino: String, taxYear: String) =
-    validatorFactory.validator(nino, taxYear)
+  private def validator(nino: String, taxYear: String) = validatorFactory.validator(nino, taxYear)
 
   "validator" should {
     "return the parsed domain object" when {
-      "a valid request is made" in new Test {
+      "a valid request is made" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator(validNino, validTaxYear).validateAndWrapResult()
         result shouldBe Right(
           DeleteOtherDeductionsRequestData(parsedNino, parsedTaxYear)
@@ -48,7 +47,7 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
     }
 
     "return NinoFormatError" when {
-      "an invalid nino is supplied" in new Test {
+      "an invalid nino is supplied" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator("A12344A", validTaxYear).validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, NinoFormatError)
@@ -57,7 +56,7 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
     }
 
     "return TaxYearFormatError" when {
-      "an invalid tax year is supplied" in new Test {
+      "an invalid tax year is supplied" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator(validNino, "201831").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, TaxYearFormatError)
@@ -66,7 +65,7 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
     }
 
     "return RuleTaxYearNotSupportedError" when {
-      "a taxYear preceeding the minimum is supplied" in new Test {
+      "a taxYear preceeding the minimum is supplied" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator(validNino, "2017-18").validateAndWrapResult()
 
         result shouldBe Left(
@@ -76,7 +75,7 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
     }
 
     "return RuleTaxYearRangeInvalidError" when {
-      "an invalid tax year range is supplied" in new Test {
+      "an invalid tax year range is supplied" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator(validNino, "2019-21").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
@@ -85,17 +84,13 @@ class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppCon
     }
 
     "return multiple errors" when {
-      "request supplied has multiple errors" in new Test {
+      "request supplied has multiple errors" in {
         val result: Either[ErrorWrapper, DeleteOtherDeductionsRequestData] = validator("A12344A", "20178").validateAndWrapResult()
         result shouldBe Left(
           ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError)))
         )
       }
     }
-  }
-
-  trait Test {
-    MockAppConfig.minimumPermittedTaxYear.returns(2019).anyNumberOfTimes()
   }
 
 }

@@ -18,16 +18,16 @@ package v1.controllers.validators
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.{ResolveNino, ResolveTaxYear}
+import api.models.domain.TaxYear
 import api.models.errors.MtdError
 import cats.data.Validated
 import cats.implicits._
-import config.AppConfig
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequestData
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Singleton
 
 @Singleton
-class DeleteOtherDeductionsValidatorFactory @Inject() (appConfig: AppConfig) {
+class DeleteOtherDeductionsValidatorFactory {
 
   def validator(nino: String, taxYear: String): Validator[DeleteOtherDeductionsRequestData] =
     new Validator[DeleteOtherDeductionsRequestData] {
@@ -35,7 +35,7 @@ class DeleteOtherDeductionsValidatorFactory @Inject() (appConfig: AppConfig) {
       def validate: Validated[Seq[MtdError], DeleteOtherDeductionsRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(appConfig.minimumPermittedTaxYear, taxYear, None, None)
+          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None)
         ).mapN(DeleteOtherDeductionsRequestData)
 
     }
