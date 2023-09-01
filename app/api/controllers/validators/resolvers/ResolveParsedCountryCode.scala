@@ -26,16 +26,15 @@ object ResolveParsedCountryCode extends Resolver[String, String] {
   private val permittedCustomCodes = Set("ZZZ")
 
   def apply(value: String, notUsedError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], String] = {
-    if (value.length != 3) {
+    if (value.length != 3)
       Invalid(List(CountryCodeFormatError.maybeWithPath(path)))
-    } else if (permittedCustomCodes.contains(value)) {
+    else if (permittedCustomCodes.contains(value))
       Valid(value)
-    } else {
+    else
       Option(CountryCode.getByAlpha3Code(value)) match {
         case Some(_) => Valid(value)
         case None    => Invalid(List(RuleCountryCodeError.maybeWithPath(path)))
       }
-    }
   }
 
 }

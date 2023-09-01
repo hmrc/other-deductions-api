@@ -95,7 +95,10 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
     customerReference match {
       case None => valid
       case Some(ref: String) =>
-        if (customerRefRegex.matches(ref)) valid else Invalid(Seq(CustomerReferenceFormatError.withPath(path)))
+        if (customerRefRegex.matches(ref))
+          valid
+        else
+          Invalid(List(CustomerReferenceFormatError.withPath(path)))
     }
 
   private val resolveAmountDeducted = ResolveParsedNumber()
@@ -105,7 +108,10 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
   }
 
   private def validateNameOfShip(field: String, path: String): Validated[Seq[MtdError], Unit] = {
-    if (field.length <= 105) valid else Invalid(List(NameOfShipFormatError.withPath(path)))
+    if (field.length <= 105)
+      valid
+    else
+      Invalid(List(NameOfShipFormatError.withPath(path)))
   }
 
 }
