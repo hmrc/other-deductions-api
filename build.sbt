@@ -29,7 +29,7 @@ lazy val microservice = Project(appName, file("."))
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
     retrieveManaged                 := true,
     update / evictionWarningOptions := EvictionWarningOptions.default.withWarnScalaVersionEviction(false),
-    scalaVersion                    := "2.13.8",
+    scalaVersion                    := "2.13.12",
     scalacOptions ++= Seq("-Xfatal-warnings", "-Wconf:src=routes/.*:silent", "-feature", "-language:higherKinds")
   )
   .settings(
@@ -56,4 +56,4 @@ lazy val microservice = Project(appName, file("."))
 
 val appName = "other-deductions-api"
 
-dependencyUpdatesFilter -= moduleFilter(name = "bootstrap-backend-play-28")
+dependencyUpdatesFilter -= moduleFilter(name = "bootstrap-backend-play-30")
