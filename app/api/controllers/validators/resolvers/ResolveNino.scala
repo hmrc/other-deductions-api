@@ -15,7 +15,6 @@
  */
 
 package api.controllers.validators.resolvers
-
 import api.models.domain.Nino
 import api.models.errors.{MtdError, NinoFormatError}
 import cats.data.Validated
@@ -24,10 +23,11 @@ import cats.data.Validated.{Invalid, Valid}
 object ResolveNino {
 
   def apply(value: String): Validated[Seq[MtdError], Nino] =
-    if (isValid(value))
+    if (isValid(value)) {
       Valid(Nino(value))
-    else
+    } else {
       Invalid(List(NinoFormatError))
+    }
 
   def isValid(nino: String): Boolean = nino != null && hasValidPrefix(nino) && ninoRegex.matches(nino)
 
@@ -39,5 +39,4 @@ object ResolveNino {
 
   private val invalidPrefixes =
     List("BG", "GB", "NK", "KN", "TN", "NT", "ZZ")
-
 }

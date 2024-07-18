@@ -57,7 +57,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
       eventId = "",
       tags = eventTags,
       detail = Map("test" -> "test"),
-      generatedAt = Instant.now
+      generatedAt = Instant.now()
     )
 
     (httpAuditEvent
