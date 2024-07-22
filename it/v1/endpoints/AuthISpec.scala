@@ -18,7 +18,7 @@ package v1.endpoints
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR}
+import play.api.http.Status.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK}
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSRequest, WSResponse}
 import play.api.test.Helpers.AUTHORIZATION
@@ -107,11 +107,11 @@ class AuthISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, Status.OK, ifsResponseBody)
+          DownstreamStub.onSuccess(DownstreamStub.GET, ifsUri, OK, ifsResponseBody)
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.OK
+        response.status shouldBe OK
       }
     }
 
@@ -127,7 +127,7 @@ class AuthISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
+        response.status shouldBe FORBIDDEN
       }
     }
 
@@ -143,7 +143,7 @@ class AuthISpec extends IntegrationBaseSpec {
         }
 
         val response: WSResponse = await(request().get())
-        response.status shouldBe Status.FORBIDDEN
+        response.status shouldBe FORBIDDEN
       }
     }
   }
