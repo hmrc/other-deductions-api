@@ -23,7 +23,7 @@ import javax.inject.Singleton
 @Singleton
 class CurrentTaxYear {
 
-  //private lazy val expectedDateFormat: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
+  // private lazy val expectedDateFormat: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
   def getCurrentTaxYear(date: LocalDate): Int = {
 
