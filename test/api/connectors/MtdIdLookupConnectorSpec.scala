@@ -18,7 +18,7 @@ package api.connectors
 
 import api.connectors.MtdIdLookupConnector.Outcome
 import api.mocks.MockHttpClient
-import mocks.MockAppConfig
+import config.MockAppConfig
 
 import scala.concurrent.Future
 
@@ -31,7 +31,7 @@ class MtdIdLookupConnectorSpec extends ConnectorSpec {
       appConfig = mockAppConfig
     )
 
-    MockAppConfig.mtdIdBaseUrl returns baseUrl
+    MockedAppConfig.mtdIdBaseUrl returns baseUrl
   }
 
   val nino  = "test-nino"
