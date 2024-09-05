@@ -28,8 +28,6 @@ import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  private val config = app.injector.instanceOf[AppConfig]
-
   private val apiDefinitionJson = Json.parse(
     s"""
        |{

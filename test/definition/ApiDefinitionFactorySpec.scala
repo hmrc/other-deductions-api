@@ -17,12 +17,10 @@
 package definition
 
 import api.mocks.MockHttpClient
-import config.ConfidenceLevelConfig
-import definition.APIStatus.{ALPHA, BETA}
 import config.MockAppConfig
+import definition.APIStatus.{ALPHA, BETA}
 import routing.Version1
 import support.UnitSpec
-import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 class ApiDefinitionFactorySpec extends UnitSpec {
 
