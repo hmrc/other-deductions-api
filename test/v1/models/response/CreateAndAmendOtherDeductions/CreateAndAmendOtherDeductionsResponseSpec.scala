@@ -17,11 +17,11 @@
 package v1.models.response.CreateAndAmendOtherDeductions
 
 import api.hateoas.{Link, Method}
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import support.UnitSpec
 import v1.models.response.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsHateoasData, CreateAndAmendOtherDeductionsResponse}
 
-class CreateAndAmendOtherDeductionsResponseSpec extends UnitSpec with MockAppConfig {
+class CreateAndAmendOtherDeductionsResponseSpec extends UnitSpec with MockOtherDeductionsAppConfig {
 
   "LinksFactory" should {
     "produce the correct links" when {

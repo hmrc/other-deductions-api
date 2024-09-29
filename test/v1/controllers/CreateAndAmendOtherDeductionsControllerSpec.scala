@@ -24,7 +24,7 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.hateoas.Method.{DELETE, GET, PUT}
 import api.services.MockAuditService
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.Configuration
@@ -43,7 +43,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
     with MockCreateAndAmendOtherDeductionsValidatorFactory
     with MockHateoasFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockOtherDeductionsAppConfig {
 
   private val taxYear = "2021-22"
 

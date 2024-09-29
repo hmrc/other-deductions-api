@@ -18,12 +18,12 @@ package v1.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import play.api.libs.json.{JsValue, Json}
 import support.UnitSpec
 import v1.models.request.createAndAmendOtherDeductions._
 
-class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class CreateAndAmendOtherDeductionsValidatorFactorySpec extends UnitSpec with MockOtherDeductionsAppConfig {
 
   private implicit val correlationId: String = "1234"
 

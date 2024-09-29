@@ -18,11 +18,11 @@ package v1.controllers.validators
 
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import support.UnitSpec
 import v1.models.request.deleteOtherDeductions.DeleteOtherDeductionsRequestData
 
-class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockAppConfig {
+class DeleteOtherDeductionsValidatorFactorySpec extends UnitSpec with MockOtherDeductionsAppConfig {
 
   private implicit val correlationId: String = "1234"
 

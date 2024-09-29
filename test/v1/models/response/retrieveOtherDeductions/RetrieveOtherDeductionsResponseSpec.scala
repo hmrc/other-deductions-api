@@ -19,12 +19,12 @@ package v1.models.response.retrieveOtherDeductions
 import api.hateoas
 import api.hateoas.{Link, Method}
 import api.models.domain.Timestamp
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import play.api.libs.json.Json
 import support.UnitSpec
 import v1.fixtures.RetrieveOtherDeductionsFixtures._
 
-class RetrieveOtherDeductionsResponseSpec extends UnitSpec with MockAppConfig {
+class RetrieveOtherDeductionsResponseSpec extends UnitSpec with MockOtherDeductionsAppConfig {
 
   val multipleSeafarersRetrieveOtherDeductionsResponse: RetrieveOtherDeductionsResponse = RetrieveOtherDeductionsResponse(
     submittedOn = Timestamp("2019-04-04T01:01:01.000Z"),

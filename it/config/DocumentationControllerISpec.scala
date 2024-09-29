@@ -28,7 +28,7 @@ import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  private val config          = app.injector.instanceOf[AppConfig]
+  private val config          = app.injector.instanceOf[OtherDeductionsAppConfig]
   private val confidenceLevel = config.confidenceLevelConfig.confidenceLevel
 
   private val apiDefinitionJson = Json.parse(

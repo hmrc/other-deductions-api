@@ -23,7 +23,7 @@ import api.models.errors
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
 import api.services.MockAuditService
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import play.api.libs.json.JsValue
 import play.api.mvc.Result
 import play.api.Configuration
@@ -40,7 +40,7 @@ class DeleteOtherDeductionsControllerSpec
     with MockDeleteOtherDeductionsService
     with MockDeleteOtherDeductionsValidatorFactory
     with MockAuditService
-    with MockAppConfig {
+    with MockOtherDeductionsAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = DeleteOtherDeductionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))

@@ -16,14 +16,14 @@
 
 package v1.controllers.validators
 
-import api.controllers.validators.Validator
-import api.controllers.validators.resolvers._
-import api.models.domain.TaxYear
-import api.models.errors._
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
+import common.errors.{CustomerReferenceFormatError, NameOfShipFormatError}
 import play.api.libs.json.JsValue
+import shared.controllers.validators.Validator
+import shared.controllers.validators.resolvers._
+import shared.models.errors._
 import v1.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
 
 import javax.inject.Singleton
@@ -40,7 +40,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
   private val minYear: Int = 1900
   private val maxYear: Int = 2100
 
-  private val validateMaxAndMinDate = new ResolveFromAndToDates(minYear, maxYear)
+  private val resolveTaxYear = ResolveTaxYearMinimum(minimumPermittedTaxYear)
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendOtherDeductionsRequestData] =
     new Validator[CreateAndAmendOtherDeductionsRequestData] {
@@ -48,7 +48,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
       def validate: Validated[Seq[MtdError], CreateAndAmendOtherDeductionsRequestData] =
         (
           ResolveNino(nino),
-          ResolveTaxYear(TaxYear.minimumTaxYear.year, taxYear, None, None),
+          resolveTaxYear(taxYear),
           resolveJson(body)
         ).mapN(CreateAndAmendOtherDeductionsRequestData) andThen validateBodyFieldFormat
 
@@ -80,21 +80,10 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
   }
 
   private def validateDateRange(fromDate: String, toDate: String, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    val fromPath = s"/seafarers/$arrayIndex/fromDate"
-    val toPath   = s"/seafarers/$arrayIndex/toDate"
+    //val fromPath = s"/seafarers/$arrayIndex/fromDate"
+    //val toPath   = s"/seafarers/$arrayIndex/toDate"
 
-    object ResolveToFromDateRange extends DateRangeResolving {
-      override protected val startDateFormatError: MtdError = DateFormatError.withPath(fromPath)
-      override protected val endDateFormatError: MtdError   = DateFormatError.withPath(toPath)
-
-      def apply(value: (String, String), maybeError: Option[MtdError], path: Option[String]): Validated[Seq[MtdError], DateRange] = {
-        resolve(value, maybeError, path)
-      }
-
-    }
-
-    (ResolveToFromDateRange((fromDate, toDate), Some(RangeToDateBeforeFromDateError.withPaths(List(fromPath, toPath))), None) andThen (dateRange =>
-      validateMaxAndMinDate(dateRange))).map(_ => ())
+    ResolveDateRange().withYearsLimitedTo(minYear, maxYear)(fromDate -> toDate).andThen(_ => valid)
   }
 
   private def validateCustomerReference(customerReference: Option[String], path: String): Validated[Seq[MtdError], Unit] =
@@ -110,7 +99,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
   private val resolveAmountDeducted = ResolveParsedNumber()
 
   private def validateAmountDeducted(value: BigDecimal, path: String): Validated[Seq[MtdError], Unit] = {
-    resolveAmountDeducted(value, path = Some(path)).map(_ => ())
+    resolveAmountDeducted(value, path = path).map(_ => ())
   }
 
   private def validateNameOfShip(field: String, path: String): Validated[Seq[MtdError], Unit] = {

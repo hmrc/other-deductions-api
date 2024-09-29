@@ -22,7 +22,7 @@ import api.hateoas.Method.{DELETE, GET, PUT}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors._
 import api.models.outcomes.ResponseWrapper
-import config.MockAppConfig
+import config.MockOtherDeductionsAppConfig
 import play.api.mvc.Result
 import play.api.Configuration
 import v1.controllers.validators.MockRetrieveOtherDeductionsValidatorFactory
@@ -40,7 +40,7 @@ class RetrieveOtherDeductionsControllerSpec
     with MockRetrieveOtherDeductionsService
     with MockRetrieveOtherDeductionsValidatorFactory
     with MockHateoasFactory
-    with MockAppConfig {
+    with MockOtherDeductionsAppConfig {
 
   private val taxYear     = "2019-20"
   private val requestData = RetrieveOtherDeductionsRequestData(Nino(nino), TaxYear.fromMtd(taxYear))
