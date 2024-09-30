@@ -19,11 +19,12 @@ package v1.controllers.validators
 import cats.data.Validated
 import cats.data.Validated.{Invalid, Valid}
 import cats.implicits._
-import common.errors.{CustomerReferenceFormatError, NameOfShipFormatError}
+import common.controllers.validators.resolvers.ResolveDateRange
+import common.errors.{CustomerReferenceFormatError, DateFormatError, NameOfShipFormatError, RangeToDateBeforeFromDateError}
 import play.api.libs.json.JsValue
 import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers._
-import shared.models.errors._
+import shared.models.errors.MtdError
 import v1.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
 
 import javax.inject.Singleton
@@ -80,10 +81,18 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
   }
 
   private def validateDateRange(fromDate: String, toDate: String, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
-    //val fromPath = s"/seafarers/$arrayIndex/fromDate"
-    //val toPath   = s"/seafarers/$arrayIndex/toDate"
+    val fromPath = s"/seafarers/$arrayIndex/fromDate"
+    val toPath   = s"/seafarers/$arrayIndex/toDate"
 
-    ResolveDateRange().withYearsLimitedTo(minYear, maxYear)(fromDate -> toDate).andThen(_ => valid)
+    (
+      ResolveIsoDate(fromDate, DateFormatError.withPath(fromPath)),
+      ResolveIsoDate(toDate, DateFormatError.withPath(toPath))
+    ).tupled
+      .andThen { case (fromDate, toDate) =>
+        ResolveDateRange.validateRange(fromDate, toDate, RangeToDateBeforeFromDateError.withPaths(List(fromPath, toPath)))
+      }
+      .andThen(dateRange => ResolveDateRange.validateMaxAndMinDate(minYear, maxYear, dateRange).map(_ => ()))
+
   }
 
   private def validateCustomerReference(customerReference: Option[String], path: String): Validated[Seq[MtdError], Unit] =

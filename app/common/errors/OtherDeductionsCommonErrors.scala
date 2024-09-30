@@ -22,3 +22,8 @@ import shared.models.errors.MtdError
 object CustomerReferenceFormatError extends MtdError("FORMAT_CUSTOMER_REFERENCE", "The provided customer reference is not valid", BAD_REQUEST)
 
 object NameOfShipFormatError extends MtdError("FORMAT_NAME_OF_SHIP", "The provided name of ship is not valid", BAD_REQUEST)
+
+object DateFormatError extends MtdError("FORMAT_DATE", "The field should be in the format YYYY-MM-DD", BAD_REQUEST)
+
+object RangeToDateBeforeFromDateError
+  extends MtdError(code = "RANGE_TO_DATE_BEFORE_FROM_DATE", message = "The To date is before the From date", BAD_REQUEST)

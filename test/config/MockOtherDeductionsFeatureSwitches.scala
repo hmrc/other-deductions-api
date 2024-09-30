@@ -18,6 +18,7 @@ package config
 
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
+import shared.config.FeatureSwitches
 
 trait MockOtherDeductionsFeatureSwitches extends MockFactory {
   implicit val mockFeatureSwitches: FeatureSwitches = mock[FeatureSwitches]
