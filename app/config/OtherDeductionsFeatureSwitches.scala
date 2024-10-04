@@ -19,26 +19,17 @@ package config
 import play.api.Configuration
 import shared.config.{FeatureSwitches, SharedAppConfig}
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
 
-@Singleton
 case class OtherDeductionsFeatureSwitches(featureSwitchConfig: Configuration) extends FeatureSwitches {
 
   @Inject
-  def this(appConfig: SharedAppConfig) = this(appConfig.featureSwitchConfig)
-
-  override val supportingAgentsAccessControlEnabled: Boolean = isEnabled("supporting-agents-access-control")
-
-  override def isEnabled(key: String): Boolean = isConfigTrue(key + ".enabled")
-
-  private def isConfigTrue(key: String): Boolean = featureSwitchConfig.getOptional[Boolean](key).getOrElse(true)
-
-  override def isReleasedInProduction(feature: String): Boolean = isConfigTrue(feature + ".released-in-production")
+  def this(sharedAppConfig: SharedAppConfig) = this(sharedAppConfig.featureSwitchConfig)
 
 }
 
 object OtherDeductionsFeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new OtherDeductionsFeatureSwitches(configuration)
 
-  def apply(appConfig: SharedAppConfig): FeatureSwitches = new OtherDeductionsFeatureSwitches(appConfig)
+  def apply(sharedAppConfig: SharedAppConfig): FeatureSwitches = new OtherDeductionsFeatureSwitches(sharedAppConfig)
 }

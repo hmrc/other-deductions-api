@@ -24,7 +24,7 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 case class OtherDeductionsVersionRoutingMap @Inject() (
-    appConfig: SharedAppConfig,
+    sharedAppConfig: SharedAppConfig,
     defaultRouter: Router,
     v1Router: v1.Routes
 ) extends VersionRoutingMap {
