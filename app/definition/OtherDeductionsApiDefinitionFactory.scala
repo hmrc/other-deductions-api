@@ -40,7 +40,7 @@ class OtherDeductionsApiDefinitionFactory @Inject() (protected val appConfig: Sh
             endpointsEnabled = appConfig.endpointsEnabled(Version1)
           ),
           APIVersion(
-            version = Version1,
+            version = Version2,
             status = buildAPIStatus(Version2),
             endpointsEnabled = appConfig.endpointsEnabled(Version2)
           )
