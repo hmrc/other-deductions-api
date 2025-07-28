@@ -54,7 +54,7 @@ class SharedAppConfig @Inject() (val config: ServicesConfig, protected[config] v
   def endpointsEnabled(version: String): Boolean = config.getBoolean(s"api.$version.endpoints.enabled")
 
   /** Like endpointsEnabled, but will return false if version doesn't exist.
-   */
+    */
   def safeEndpointsEnabled(version: String): Boolean =
     configuration
       .getOptional[Boolean](s"api.$version.endpoints.enabled")

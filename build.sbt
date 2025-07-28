@@ -21,26 +21,30 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val ItTest = config("it") extend Test
 
+ThisBuild / scalacOptions ++= Seq(
+  "-Werror",
+  "-Wconf:msg=Flag.*repeatedly:s"
+)
+ThisBuild / scalacOptions += "-nowarn" // Added help suppress warnings in migration. Must be removed when changes shown are complete
+ThisBuild / scalafmtOnCompile := true
+
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
     retrieveManaged                 := true,
-    scalaVersion                    := "2.13.16",
+    scalaVersion                    := "3.5.2",
     scalacOptions ++= Seq(
-      "-Xfatal-warnings",
-      "-Wconf:src=routes/.*:silent",
       "-feature",
-      "-language:higherKinds",
-      "-Xlint:-byname-implicit",
+      "-Wconf:src=routes/.*:s"
     )
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
   )
   .settings(majorVersion := 0)
-  .settings(CodeCoverageSettings.settings *)
+  .settings(CodeCoverageSettings.settings)
   .settings(defaultSettings() *)
   .configs(ItTest)
   .settings(
@@ -53,5 +57,3 @@ lazy val microservice = Project(appName, file("."))
   .settings(PlayKeys.playDefaultPort := 7797)
 
 val appName = "other-deductions-api"
-
-dependencyUpdatesFilter -= moduleFilter(name = "bootstrap-backend-play-30")
