@@ -71,7 +71,7 @@ class EnumsSpec extends UnitSpec with Inspectors {
     }
 
     "allow roundtrip" in {
-      forAll(List(`enum-one`, `enum-two`, `enum-three`)) { value: Enum =>
+      forAll(List(`enum-one`, `enum-two`, `enum-three`)) { (value: Enum) =>
         val foo = Foo(value)
         Json.toJson(foo).as[Foo[Enum]] shouldBe foo
       }

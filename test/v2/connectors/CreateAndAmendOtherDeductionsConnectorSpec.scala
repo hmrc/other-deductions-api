@@ -58,8 +58,7 @@ class CreateAndAmendOtherDeductionsConnectorSpec extends ConnectorSpec {
       }
     }
 
-    trait Test {
-      _: ConnectorTest =>
+    trait Test extends ConnectorTest {
 
       val nino: String = "AA123456A"
 

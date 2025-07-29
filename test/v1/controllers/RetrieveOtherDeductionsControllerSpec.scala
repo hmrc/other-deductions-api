@@ -127,6 +127,7 @@ class RetrieveOtherDeductionsControllerSpec
     )
 
     protected def callController(): Future[Result] = controller.handleRequest(nino, taxYear)(fakeGetRequest)
+    //
   }
 
 }

@@ -16,13 +16,14 @@
 
 package shared.models.domain
 
-import play.api.libs.json
+import play.api.libs.json._
 import shared.utils.enums.Enums
 
-sealed trait Source
+enum Source {
+  case `customer`
+  case `HMRC HELD`
+}
 
 object Source {
-  case object `MTD-SA` extends Source
-
-  implicit val format: json.Format[Source] = Enums.format[Source]
+  given Format[Source] = Enums.format(values)
 }

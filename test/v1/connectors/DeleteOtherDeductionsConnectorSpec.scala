@@ -54,8 +54,7 @@ class DeleteOtherDeductionsConnectorSpec extends ConnectorSpec {
     }
   }
 
-  trait Test {
-    _: ConnectorTest =>
+  trait Test extends ConnectorTest {
 
     val connector: DeleteOtherDeductionsConnector = new DeleteOtherDeductionsConnector(
       http = mockHttpClient,

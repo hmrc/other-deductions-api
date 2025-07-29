@@ -18,7 +18,6 @@ package shared.utils.enums
 
 import cats.Show
 import play.api.libs.json._
-import shared.utils.enums.Values.MkValues
 
 import scala.reflect.ClassTag
 

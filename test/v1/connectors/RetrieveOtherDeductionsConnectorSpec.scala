@@ -53,7 +53,7 @@ class RetrieveOtherDeductionsConnectorSpec extends ConnectorSpec {
       }
     }
 
-    trait Test { _: ConnectorTest =>
+    trait Test extends ConnectorTest {
       val taxYear: String
 
       val connector: RetrieveOtherDeductionsConnector = new RetrieveOtherDeductionsConnector(http = mockHttpClient, appConfig = mockAppConfig)
