@@ -35,7 +35,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
         setupMockConfig(Version9)
         MockedSharedAppConfig.apiStatus(Version9) returns "BETA"
 
-        val result: APIStatus = apiDefinitionFactory.checkBuildApiStatus(Version9)
+        val result: APIStatus = checkBuildApiStatus(Version9)
         result shouldBe BETA
       }
 
@@ -72,7 +72,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   class Test extends MockHttpClient with MockSharedAppConfig {
     MockedSharedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
 
-    protected val apiDefinitionFactory = new ApiDefinitionFactory {
+    protected val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {
       protected val appConfig: SharedAppConfig = mockAppConfig
 
       val definition: Definition = Definition(

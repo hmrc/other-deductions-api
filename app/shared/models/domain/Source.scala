@@ -20,8 +20,7 @@ import play.api.libs.json._
 import shared.utils.enums.Enums
 
 enum Source {
-  case `customer`
-  case `HMRC HELD`
+  case `MTD-SA`
 }
 
 object Source {
