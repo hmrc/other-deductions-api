@@ -16,7 +16,7 @@
 
 package shared.definition
 
-import play.api.libs.json._
+import play.api.libs.json.*
 import shared.routing.Version
 import shared.utils.enums.Enums
 
@@ -42,7 +42,6 @@ case class APIDefinition(name: String,
                          categories: Seq[String],
                          versions: Seq[APIVersion],
                          requiresTrust: Option[Boolean]) {
-
   require(name.nonEmpty, "name is required")
   require(description.nonEmpty, "description is required")
   require(context.nonEmpty, "context is required")

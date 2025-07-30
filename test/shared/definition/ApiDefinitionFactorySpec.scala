@@ -85,8 +85,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
           None)
       )
 
-      def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
     }
+
+    def checkBuildApiStatus(version: Version): APIStatus = apiDefinitionFactory.buildAPIStatus(version)
 
     protected def setupMockConfig(version: Version): Unit = {
       MockedSharedAppConfig
