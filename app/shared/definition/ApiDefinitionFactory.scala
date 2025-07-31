@@ -27,7 +27,7 @@ trait ApiDefinitionFactory extends Logging {
 
   protected val appConfig: SharedAppConfig
 
-  val definition: Definition
+  lazy val definition: Definition
 
   def buildAPIStatus(version: Version): APIStatus = {
     checkDeprecationConfigFor(version)

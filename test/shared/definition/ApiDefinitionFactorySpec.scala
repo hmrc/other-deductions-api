@@ -75,7 +75,7 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {
       protected val appConfig: SharedAppConfig = mockAppConfig
 
-      val definition: Definition = Definition(
+      lazy val definition: Definition = Definition(
         APIDefinition(
           "test API definition",
           "description",
