@@ -25,7 +25,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-Werror",
   "-Wconf:msg=Flag.*repeatedly:s"
 )
-ThisBuild / scalacOptions += "-nowarn" //TODO remove once errors done, Added help suppress warnings in migration. Must be removed when changes shown are complete
+
 ThisBuild / scalafmtOnCompile := true
 
 lazy val microservice = Project(appName, file("."))
