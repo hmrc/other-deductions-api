@@ -23,7 +23,6 @@ enum Status {
   case valid, invalid, superseded
 }
 
-//noinspection ScalaStyle
 object Status {
   given Format[Status] = Enums.format(values)
 }

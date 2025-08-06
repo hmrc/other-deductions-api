@@ -42,7 +42,7 @@ class EnumsSpec extends UnitSpec with Inspectors {
 
   given Arbitrary[Enum] = Arbitrary(Gen.oneOf(values.toList))
 
-  "SealedTraitEnumJson" must {
+  "EnumJson" must {
 
     "check toString assumption" in {
       `enum-two`.toString shouldBe "enum-two"
@@ -132,7 +132,7 @@ class EnumsSpec extends UnitSpec with Inspectors {
       badJson.validate[Foo[Enum]] shouldBe JsError(__ \ "someField", JsonValidationError("error.expected.jsstring"))
     }
 
-    "only work for sealed trait singletons (objects)" in {
+    "only work for enums with singleton cases (no parameters)" in {
       assertTypeError(
         """
           |      enum NotEnum {

@@ -21,9 +21,12 @@ import uk.gov.hmrc.versioning.SbtGitVersioning.autoImport.majorVersion
 
 lazy val ItTest = config("it") extend Test
 
+ThisBuild / scalaVersion := "3.5.2"
 ThisBuild / scalacOptions ++= Seq(
   "-Werror",
-  "-Wconf:msg=Flag.*repeatedly:s"
+  "-Wconf:msg=Flag.*repeatedly:s",
+  "-feature",
+  "-Wconf:src=routes/.*:s"
 )
 
 ThisBuild / scalafmtOnCompile := true
@@ -32,13 +35,7 @@ lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
-    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test(),
-    retrieveManaged                 := true,
-    scalaVersion                    := "3.5.2",
-    scalacOptions ++= Seq(
-      "-feature",
-      "-Wconf:src=routes/.*:s"
-    )
+    libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test()
   )
   .settings(
     Compile / unmanagedResourceDirectories += baseDirectory.value / "resources"
