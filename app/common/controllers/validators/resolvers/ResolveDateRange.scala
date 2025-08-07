@@ -45,19 +45,4 @@ object ResolveDateRange extends ResolverSupport {
       .map(_ => value)
   }
 
-  def datesLimitedTo(minDate: LocalDate, minError: => MtdError, maxDate: LocalDate, maxError: => MtdError): Validator[DateRange] =
-    combinedValidator[DateRange](
-      satisfies(minError)(_.startDate >= minDate),
-      satisfies(minError)(_.startDate <= maxDate),
-      satisfies(maxError)(_.endDate <= maxDate),
-      satisfies(maxError)(_.endDate >= minDate)
-    )
-
-  def yearsLimitedTo(minYear: Int, minError: => MtdError, maxYear: Int, maxError: => MtdError): Validator[DateRange] = {
-    def yearStartDate(year: Int) = LocalDate.ofYearDay(year, 1)
-    def yearEndDate(year: Int)   = yearStartDate(year + 1).minusDays(1)
-
-    datesLimitedTo(yearStartDate(minYear), minError, yearEndDate(maxYear), maxError)
-  }
-
 }
