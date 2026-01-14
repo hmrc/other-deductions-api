@@ -1,0 +1,264 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Retrieve Partnership Income",
+  "description": "Schema for retrieving partnership income submissions",
+  "type": "object",
+  "properties": {
+    "submittedOn": {
+      "description": "The date the income was submitted",
+      "type": "string",
+      "format": "date-time",
+      "example": "2025-12-12T12:00:00.000Z"
+    },
+    "partnershipUtr": {
+      "description": "The 10-digit partnership UTR. If the customer is a partner in a foreign partnership, put your own UTR",
+      "type": "string",
+      "pattern": "^\\d{10}$",
+      "example": "1234567890"
+    },
+    "partnershipName": {
+      "description": "The name of the partnership.",
+      "example": "General Partners",
+      "type": "string",
+      "maxLength": 105
+    },
+    "startDate": {
+      "description": "The date you joined the partnership in YYYY-MM-DD format.",
+      "type": "string",
+      "format": "date",
+      "example": "2026-01-01"
+    },
+    "endDate": {
+      "description": "The date you left the partnership in YYYY-MM-DD format.",
+      "type": "string",
+      "format": "date",
+      "example": "2026-12-31"
+    },
+    "cashBasis": {
+      "description": "If the partnership used cash basis, money actually received and paid out, to calculate its trading and professional income and expenses.",
+      "type": "boolean",
+      "example": true
+    },
+    "partnershipTrades": {
+      "description": "The list of trades relevant to the partnership.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tradeDescription": {
+            "description": "Description of the partnership trade or profession. This must be unique. ",
+            "type": "string",
+            "maxLength": 105,
+            "example": "Accountants Partner group"
+          },
+          "tradingOrProfessionalProfits": {
+            "description": "Your share of the partnership’s trading or professional profits",
+            "type": "object",
+            "properties": {
+              "shareOfProfitOrLoss":
+              { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 100.99 },
+              "basisAdjustment": {
+                "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 10.00 },
+              "accountingAdjustment": { "type": "number", "example": 5.00 },
+              "averagingAdjustment": {
+                "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50 },
+              "foreignTaxClaimedDeduction": { "type": "number", "example": 1.00 },
+              "adjustedProfit": { "type": "number", "example": 110.99 },
+              "transitionProfitArisingThisYear": { "type": "number", "example": 0.00 },
+              "lossesBroughtForwardTransitionProfit": { "type": "number", "example": 0.00 },
+              "lossesBroughtForwardAdjustedProfit": { "type": "number", "example": 0.00 },
+              "profitAfterBroughtForwardLosses": { "type": "number", "example": 110.99 },
+              "otherBusinessIncome": { "type": "number", "example": 5.00 },
+              "shareOfTaxableProfit": { "type": "number", "example": 115.99 }
+            },
+            "required": ["shareOfProfitOrLoss", "adjustedProfit", "shareOfTaxableProfit"]
+          },
+          "tradingOrProfessionalLosses": {
+            "description": "Your share of the partnership’s trading or professional losses",
+            "type": "object",
+            "properties": {
+              "adjustedLoss": { "type": "number", "example": 0.00 },
+              "currentYearLossAppliedToGeneralIncome": { "type": "number", "example": 0.00 },
+              "lossesCarriedBack": { "type": "number", "example": 0.00 },
+              "carryForwardLosses": { "type": "number", "example": 0.00 }
+            }
+          },
+          "nationalInsuranceContributions": {
+            "description": "Class 2 and Class 4 National Insurance contributions (NICs)",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "voluntaryClass2Nics": { "type": "boolean" },
+              "class4Exemption": { "type": "boolean" },
+              "adjustmentToProfitsForClass4": { "type": "number" }
+            }
+          },
+          "untaxedSavingsIncome": {
+            "description": "Untaxed savings income",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfUkUntaxedSavingsIncome": { "type": "number" },
+              "untaxedSavingsIncomeAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50 },
+              "adjustedUkSavingsIncome": { "type": "number" },
+              "shareOfForeignUntaxedSavingsIncome": { "type": "number" },
+              "foreignUntaxedSavingsIncomeAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50  },
+              "totalForeignTaxTakenOff": { "type": "number" },
+              "adjustedForeignSavingsIncome": { "type": "number" },
+              "totalUntaxedSavingsIncome": { "type": "number" }
+            }
+          },
+          "ukPropertyIncome": {
+            "description": "Income from UK property",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfProfitOrLoss": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50 },
+              "profitOrLossAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50  },
+              "lossesBroughtForward": { "type": "number" },
+              "currentYearLossAppliedToGeneralIncome": { "type": "number" },
+              "carryForwardLosses": { "type": "number" },
+              "shareOfTaxableProfit": { "type": "number" },
+              "residentialPropertyFinanceCosts": { "type": "number" },
+              "residentialPropertyFinanceCostsBroughtForward": { "type": "number" }
+            }
+          },
+          "otherUntaxedUkIncome": {
+            "description": "Other untaxed UK income",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfOtherUntaxedUkIncome": { "type": "number" },
+              "otherUntaxedUkIncomeAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50 },
+              "lossesBroughtForward": { "type": "number" },
+              "shareOfTaxableProfit": { "type": "number" },
+              "shareOfLoss": { "type": "number" },
+              "otherUntaxedUKIncomeLossAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50  },
+              "carryForwardLosses": { "type": "number" }
+            }
+          },
+          "offshoreFundsIncome": {
+            "description": "Income from offshore funds",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfOffshoreFundsIncome": { "type": "number" },
+              "offShoreFundsIncomeAdjustment": { "type": "number", "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50  },
+              "totalForeignTaxTakenOff": { "type": "number" },
+              "shareOfTaxableIncome": { "type": "number" }
+            }
+          },
+          "otherUntaxedForeignIncome": {
+            "description": "Other untaxed foreign income",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfOtherUntaxedForeignIncome": { "type": "number" },
+              "otherUntaxedForeignIncomeAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50 },
+              "lossesBroughtForward": { "type": "number" },
+              "totalForeignTaxTakenOff": { "type": "number" },
+              "shareOfTaxableProfit": { "type": "number" },
+              "shareOfLoss": { "type": "number" },
+              "otherUntaxedForeignIncomeLossesAdjustment": { "type": "number",
+                "multipleOf": 0.01,
+                "minimum": 0.00,
+                "maximum": 99999999999.99,
+                "example": 2.50  },
+              "carryForwardLosses": { "type": "number" },
+              "residentialFinancialCost": { "type": "number" },
+              "residentialFinancialCostBroughtForward": { "type": "number" }
+            }
+          },
+          "totalUntaxedIncomeExcludingSavings": {
+            "description": "Share of total untaxed income – other than savings",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfTotalUntaxedIncomeExcludingSavings": { "type": "number" }
+            }
+          },
+          "taxedIncomeAndDividendIncome": {
+            "description": "Your share of the partnership’s taxed income and dividend income",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfDividendIncome": { "type": "number" },
+              "dividendIncomeForeignTaxTakenOff": { "type": "number" },
+              "totalDividendIncome": { "type": "number" },
+              "shareOfTaxedIncome": { "type": "number" },
+              "taxedIncomeForeignTaxTakenOff": { "type": "number" },
+              "totalTaxedIncome": { "type": "number" },
+              "shareOfOtherTaxedIncome": { "type": "number" },
+              "otherTaxedIncomeForeignTaxTakenOff": { "type": "number" }
+            }
+          },
+          "totalTaxedAndUntaxedIncome": {
+            "description": "Your share of the partnership’s total taxed and untaxed income",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfTotalTaxedAndUntaxedIncome": { "type": "number" }
+            }
+          },
+          "taxPaidAndDeductions": {
+            "description": "Your share of the partnership’s tax paid and deductions",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "shareOfIncomeTaxTakenOffPartnershipIncome": { "type": "number" },
+              "shareOfCisDeductionsByContractors": { "type": "number" },
+              "shareOfTaxTakenOffTradingIncome": { "type": "number" },
+              "shareOfTotalTaxTakenOff": { "type": "number" }
+            }
+          }
+        },
+        "required": ["tradeDescription"]
+      }
+    }
+  },
+  "required": ["submittedOn", "partnershipUtr", "partnershipName", "partnershipTrades"],
+  "additionalProperties": false
+}

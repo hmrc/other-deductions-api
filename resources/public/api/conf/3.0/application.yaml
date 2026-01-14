@@ -1,0 +1,17 @@
+openapi: "3.0.3"
+
+info:
+  version: "1.0"
+  title: Partner Income API (MTD)
+  description: |
+
+tags:
+  - name: Partnership Income
+
+paths:
+  /income/partnerships/{nino}/partnership/{taxYear}:
+    $ref: "./partnership_income_create.yaml"
+  /income/partnerships/{nino}/partnership/{partnershipUtr}/{taxYear}:
+    $ref: "./partnership_income.yaml"
+  /income/partnerships/{nino}/partnership/{taxYear}/list:
+    $ref: "./partnership_income_list.yaml"

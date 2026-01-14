@@ -1,0 +1,100 @@
+summary: Create and Amend Partner Income
+description: |
+  This endpoint allows customers to submit income from Partnerships from tax year 26/27 onwards.
+  
+  The partnership UTR in the request body will be the key used to create or update a submission.
+  
+  ### Test data
+  Scenario simulation using Gov-Test-Scenario headers is only available in the sandbox environment.
+  
+  | Header Value (Gov-Test-Scenario) | Scenario                                                                                       |
+  |----------------------------------|------------------------------------------------------------------------------------------------|
+  | N/A - DEFAULT                    | Simulates success response.                                                                    |
+  | STATEFUL                         | Performs a stateful create or update.                                                          |
+  | OUTSIDE_AMENDMENT_WINDOW         | Simulates the scenario where request cannot be completed as it is outside the amendment window.|
+
+parameters:
+  - $ref: './common/pathParameters.yaml#/components/parameters/nino'
+  - $ref: './common/pathParameters.yaml#/components/parameters/taxYear2027'
+  - $ref: './common/headers.yaml#/components/parameters/correlationId2027'
+  - $ref: './common/headers.yaml#/components/parameters/acceptJson'
+  - $ref: './common/headers.yaml#/components/parameters/contentTypeJson'
+  - $ref: './common/headers.yaml#/components/parameters/authorizationWriteScopeHeader'
+  - $ref: './common/headers.yaml#/components/parameters/testScenarioHeader'
+
+security:
+  - User-Restricted:
+      - write:self-assessment
+
+requestBody:
+  content:
+    application/json:
+      schema:
+        $ref: './schemas/create_and_amend_partnership_income_request.json'
+      example:
+        $ref: './examples/create_and_amend_partnership_income_request.json'
+
+responses:
+  "204":
+    description: Success(No Content)
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+
+  "400":
+    description: Bad request
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          FORMAT_NINO:
+            $ref: './common/errors.yaml#/components/examples/formatNino'
+          FORMAT_TAX_YEAR:
+            $ref: './common/errors.yaml#/components/examples/formatTaxYear'
+          RULE_TAX_YEAR_NOT_SUPPORTED:
+            $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
+          RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED:
+            $ref: './common/errors.yaml#/components/examples/incorrectOrEmptyBody'
+#          RULE_OUTSIDE_AMENDMENT_WINDOW:
+#            $ref: './common/errors.yaml#/components/examples/ruleOutsideAmendmentWindow'
+#          RULE_INCORRECT_GOV_TEST_SCENARIO:
+#            $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
+
+  "403":
+    description: Forbidden
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+          CLIENT_OR_AGENT_NOT_AUTHORISED:
+            $ref: './common/errors.yaml#/components/examples/clientOrAgentNotAuthorised'
+
+  "422":
+    description: Unprocessable Entity
+    headers:
+      X-CorrelationId:
+        $ref: './common/headers.yaml#/components/parameters/correlationId'
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/error-response.yaml'
+        examples:
+#          RULE_REQUEST_CANNOT_BE_FULFILLED:
+#            $ref: './common/errors.yaml#/components/examples/requestCannotBeFulfilled'
+          RULE_TRADE_DESCRIPTIONS_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleTradeDescriptionsInvalid'
+          RULE_START_DATE_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleStartDateInvalid'
+          RULE_END_DATE_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleEndDateInvalid'
+          RULE_START_DATE_AFTER_INVALID:
+            $ref: './common/errors.yaml#/components/examples/ruleStartDateAfterInvalid'
+

@@ -1,0 +1,17 @@
+get:
+  $ref: "./retrieve.yaml"
+
+  summary: Retrieve Partner Income
+
+  security:
+    - User-Restricted:
+        - read:self-assessment
+
+delete:
+  $ref: "./delete.yaml"
+
+  summary: Delete Partner Income
+
+  security:
+    - User-Restricted:
+        - write:self-assessment

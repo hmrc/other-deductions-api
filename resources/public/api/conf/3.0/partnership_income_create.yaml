@@ -1,0 +1,8 @@
+put:
+  $ref: "./create_and_amend.yaml"
+
+  summary: Create and Amend Partner Income
+
+  security:
+    - User-Restricted:
+        - write:self-assessment

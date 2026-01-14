@@ -1,0 +1,21 @@
+description: Error Response
+type: object
+properties:
+  code:
+    description: The error code
+    type: string
+  message:
+    description: The error message
+    type: string
+required:
+  - code
+  - message
+
+
+#    - "1117 - The tax year provided is invalid"
+#    - "1215 - Invalid taxable entity id"
+#    - "1216 - Missing required tax year"
+#    - "1257 - Invalid partnership UTR"
+#    - "1258 - Missing required partnership UTR"
+
+

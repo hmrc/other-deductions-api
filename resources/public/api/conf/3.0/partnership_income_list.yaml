@@ -1,0 +1,6 @@
+get:
+  $ref: "./retrieve_list.yaml"
+  summary: Retrieve List Of Partner Income Submissions
+  security:
+    - User-Restricted:
+    - read:self-assessment

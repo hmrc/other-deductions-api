@@ -1,0 +1,14 @@
+{
+  "partnerIncomeSubmissions": [
+    {
+      "partnershipUtr": 1234567890,
+      "partnershipName": "General Partners"
+    },
+    {
+      "partnershipUtr": 1234567811,
+      "partnershipName": "Accounting Partners"
+
+    }
+  ]
+}
+

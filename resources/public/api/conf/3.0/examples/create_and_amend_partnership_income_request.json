@@ -1,0 +1,113 @@
+{
+  "partnerIncomeSubmissions": [
+    {
+      "partnershipUtr": 123456781,
+      "partnershipName": "General Partners",
+      "startDate": "2026-08-24",
+      "endDate": "2026-09-24",
+      "cashBasis": false,
+      "partnershipTrades": [
+        {
+          "tradeDescription": "Accountants Partner group",
+          "tradingOrProfessionalProfits": {
+            "shareOfProfitOrLoss": -100.99,
+            "basisAdjustment": -99,
+            "accountingAdjustment": 100.99,
+            "averagingAdjustment": -99,
+            "foreignTaxClaimedDeduction": 100.99,
+            "adjustedProfit": 100.99,
+            "transitionProfitArisingThisYear": 100.99,
+            "lossesBroughtForwardTransitionProfit": 100.99,
+            "lossesBroughtForwardAdjustedProfit": 100.99,
+            "profitAfterBroughtForwardLosses": 100.99,
+            "otherBusinessIncome": 100.99,
+            "shareOfTaxableProfit": 100.99
+          },
+          "tradingOrProfessionalLosses": {
+            "adjustedLoss": 100.99,
+            "currentYearLossAppliedToGeneralIncome": 100.99,
+            "lossesCarriedBack": 100.99,
+            "carryForwardLosses": 100.99
+          }
+        }
+      ],
+      "nationalInsuranceContributions": {
+        "voluntaryClass2Nics": true,
+        "class4Exemption": false,
+        "adustmentToProfitsForClass4": 100
+      },
+      "untaxedSavingsIncome": {
+        "shareOfUkUntaxedSavingsIncome": 100.99,
+        "untaxedSavingsIncomeAdjustment": 100.99,
+        "adjustedUkSavingsIncome": 100.99,
+        "shareOfForeignUntaxedSavingsIncome": 100.99,
+        "foreignUntaxedSavingsIncomeAdjustment": 100.99,
+        "totalForeignTaxTakenOff": 100.99,
+        "adjustedForeignSavingsIncome": 100.99,
+        "totalUntaxedSavingsIncome": 100.99
+      },
+      "ukPropertyIncome": {
+        "shareOfProfitOrLoss": -100.99,
+        "profitOrLossAdjustment": -100.99,
+        "lossesBroughtForward": 100.99,
+        "currentYearLossAppliedToGeneralIncome": 100.99,
+        "carryForwardLosses": 100.99,
+        "shareOfTaxableProfit": 100.99,
+        "residentialPropertyFinanceCosts": 100.99,
+        "residentialPropertyFinanceCostsBroughtForward": 100.99
+      },
+      "otherUntaxedUkIncome": {
+        "shareOfOtherUntaxedUkIncome": 100.99,
+        "otherUntaxedUkIncomeAdjustment": 100.99,
+        "lossesBroughtForward": 100.99,
+        "shareOfTaxableProfit": 100.99,
+        "shareOfLoss": 100.99,
+        "otherUntaxedUkIncomeLossAdjustment": 100.99,
+        "carryForwardLosses": 100.99
+      },
+      "untaxedOffshoreFundIncome": {
+        "shareOfOffshoreFundsIncome": 100.99,
+        "offShoreFundsIncomeAdjustment": 100.99,
+        "totalForeignTaxTakenOff": 90,
+        "shareOfTaxableIncome": 100.99
+      },
+      "otherUntaxedForeignIncome": {
+        "shareOfOtherUntaxedForeignIncome": 100.99,
+        "otherUntaxedForeignIncomeAdjustment": 100.99,
+        "lossesBroughtForward": 100.99,
+        "totalForeignTaxTakenOff": 100.99,
+        "shareOfTaxableProfit": 100.99,
+        "shareOfLoss": 100.99,
+        "otherUntaxedForeignIncomeLossesAdjustment": 100.99,
+        "carryForwardLosses": 100.99,
+        "residentialFinancialCost": 100.99,
+        "residentialFinancialCostBroughtForward": 100.99
+      },
+      "totalUntaxedIncomeExcludingSavings":{
+        "shareOfTotalUntaxedIncomeExcludingSavings": 900
+      },
+      "taxedIncomeAndDividendIncome": {
+        "shareOfDividendIncome": 100.99,
+        "dividendIncomeForeignTaxTakenOff": 100.99,
+        "totalDividendIncome": 100.99,
+
+        "shareOfTaxedIncome": 100.99,
+        "taxedIncomeForeignTaxTakenOff": 100.99,
+        "totalTaxedIncome": 100.99,
+
+        "shareOfOtherTaxedIncome": 100.99,
+        "otherTaxedIncomeForeignTaxTakenOff": 100.99
+      },
+      "totalTaxedAndUntaxedIncome": {
+        "shareOfTotalTaxedAndUntaxedIncome": 900
+      },
+      "taxPaidAndDeductions": {
+        "shareOfIncomeTaxTakenOffPartnershipIncome": 100.99,
+        "shareOfCisDeductionsByContractors": 100.99,
+        "shareOfTaxTakenOffTradingIncome": 100.99,
+        "shareOfTotalTaxTakenOff": 100.99
+      }
+    }
+  ]
+}
+
