@@ -5,7 +5,7 @@
   "type": "object",
   "properties": {
     "submittedOn": {
-      "description": "The date the deductions were added. It must be provided in the format `YYYY-MM-DDThh:mm:ss.sssZ`",
+      "description": "The date the deductions were added. It must be provided in the format `YYYY-MM-DDTHH:mm:ss.SSSZ`",
       "type": "string",
       "format": "date-time",
       "example": "2019-04-04T01:01:01.000Z"
@@ -19,6 +19,7 @@
           "customerReference": {
             "description": "A reference the user supplies to identify the record.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "SEAFARERS1234"
           },
           "amountDeducted": {
@@ -32,6 +33,8 @@
           "nameOfShip": {
             "description": "The name of the ship worked on.",
             "type": "string",
+            "minLength": 1,
+            "maxLength": 105,
             "example": "Blue Bell"
           },
           "fromDate": {

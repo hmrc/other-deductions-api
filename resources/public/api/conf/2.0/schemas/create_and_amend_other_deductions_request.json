@@ -13,6 +13,7 @@
           "customerReference": {
             "description": "A reference the user supplies to identify the record.",
             "type": "string",
+            "pattern": "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$",
             "example": "SEAFARERS1234"
           },
           "amountDeducted": {
@@ -26,6 +27,8 @@
           "nameOfShip": {
             "description": "The name of the ship worked on.",
             "type": "string",
+            "minLength": 1,
+            "maxLength": 105,
             "example": "Blue Bell"
           },
           "fromDate": {
