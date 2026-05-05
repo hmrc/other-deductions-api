@@ -26,7 +26,6 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.*
 import shared.models.errors.MtdError
 import v2.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
-import scala.util.matching.Regex
 import javax.inject.Singleton
 
 @Singleton
@@ -69,18 +68,15 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   }
 
-  private def resolveString(value: Option[String], regex: Regex, error: MtdError): Validated[Seq[MtdError], Option[String]] =
-    ResolveStringPattern(value, regex, error)
-
   private def validateSeafarers(seafarers: Seafarers, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
     import seafarers._
 
     def path(field: String) = s"/seafarers/$arrayIndex/$field"
 
     (
-      resolveString(customerReference, customerRefRegex, CustomerReferenceFormatError.withPath(path("customerReference"))),
+      ResolveStringPattern(customerReference, customerRefRegex, CustomerReferenceFormatError.withPath(path("customerReference"))),
       validateAmountDeducted(amountDeducted, path("amountDeducted")),
-      resolveString(Some(nameOfShip), nameOfShipRegex, NameOfShipFormatError.withPath(path("nameOfShip"))),
+      ResolveStringPattern(nameOfShip, nameOfShipRegex, NameOfShipFormatError.withPath(path("nameOfShip"))),
       validateDateRange(fromDate, toDate, arrayIndex)
     ).tupled
       .andThen { case (_, _, _, _) => valid }
