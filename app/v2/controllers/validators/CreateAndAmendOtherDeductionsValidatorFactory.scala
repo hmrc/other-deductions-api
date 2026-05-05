@@ -17,7 +17,7 @@
 package v2.controllers.validators
 
 import cats.data.Validated
-import cats.data.Validated.{Invalid, Valid}
+import cats.data.Validated.Valid
 import cats.implicits.*
 import common.controllers.validators.resolvers.ResolveDateRange
 import common.errors.{CustomerReferenceFormatError, DateFormatError, NameOfShipFormatError, RangeToDateBeforeFromDateError}
@@ -26,13 +26,14 @@ import shared.controllers.validators.Validator
 import shared.controllers.validators.resolvers.*
 import shared.models.errors.MtdError
 import v2.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
-
+import scala.util.matching.Regex
 import javax.inject.Singleton
 
 @Singleton
 class CreateAndAmendOtherDeductionsValidatorFactory {
 
   private val customerRefRegex = "^[0-9a-zA-Z{À-˿’}\\- _&`():.'^]{1,90}$".r
+  private val nameOfShipRegex  = "^.{1,105}$".r
 
   private val valid = Valid(())
 
@@ -68,13 +69,18 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   }
 
+  private def resolveString(value: Option[String], regex: Regex, error: MtdError): Validated[Seq[MtdError], Option[String]] =
+    ResolveStringPattern(value, regex, error)
+
   private def validateSeafarers(seafarers: Seafarers, arrayIndex: Int): Validated[Seq[MtdError], Unit] = {
     import seafarers._
 
+    def path(field: String) = s"/seafarers/$arrayIndex/$field"
+
     (
-      validateCustomerReference(customerReference, s"/seafarers/$arrayIndex/customerReference"),
-      validateAmountDeducted(amountDeducted, s"/seafarers/$arrayIndex/amountDeducted"),
-      validateNameOfShip(nameOfShip, s"/seafarers/$arrayIndex/nameOfShip"),
+      resolveString(customerReference, customerRefRegex, CustomerReferenceFormatError.withPath(path("customerReference"))),
+      validateAmountDeducted(amountDeducted, path("amountDeducted")),
+      resolveString(Some(nameOfShip), nameOfShipRegex, NameOfShipFormatError.withPath(path("nameOfShip"))),
       validateDateRange(fromDate, toDate, arrayIndex)
     ).tupled
       .andThen { case (_, _, _, _) => valid }
@@ -95,27 +101,10 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   }
 
-  private def validateCustomerReference(customerReference: Option[String], path: String): Validated[Seq[MtdError], Unit] =
-    customerReference match {
-      case None => valid
-      case Some(ref: String) =>
-        if (customerRefRegex.matches(ref))
-          valid
-        else
-          Invalid(List(CustomerReferenceFormatError.withPath(path)))
-    }
-
   private val resolveAmountDeducted = ResolveParsedNumber()
 
   private def validateAmountDeducted(value: BigDecimal, path: String): Validated[Seq[MtdError], Unit] = {
     resolveAmountDeducted(value, path = path).map(_ => ())
-  }
-
-  private def validateNameOfShip(field: String, path: String): Validated[Seq[MtdError], Unit] = {
-    if (field.length <= 105)
-      valid
-    else
-      Invalid(List(NameOfShipFormatError.withPath(path)))
   }
 
 }
