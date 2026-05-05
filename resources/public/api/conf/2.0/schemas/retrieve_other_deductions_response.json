@@ -33,7 +33,7 @@
           "nameOfShip": {
             "description": "The name of the ship worked on. Must not be empty or contain only whitespace.",
             "type": "string",
-            "maxLength": 105,
+            "pattern": "^.{1,105}$",
             "example": "Blue Bell"
           },
           "fromDate": {
