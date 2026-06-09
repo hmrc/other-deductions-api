@@ -131,7 +131,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
         contentAsJson(result) shouldBe BadRequestError.asJson
       }
 
-      "Upstream4xxResponse thrown" in new Test() {
+      "Upstream4xxResponse thrown" in new Test {
         val ex: UpstreamErrorResponse = UpstreamErrorResponse("client error", TOO_MANY_REQUESTS, TOO_MANY_REQUESTS, None.orNull)
         val result: Future[Result]    = handler.onServerError(requestHeader, ex)
 
@@ -148,7 +148,7 @@ class ErrorHandlerSpec extends UnitSpec with GuiceOneAppPerSuite {
         contentAsJson(result) shouldBe InternalError.asJson
       }
 
-      "Upstream5xxResponse thrown" in new Test() {
+      "Upstream5xxResponse thrown" in new Test {
         val ex: UpstreamErrorResponse = UpstreamErrorResponse("server error", SERVICE_UNAVAILABLE, SERVICE_UNAVAILABLE, None.orNull)
         val result: Future[Result]    = handler.onServerError(requestHeader, ex)
 
