@@ -16,7 +16,7 @@
 
 package config
 
-import api.config.{FeatureSwitches, SharedAppConfig}
+import api.config.{FeatureSwitches, AppConfig}
 import play.api.Configuration
 
 import javax.inject.Inject
@@ -24,12 +24,12 @@ import javax.inject.Inject
 case class OtherDeductionsFeatureSwitches(featureSwitchConfig: Configuration) extends FeatureSwitches {
 
   @Inject
-  def this(sharedAppConfig: SharedAppConfig) = this(sharedAppConfig.featureSwitchConfig)
+  def this(appConfig: AppConfig) = this(appConfig.featureSwitchConfig)
 
 }
 
 object OtherDeductionsFeatureSwitches {
   def apply(configuration: Configuration): FeatureSwitches = new OtherDeductionsFeatureSwitches(configuration)
 
-  def apply(sharedAppConfig: SharedAppConfig): FeatureSwitches = new OtherDeductionsFeatureSwitches(sharedAppConfig)
+  def apply(appConfig: AppConfig): FeatureSwitches = new OtherDeductionsFeatureSwitches(appConfig)
 }

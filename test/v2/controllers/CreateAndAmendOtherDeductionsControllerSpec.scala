@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.audit.{AuditEvent, AuditResponse, GenericAuditDetail}
 import api.models.domain.{Nino, TaxYear}
@@ -39,7 +39,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
     with MockCreateAndAmendOtherDeductionsService
     with MockCreateAndAmendOtherDeductionsValidatorFactory
     with MockAuditService
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val taxYear = "2021-22"
   private val nino    = "AA123456A"
@@ -79,7 +79,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
       "the request received is valid" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
         MockCreateAndAmendOtherDeductionsService
           .createAndAmend(requestData)
@@ -96,7 +96,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
         runErrorTestWithAudit(NinoFormatError, Some(requestBodyJson))
       }
@@ -104,7 +104,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
       "the service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
         MockCreateAndAmendOtherDeductionsService
           .createAndAmend(requestData)
@@ -130,7 +130,7 @@ class CreateAndAmendOtherDeductionsControllerSpec
     protected def callController(): Future[Result] =
       controller.handleRequest(nino, taxYear)(fakePostRequest(requestBodyJson))
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 

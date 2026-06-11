@@ -23,11 +23,11 @@ import org.scalamock.scalatest.MockFactory
 import org.scalatest.TestSuite
 import play.api.Configuration
 
-trait MockSharedAppConfig extends TestSuite with MockFactory {
+trait MockAppConfig extends TestSuite with MockFactory {
 
-  implicit val mockAppConfig: SharedAppConfig = mock[SharedAppConfig]
+  implicit val mockAppConfig: AppConfig = mock[AppConfig]
 
-  object MockedSharedAppConfig {
+  object MockedAppConfig {
     // MTD ID Lookup Config
     def mtdIdBaseUrl: CallHandler0[String] = (() => mockAppConfig.mtdIdBaseUrl: String).expects()
 

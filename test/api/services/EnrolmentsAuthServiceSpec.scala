@@ -16,7 +16,7 @@
 
 package api.services
 
-import api.config.{ConfidenceLevelConfig, MockSharedAppConfig}
+import api.config.{ConfidenceLevelConfig, MockAppConfig}
 import api.models.auth.UserDetails
 import api.models.errors.{ClientOrAgentNotAuthorisedError, InternalError}
 import api.models.outcomes.AuthOutcome
@@ -31,7 +31,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class EnrolmentsAuthServiceSpec extends ServiceSpec with MockSharedAppConfig {
+class EnrolmentsAuthServiceSpec extends ServiceSpec with MockAppConfig {
 
   private val mtdId = "123567890"
 
@@ -308,7 +308,7 @@ class EnrolmentsAuthServiceSpec extends ServiceSpec with MockSharedAppConfig {
     }
 
     def mockConfidenceLevelCheckConfig(authValidationEnabled: Boolean): Unit = {
-      MockedSharedAppConfig.confidenceLevelConfig
+      MockedAppConfig.confidenceLevelConfig
         .anyNumberOfTimes()
         .returns(
           ConfidenceLevelConfig(

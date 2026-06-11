@@ -17,7 +17,7 @@
 package definition
 
 import api.config.Deprecation.NotDeprecated
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.definition.APIStatus.BETA
 import api.definition.{APIDefinition, APIVersion, Definition}
 import api.mocks.MockHttpClient
@@ -27,17 +27,17 @@ import cats.implicits.catsSyntaxValidatedId
 
 class OtherDeductionsApiDefinitionFactorySpec extends UnitSpec {
 
-  class Test extends MockHttpClient with MockSharedAppConfig {
+  class Test extends MockHttpClient with MockAppConfig {
     val apiDefinitionFactory = new OtherDeductionsApiDefinitionFactory(mockAppConfig)
-    MockedSharedAppConfig.apiGatewayContext returns "other/deductions"
+    MockedAppConfig.apiGatewayContext returns "other/deductions"
   }
 
   "definition" when {
     "called" should {
       "return a valid Definition case class" in new Test {
-        MockedSharedAppConfig.apiStatus(Version2) returns "BETA"
-        MockedSharedAppConfig.endpointsEnabled(Version2) returns true
-        MockedSharedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
+        MockedAppConfig.apiStatus(Version2) returns "BETA"
+        MockedAppConfig.endpointsEnabled(Version2) returns true
+        MockedAppConfig.deprecationFor(Version2).returns(NotDeprecated.valid).anyNumberOfTimes()
 
         apiDefinitionFactory.definition shouldBe Definition(
           api = APIDefinition(

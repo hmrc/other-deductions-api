@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.config.MockSharedAppConfig
+import api.config.MockAppConfig
 import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
 import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
@@ -36,7 +36,7 @@ class RetrieveOtherDeductionsControllerSpec
     with ControllerTestRunner
     with MockRetrieveOtherDeductionsService
     with MockRetrieveOtherDeductionsValidatorFactory
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   private val nino        = "AA123456A"
   private val taxYear     = "2019-20"
@@ -47,7 +47,7 @@ class RetrieveOtherDeductionsControllerSpec
       "given a valid request" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
         MockRetrieveOtherDeductionsService
           .retrieve(requestData)
           .returns(Future.successful(Right(ResponseWrapper(correlationId, responseBodyModel))))
@@ -63,7 +63,7 @@ class RetrieveOtherDeductionsControllerSpec
       "the parser validation fails" in new Test {
         willUseValidator(returning(NinoFormatError))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
         runErrorTest(NinoFormatError)
       }
@@ -71,7 +71,7 @@ class RetrieveOtherDeductionsControllerSpec
       "the service returns an error" in new Test {
         willUseValidator(returningSuccess(requestData))
 
-        MockedSharedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
+        MockedAppConfig.endpointAllowsSupportingAgents(controller.endpointName).anyNumberOfTimes() returns false
 
         MockRetrieveOtherDeductionsService
           .retrieve(requestData)
@@ -93,7 +93,7 @@ class RetrieveOtherDeductionsControllerSpec
       idGenerator = mockIdGenerator
     )
 
-    MockedSharedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
+    MockedAppConfig.featureSwitchConfig.anyNumberOfTimes() returns Configuration(
       "supporting-agents-access-control.enabled" -> true
     )
 

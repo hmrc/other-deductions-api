@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.config.SharedAppConfig
+import api.config.AppConfig
 import api.controllers.*
 import api.routing.Version
 import api.services.{AuditService, EnrolmentsAuthService, MtdIdLookupService}
@@ -36,7 +36,7 @@ class CreateAndAmendOtherDeductionsController @Inject() (val authService: Enrolm
                                                          service: CreateAndAmendOtherDeductionsService,
                                                          auditService: AuditService,
                                                          cc: ControllerComponents,
-                                                         idGenerator: IdGenerator)(implicit appConfig: SharedAppConfig, ec: ExecutionContext)
+                                                         idGenerator: IdGenerator)(implicit appConfig: AppConfig, ec: ExecutionContext)
     extends AuthorisedController(cc) {
   val endpointName = "create-amend-other-deductions"
 

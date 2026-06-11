@@ -17,7 +17,7 @@
 package api.controllers
 
 import api.config.Deprecation.NotDeprecated
-import api.config.{MockSharedAppConfig, RealAppConfig}
+import api.config.{MockAppConfig, RealAppConfig}
 import api.models.audit.{AuditError, AuditEvent, AuditResponse}
 import api.models.domain.Nino
 import api.models.errors.{BadRequestError, ErrorWrapper, MtdError}
@@ -41,7 +41,7 @@ abstract class ControllerBaseSpec
     with HeaderNames
     with ResultExtractors
     with MockAuditService
-    with MockSharedAppConfig {
+    with MockAppConfig {
 
   protected val apiVersion: Version = Version9
 
@@ -79,7 +79,7 @@ trait ControllerTestRunner
     MockedEnrolmentsAuthService.authoriseUser()
     MockedIdGenerator.generateCorrelationId.returns(correlationId)
 
-    MockedSharedAppConfig
+    MockedAppConfig
       .deprecationFor(apiVersion)
       .returns(NotDeprecated.valid)
       .anyNumberOfTimes()

@@ -16,7 +16,7 @@
 
 package api.connectors
 
-import api.config.{DownstreamConfig, MockSharedAppConfig}
+import api.config.{DownstreamConfig, MockAppConfig}
 import api.mocks.MockHttpClient
 import api.utils.UnitSpec
 import org.scalamock.handlers.CallHandler
@@ -47,7 +47,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
       Some("this-api")
     )
 
-  protected trait ConnectorTest extends MockHttpClient with MockSharedAppConfig {
+  protected trait ConnectorTest extends MockHttpClient with MockAppConfig {
     protected val baseUrl: String = "http://test-BaseUrl"
 
     protected val requiredHeaders: Seq[(String, String)]
@@ -121,7 +121,7 @@ trait ConnectorSpec extends UnitSpec with Status with MimeTypes with HeaderNames
   protected trait IfsTest extends StandardConnectorTest {
     override val name = "ifs"
 
-    MockedSharedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
+    MockedAppConfig.ifsDownstreamConfig.anyNumberOfTimes() returns config
   }
 
 }
