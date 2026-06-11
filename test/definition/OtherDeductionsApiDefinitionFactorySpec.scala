@@ -16,14 +16,14 @@
 
 package definition
 
+import api.config.Deprecation.NotDeprecated
+import api.config.MockSharedAppConfig
+import api.definition.APIStatus.BETA
+import api.definition.{APIDefinition, APIVersion, Definition}
+import api.mocks.MockHttpClient
+import api.routing.Version2
+import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
-import shared.config.Deprecation.NotDeprecated
-import shared.config.MockSharedAppConfig
-import shared.definition.APIStatus.BETA
-import shared.definition.{APIDefinition, APIVersion, Definition}
-import shared.mocks.MockHttpClient
-import shared.routing.Version2
-import shared.utils.UnitSpec
 
 class OtherDeductionsApiDefinitionFactorySpec extends UnitSpec {
 

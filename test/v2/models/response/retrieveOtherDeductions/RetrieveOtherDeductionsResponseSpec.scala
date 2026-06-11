@@ -16,11 +16,11 @@
 
 package v2.models.response.retrieveOtherDeductions
 
+import api.config.MockSharedAppConfig
+import api.models.domain.Timestamp
+import api.utils.UnitSpec
 import play.api.libs.json.*
-import shared.config.MockSharedAppConfig
-import shared.models.domain.Timestamp
-import shared.utils.UnitSpec
-import v2.fixtures.RetrieveOtherDeductionsFixtures._
+import v2.fixtures.RetrieveOtherDeductionsFixtures.*
 
 class RetrieveOtherDeductionsResponseSpec extends UnitSpec with MockSharedAppConfig {
 

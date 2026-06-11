@@ -16,15 +16,15 @@
 
 package v2.controllers
 
+import api.config.MockSharedAppConfig
+import api.controllers.{ControllerBaseSpec, ControllerTestRunner}
+import api.models.domain.{Nino, TaxYear}
+import api.models.errors.*
+import api.models.outcomes.ResponseWrapper
 import play.api.Configuration
 import play.api.mvc.Result
-import shared.config.MockSharedAppConfig
-import shared.controllers.{ControllerBaseSpec, ControllerTestRunner}
-import shared.models.domain.{Nino, TaxYear}
-import shared.models.errors._
-import shared.models.outcomes.ResponseWrapper
 import v2.controllers.validators.MockRetrieveOtherDeductionsValidatorFactory
-import v2.fixtures.RetrieveOtherDeductionsFixtures._
+import v2.fixtures.RetrieveOtherDeductionsFixtures.*
 import v2.mocks.services.MockRetrieveOtherDeductionsService
 import v2.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequestData
 

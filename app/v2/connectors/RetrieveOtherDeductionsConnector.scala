@@ -16,10 +16,10 @@
 
 package v2.connectors
 
-import shared.config.SharedAppConfig
-import shared.connectors.DownstreamUri.IfsUri
-import shared.connectors.httpparsers.StandardDownstreamHttpParser._
-import shared.connectors.{BaseDownstreamConnector, DownstreamOutcome}
+import api.config.SharedAppConfig
+import api.connectors.DownstreamUri.IfsUri
+import api.connectors.httpparsers.StandardDownstreamHttpParser.*
+import api.connectors.{BaseDownstreamConnector, DownstreamOutcome}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 import v2.models.request.retrieveOtherDeductions.RetrieveOtherDeductionsRequestData
@@ -36,7 +36,7 @@ class RetrieveOtherDeductionsConnector @Inject() (val http: HttpClientV2, val ap
       ec: ExecutionContext,
       correlationId: String): Future[DownstreamOutcome[RetrieveOtherDeductionsResponse]] = {
 
-    import request._
+    import request.*
 
     val url = if (taxYear.useTaxYearSpecificApi) {
       IfsUri[RetrieveOtherDeductionsResponse](s"income-tax/deductions/${taxYear.asTysDownstream}/$nino")

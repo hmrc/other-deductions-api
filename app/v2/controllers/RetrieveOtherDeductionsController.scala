@@ -16,11 +16,11 @@
 
 package v2.controllers
 
+import api.config.SharedAppConfig
+import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
+import api.services.{EnrolmentsAuthService, MtdIdLookupService}
+import api.utils.IdGenerator
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import shared.config.SharedAppConfig
-import shared.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler}
-import shared.services.{EnrolmentsAuthService, MtdIdLookupService}
-import shared.utils.IdGenerator
 import v2.controllers.validators.RetrieveOtherDeductionsValidatorFactory
 import v2.services.RetrieveOtherDeductionsService
 
