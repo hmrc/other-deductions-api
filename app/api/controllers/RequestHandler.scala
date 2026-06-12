@@ -16,8 +16,8 @@
 
 package api.controllers
 
-import api.config.Deprecation.Deprecated
 import api.config.AppConfig
+import api.config.Deprecation.Deprecated
 import api.controllers.validators.Validator
 import api.models.errors.{ErrorWrapper, InternalError, RuleRequestCannotBeFulfilledError}
 import api.models.outcomes.ResponseWrapper
@@ -190,11 +190,8 @@ object RequestHandler {
         result
       }
 
-      private def handleFailure(errorWrapper: ErrorWrapper)(implicit
-          ctx: RequestContext,
-          request: UserRequest[?],
-          ec: ExecutionContext,
-          appConfig: AppConfig): Result = {
+      private def handleFailure(
+          errorWrapper: ErrorWrapper)(implicit ctx: RequestContext, request: UserRequest[?], ec: ExecutionContext, appConfig: AppConfig): Result = {
 
         implicit val apiVersion: Version = Version(request)
         logger.warn(

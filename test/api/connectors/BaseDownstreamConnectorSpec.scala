@@ -16,7 +16,7 @@
 
 package api.connectors
 
-import api.config.{MockAppConfig, AppConfig}
+import api.config.{AppConfig, MockAppConfig}
 import api.mocks.MockHttpClient
 import api.models.outcomes.ResponseWrapper
 import api.utils.UnitSpec
@@ -67,7 +67,7 @@ class BaseDownstreamConnectorSpec extends UnitSpec with MockHttpClient with Mock
     HeaderCarrier(otherHeaders = inputHeaders)
 
   val connector: BaseDownstreamConnector = new BaseDownstreamConnector {
-    val http: HttpClientV2         = mockHttpClient
+    val http: HttpClientV2   = mockHttpClient
     val appConfig: AppConfig = mockAppConfig
   }
 

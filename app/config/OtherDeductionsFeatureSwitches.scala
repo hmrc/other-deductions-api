@@ -16,7 +16,7 @@
 
 package config
 
-import api.config.{FeatureSwitches, AppConfig}
+import api.config.{AppConfig, FeatureSwitches}
 import play.api.Configuration
 
 import javax.inject.Inject
