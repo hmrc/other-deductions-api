@@ -22,7 +22,6 @@ import api.models.errors.MtdError
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.*
-import common.controllers.validators.resolvers.ResolveDateRange
 import common.errors.{CustomerReferenceFormatError, DateFormatError, NameOfShipFormatError, RangeToDateBeforeFromDateError}
 import play.api.libs.json.JsValue
 import v2.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
