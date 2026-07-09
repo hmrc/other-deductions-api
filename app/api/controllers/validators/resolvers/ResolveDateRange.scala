@@ -71,21 +71,4 @@ object ResolveDateRange extends ResolverSupport {
     datesLimitedTo(yearStartDate(minYear), minError, yearEndDate(maxYear), maxError)
   }
 
-  def validateRange(parsedStartDate: LocalDate, parsedEndDate: LocalDate, endBeforeStartDateError: MtdError): Validated[Seq[MtdError], DateRange] =
-    if (parsedEndDate < parsedStartDate)
-      Invalid(List(endBeforeStartDateError))
-    else
-      Valid(DateRange(parsedStartDate, parsedEndDate))
-
-  def validateMaxAndMinDate(minYear: Int, maxYear: Int, value: DateRange): Validated[Seq[MtdError], DateRange] = {
-    val validatedFromDate: Validated[List[MtdError], Unit] =
-      if (value.startDate.getYear < minYear) Invalid(List(StartDateFormatError)) else Valid(())
-
-    val validatedToDate: Validated[List[MtdError], Unit] =
-      if (value.endDate.getYear >= maxYear) Invalid(List(EndDateFormatError)) else Valid(())
-
-    List(validatedFromDate, validatedToDate).sequence_
-      .map(_ => value)
-  }
-
 }

@@ -38,9 +38,6 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAndAmendOtherDeductionsBody]()
 
-  private val minYear: Int = 1900
-  private val maxYear: Int = 2100
-
   private val resolveTaxYear = ResolveTaxYearMinimum(minimumPermittedTaxYear)
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendOtherDeductionsRequestData] =
@@ -86,21 +83,18 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
     val fromPath = s"/seafarers/$arrayIndex/fromDate"
     val toPath   = s"/seafarers/$arrayIndex/toDate"
 
-    (
-      ResolveIsoDate(fromDate, DateFormatError.withPath(fromPath)),
-      ResolveIsoDate(toDate, DateFormatError.withPath(toPath))
-    ).tupled
-      .andThen { case (fromDate, toDate) =>
-        ResolveDateRange.validateRange(fromDate, toDate, RangeToDateBeforeFromDateError.withPaths(List(fromPath, toPath)))
-      }
-      .andThen(dateRange => ResolveDateRange.validateMaxAndMinDate(minYear, maxYear, dateRange).map(_ => ()))
+    val resolveDateRange = ResolveDateRange(
+      DateFormatError.withPath(fromPath),
+      DateFormatError.withPath(toPath),
+      RangeToDateBeforeFromDateError.withPaths(List(fromPath, toPath)))
 
+    resolveDateRange((fromDate, toDate)).map(_ => ())
   }
 
-  private val resolveAmountDeducted = ResolveParsedNumber()
+}
 
-  private def validateAmountDeducted(value: BigDecimal, path: String): Validated[Seq[MtdError], Unit] = {
-    resolveAmountDeducted(value, path = path).map(_ => ())
-  }
+private val resolveAmountDeducted = ResolveParsedNumber()
 
+private def validateAmountDeducted(value: BigDecimal, path: String): Validated[Seq[MtdError], Unit] = {
+  resolveAmountDeducted(value, path = path).map(_ => ())
 }
