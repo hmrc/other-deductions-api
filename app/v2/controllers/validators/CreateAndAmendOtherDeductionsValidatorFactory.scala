@@ -38,7 +38,7 @@ class CreateAndAmendOtherDeductionsValidatorFactory {
 
   private val resolveJson = new ResolveNonEmptyJsonObject[CreateAndAmendOtherDeductionsBody]()
 
-  private val resolveTaxYear = ResolveTaxYearMinimum(minimumPermittedTaxYear)
+  private val resolveTaxYear = ResolveDetailedTaxYear(minimumTaxYear = minimumPermittedTaxYear)
 
   def validator(nino: String, taxYear: String, body: JsValue): Validator[CreateAndAmendOtherDeductionsRequestData] =
     new Validator[CreateAndAmendOtherDeductionsRequestData] {
