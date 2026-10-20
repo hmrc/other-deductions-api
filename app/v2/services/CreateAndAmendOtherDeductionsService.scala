@@ -20,7 +20,7 @@ import api.controllers.RequestContext
 import api.models.errors.*
 import api.services.{BaseService, ServiceOutcome}
 import cats.implicits.*
-import common.errors.OutsideAmendmentWindowError
+import api.models.errors.OutsideAmendmentWindowError
 import v2.connectors.CreateAndAmendOtherDeductionsConnector
 import v2.models.request.createAndAmendOtherDeductions.CreateAndAmendOtherDeductionsRequestData
 

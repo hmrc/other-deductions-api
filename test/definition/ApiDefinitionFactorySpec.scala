@@ -20,16 +20,16 @@ import api.config.Deprecation.NotDeprecated
 import api.config.MockAppConfig
 import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.definition.APIStatus.BETA
-import api.definition.{APIDefinition, APIVersion, Definition}
+import api.definition.{APIDefinition, APIVersion, ApiDefinitionFactory, Definition}
 import api.mocks.MockHttpClient
 import api.routing.Version2
 import api.utils.UnitSpec
 import cats.implicits.catsSyntaxValidatedId
 
-class OtherDeductionsApiDefinitionFactorySpec extends UnitSpec {
+class ApiDefinitionFactorySpec extends UnitSpec {
 
   class Test extends MockHttpClient with MockAppConfig {
-    val apiDefinitionFactory = new OtherDeductionsApiDefinitionFactory(mockAppConfig)
+    val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
     MockedAppConfig.apiGatewayContext returns "other/deductions"
   }
 

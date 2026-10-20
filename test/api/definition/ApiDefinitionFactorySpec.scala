@@ -17,7 +17,7 @@
 package api.definition
 
 import api.config.Deprecation.NotDeprecated
-import api.config.{AppConfig, MockAppConfig}
+import api.config.MockAppConfig
 import api.definition.APIStatus.{ALPHA, BETA}
 import api.mocks.MockHttpClient
 import api.routing.*
@@ -69,13 +69,12 @@ class ApiDefinitionFactorySpec extends UnitSpec {
     }
   }
 
-  trait Test extends UnitSpec with MockHttpClient with MockAppConfig {
+  trait Test extends MockHttpClient with MockAppConfig {
     MockedAppConfig.apiGatewayContext returns "individuals/self-assessment/adjustable-summary"
 
-    val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory {
-      protected val appConfig: AppConfig = mockAppConfig
+    val apiDefinitionFactory: ApiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig) {
 
-      lazy val definition: Definition = Definition(
+      override lazy val definition: Definition = Definition(
         APIDefinition(
           "test API definition",
           "description",
