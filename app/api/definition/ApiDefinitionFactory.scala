@@ -22,11 +22,10 @@ import api.definition.APIAccessType.{CONTROLLED, PUBLIC}
 import api.utils.Logging
 import cats.data.Validated.Invalid
 
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 
+@Singleton
 class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
-
-  protected val mtdCategory = "INCOME_TAX_MTD"
 
   lazy val definition: Definition =
     Definition(

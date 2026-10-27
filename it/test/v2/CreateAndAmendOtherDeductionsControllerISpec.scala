@@ -18,7 +18,6 @@ package v2
 
 import api.models.errors.*
 import api.services.*
-import api.models.errors.{CustomerReferenceFormatError, NameOfShipFormatError, OutsideAmendmentWindowError}
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status.*
 import play.api.libs.json.{JsObject, JsValue, Json}

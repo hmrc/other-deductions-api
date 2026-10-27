@@ -21,7 +21,6 @@ import api.models.domain.{Nino, TaxYear}
 import api.models.errors.*
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
-import api.models.errors.OutsideAmendmentWindowError
 import uk.gov.hmrc.http.HeaderCarrier
 import v2.mocks.connectors.MockCreateAndAmendOtherDeductionsConnector
 import v2.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
