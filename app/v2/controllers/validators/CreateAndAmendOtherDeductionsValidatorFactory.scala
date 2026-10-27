@@ -18,11 +18,10 @@ package v2.controllers.validators
 
 import api.controllers.validators.Validator
 import api.controllers.validators.resolvers.*
-import api.models.errors.MtdError
+import api.models.errors.{CustomerReferenceFormatError, DateFormatError, MtdError, NameOfShipFormatError, RangeToDateBeforeFromDateError}
 import cats.data.Validated
 import cats.data.Validated.Valid
 import cats.implicits.*
-import common.errors.{CustomerReferenceFormatError, DateFormatError, NameOfShipFormatError, RangeToDateBeforeFromDateError}
 import play.api.libs.json.JsValue
 import v2.models.request.createAndAmendOtherDeductions.{CreateAndAmendOtherDeductionsBody, CreateAndAmendOtherDeductionsRequestData, Seafarers}
 

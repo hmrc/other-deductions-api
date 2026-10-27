@@ -19,7 +19,6 @@ package v2
 import api.models.errors.*
 import api.services.*
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import common.errors.OutsideAmendmentWindowError
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status
 import play.api.http.Status.*
